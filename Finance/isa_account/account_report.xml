@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report auto="False" id="account_general_ledger_inherits" menu="False" model="account.account" name="account.general.ledger1" rml="isa_account/report/account_general_ledger1.rml" string="ISA General Ledger"/>
+        <report auto="False" id="account_general_ledger_landscape_isa" menu="False" model="account.account" name="account.general.ledger_landscape_isa" rml="isa_account/report/account_general_ledger_landscape_isa.rml" string="ISA General Ledger"/>
+        <report auto="False" id="account_account_balance_isa" menu="False" model="account.account" name="account.account.balance.isa" rml="isa_account/report/account_balance_isa.rml" string="ISA Trial Balance"/>
+       
+        <report auto="False" id="account_journal_inherits_isa" model="account.journal.period" name="account.journal.period.print.isa" rml="isa_account/report/account_journal_isa.rml" string="ISA Journal" header="False"/>
+        <report auto="False" id="account_journal_sale_purchase_inherits_isa" model="account.journal.period" name="account.journal.period.print.sale.purchase.isa" rml="isa_account/report/account_journal_sale_purchase_isa.rml" string="ISA Sale/Purchase Journal" header="False"/>
+        
+        <report auto="False" id="account_general_journal_isa_inherit" model="account.journal.period" name="account.general.journal.isa" rml="isa_account/report/account_general_journal.rml" string="ISA General Journal" header="False"/>
+        <report auto="False" id="account_central_journal_isa_inherit" model="account.journal.period" name="account.central.journal.isa" rml="isa_account/report/account_central_journal.rml" string="ISA Central Journal" header="False"/>
+        <report auto="False" id="account_3rdparty_account_balance_isa_inherit" menu="False" model="account.account" name="account.partner.balance.isa" rml="isa_account/report/account_partner_balance.rml" string="ISA Partner Balance"/>
+        <report auto="False" id="account_3rdparty_ledger_isa_inherit" menu="False" model="res.partner" name="account.third_party_ledger.isa" rml="isa_account/report/account_partner_ledger.rml" string="ISA Partner Ledger"/>
+        
+        <report auto="False" id="account_3rdparty_ledger_isa_inherit12213" menu="False" model="res.partner" name="account.aged_trial_balance.isa" rml="isa_account/report/account_aged_partner_balance.rml" string="ISA Aged Ledger"/>
+        
+        
+        <report auto="False" id="account_3rdparty_ledger_other_isa_inherit" menu="False" model="res.partner" name="account.third_party_ledger_other.isa" rml="isa_account/report/account_partner_ledger_other.rml" string="ISA Partner Ledger"/>
+        
+        
+        
+        
+        
+        <report id="financial_report_id_inherit" 
+			model="account.financial.report" 
+			name="account.financial.report.isa" 
+			rml="isa_account/report/account_financial_report_isa.rml"
+			string="ISA Financial Report"
+			auto="False">
+		</report>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <report auto="False" id="account_overdue" model="res.partner" name="account.overdue" rml="account/report/account_print_overdue.rml" string="Overdue Payments"/>
+        <report
+            auto="False"
+            id="account_invoices"
+            model="account.invoice"
+            name="account.invoice"
+            rml="account/report/account_print_invoice.rml"
+            string="Invoices"
+            attachment="(object.state in ('open','paid')) and ('INV'+(object.number or '').replace('/','')+'.pdf')"
+            attachment_use="True"
+            usage="default"
+            />
+        <report id="account_transfers" model="account.transfer" name="account.transfer" string="Transfers" xml="account/report/transfer.xml" xsl="account/report/transfer.xsl"/>
+        <report auto="False" id="account_intracom" menu="False" model="account.move.line" name="account.intracom" string="IntraCom"/>
+
+        <report
+            auto="False"
+            id="account_vat_declaration"
+            menu="False"
+            model="account.tax.code"
+            name="account.vat.declaration"
+            rml="account/report/account_tax_report.rml"
+            string="Taxes Report"/>
+
+        <menuitem
+            id="menu_tax_report"
+            name="Taxes"
+            parent="account.menu_finance_generic_reporting" sequence="3"/>
+
+    </data>
+</openerp>

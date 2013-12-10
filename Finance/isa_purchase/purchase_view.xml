@@ -1,0 +1,44 @@
+<?xml version ="1.0"?>
+<openerp>
+	<data>
+	
+
+
+		
+	
+		<record id="purchase_order_form_isa_inherit" model="ir.ui.view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+	            
+            	<xpath expr="//field[@name='partner_ref']" position="after">
+		            <field name='awb_no' />
+	            </xpath>
+				
+				<xpath expr="//page[@string='Incoming Shipments &amp; Invoices']" position="after">
+				<page string='Shipment Related Documents'>
+					
+					<div class='oe_right oe_button_box'>
+						<button name="send_mail" string="Send Mail"  type="object" />
+						<button name="approve_by_admin_sr" string="Approve" type="object" attrs="{'invisible':[('state_for_sr','not in',['sent_for_approval'])]}"/>
+					</div>
+					<group>
+					<group>
+		            <field name='awb_attachment' attrs="{'required':[('state','=','approved')]}"/>
+		            <field name='du_attachment' attrs="{'required':[('state','=','approved')]}"/>
+		            <field name='user_id'/>
+		            <field name='approve' />
+		            </group>
+		            </group>
+		        </page>
+	            </xpath>
+				
+					            
+	        </field>
+	        </record>
+	    
+	    
+	    
+	</data>
+</openerp>

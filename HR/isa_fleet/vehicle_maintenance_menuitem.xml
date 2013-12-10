@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <menuitem name="Vehicle Maintenance" parent="fleet.menu_root" id="isa_fleet_vehicles" sequence="2" />
+        <menuitem action="action_isa_maintenance" parent="isa_fleet_vehicles" id="isa_fleet_vehicle_menu"/>
+    </data>
+</openerp>
+
+
+

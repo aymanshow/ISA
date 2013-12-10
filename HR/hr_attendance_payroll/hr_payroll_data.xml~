@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        
+        <record id="TAX" model="hr.salary.rule.category">
+            <field name="name">Taxable Income</field>
+            <field name="code">TAX</field>
+        </record>
+
+        <record id="TD" model="hr.salary.rule.category">
+            <field name="name">Total Descontos</field>
+            <field name="code">TD</field>
+        </record>
+
+        <record id="hr_rule_basic" model="hr.salary.rule">
+            <field name="name">Basic</field>
+            <field name="sequence" eval="1"/>
+            <field name="code">BASIC</field>
+            <field name="category_id" ref="hr_payroll.BASIC"/>
+	    <field name="active">True</field>
+	    <field name="appears_on_payslip">True</field>
+            <field name="condition_select">none</field>
+            <field name="amount_select">code</field>
+            <field name="amount_python_compute">result =  ((contract.wage*(worked_days.WORK100.number_of_days+worked_days.weekly.number_of_days+worked_days.pl.number_of_days+worked_days.paid_holiday.number_of_days))/worked_days.MONTHDAYS.number_of_days)</field>
+        </record>
+
+        
+
+
+        <!-- Salary Structure -->
+
+         <!--record id="structure_base" model="hr.payroll.structure">
+            <field name="code">BASE</field>
+            <field name="name">Base for new structures</field>
+            <field eval="[(6, 0, [ref('hr_rule_basic'), ref('hr_rule_taxable'),ref('hr_rule_net')])]" name="rule_ids"/>
+            <field name="company_id" ref="base.main_company"/>
+        </record-->
+
+        <!-- Decimal Precision -->
+
+        <!--record forcecreate="True" id="decimal_payroll" model="decimal.precision">
+            <field name="name">Payroll</field>
+            <field name="digits">2</field>
+        </record>
+
+        <record forcecreate="True" id="decimal_payroll_rate" model="decimal.precision">
+            <field name="name">Payroll Rate</field>
+            <field name="digits">4</field>
+        </record-->
+
+
+    </data>
+</openerp>

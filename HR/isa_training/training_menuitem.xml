@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+ <menuitem name="ISA Employee Training" parent="hr.menu_hr_root" id="menu_isa_hr_employee" groups="base.group_hr_manager,base.group_hr_user,base.group_user" sequence="6"/>
+		 
+       <menuitem 
+			id='menu_action_view_drishti_hr_training_form' 
+			action="action_employee_training1" 
+			name='Training' 
+			parent='menu_isa_hr_employee'
+        	sequence='4'/> 	
+       <menuitem 
+			id='menu_action_view_drishti_hr_training_form1' 
+			action="action_training_hr_rejected2" 
+			name='Rejected Training Form' 
+			parent='menu_isa_hr_employee'
+        	sequence='5'/> 	 		      
+    </data>
+</openerp>
+
+
+

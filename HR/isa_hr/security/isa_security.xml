@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+       <record id="base.group_isa_management" model="res.groups">
+            <field name="name">ISA Management</field>
+        </record>  
+        <record id="base.group_isa_hr_departemnt" model="res.groups">
+            <field name="name">ISA HR DEPARTMENT</field>
+        </record>
+        
+        <record id="base.group_online_test" model="res.groups">
+            <field name="name">Online Test User</field>
+        </record>
+         <record id="base.group_employee_requestion" model="res.groups">
+            <field name="name">Employee Requestion</field>
+        </record>
+     </data>
+</openerp>

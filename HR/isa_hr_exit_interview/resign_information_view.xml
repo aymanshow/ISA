@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_emp_resign_info_tree" model="ir.ui.view">
+        <field name="name">resign.information.tree</field>
+        <field name="model">resign.information</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Resign Form" version="7.0">
+		        <field name="resign_date"/>
+		        <field name="reason"/>
+		        <field name="state"/>
+            </tree>
+        </field>
+    	</record>
+    
+        <record id="view_emp_resign_info_form" model="ir.ui.view">
+        <field name="name">resign.information.form</field>
+        <field name="model">resign.information</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+        
+            <form string="Enrollment Form" version="7.0">
+                <header>
+                     <button name="submit_resign" string="Confirm" type="object" class="oe_highlight" attrs="{'invisible':[('state','in',['initiate','approve','exit_int','relieved'])]}"/>
+                     <button name="admin_approve_resign" string="Approve" type="object" attrs="{'invisible':[('state','in',['approve','exit_int','relieved'])]}" class="oe_highlight" groups="isa_hr_exit_interview.group_isa_user_admin,isa_hr_exit_interview.group_isa_manager"/>
+                     <button name="emp_exit_interview" string="Submit for exit" type="object" attrs="{'invisible':[('state','not in',['approve'])]}" class="oe_highlight"/>
+                     <button name="emp_releived" string="Relieved" type="object" attrs="{'invisible':[('state','in',['approve','initiate','draft','close','relieved'])]}" class="oe_highlight"/>                       
+                      
+<!--                    <button name="emp_close" string="Close" type="object" attrs="{'invisible':[('state','not in',['approve'])]}" class="oe_highlight"/>-->
+                      
+                        <button string="Discard" special="cancel"/>
+                       <field name="state" widget="statusbar" statusbar_visible="draft,initiate,approve,exit_int,relieved,close" readonly="1"/>
+                    </header>
+                    <sheet>
+                    <group colspan="2" col="4">
+                        <field name="employee_id" readonly="1"/>
+                        <field name="resign_date"/>
+				        <field name="designation_id" />
+				        <field name="termination_date" attrs="{'invisible':[('state','in',['draft','initiate','approve'])]}"/>
+				        <field name="department_id" readonly="1"/>
+						<field name="job_code" attrs="{'invisible':[('state','in',['draft','initiate','approve'])]}"/>
+
+						<field name="emp_id" attrs="{'invisible':[('state','in',['draft','initiate','approve'])]}"/>
+
+						<field name="eligible_for_rehire" attrs="{'invisible':[('state','in',['draft','initiate','approve'])]}"/>
+						<field name="state1" nolabel="1" attrs="{'invisible':[('state','in',['draft','initiate','approve'])]}"/>
+                    </group>
+                    <group attrs="{'invisible':[('state','not in',['exit_int'])]}" >
+                    <group string="Voluntary">
+					    <field name="another_position"/>
+				        <field name="personal_reasons"/>
+				        <field name="relocation"/>
+				        <field name="retirement"/>
+				        <field name="return_to _school"/>
+				        <field name="other"/>
+					</group>
+					<group string="Involuntary">
+				        <field name="attendance"/>
+				        <field name="violation_of_company_policy"/>
+				        <field name="lay_off"/>
+				        <field name="reorganization"/>
+				        <field name="position_eliminated"/>
+				        <field name="other1"/>
+					</group>
+					</group>
+                    <group string="Reason" colspan="4" col="4" attrs="{'invisible':[('state','in',['exit_int','relieved'])]}">
+               	     <field name="reason" nolabel="1" attrs="{'readonly':[('state','not in',['draft'])]}"/>
+                    </group>
+                    <group  attrs="{'invisible':[('state','not in',['approve'])]}">
+                    <notebook>
+					<page string="Exit Questions">
+					<group>
+					<field name="test_information_id" colspan="4" nolabel="1">
+				 		<tree editable="bottom" >
+				 			<field name="resign_ques_ids" invisible="1"/>
+							<field name="sr_no" readonly="1"/>
+							<field name="questions" readonly="1"/>
+							<field name="answers"/>
+						</tree>
+					</field>
+					</group>
+					</page>
+					<page string="Company Property">
+						<group>
+						<field name="company_asset_id" colspan="4" nolabel="1">
+					 		<tree editable="bottom" >
+					 		<field name="resign_com_asset_ids" invisible="1"/>
+							<field name="sr_no" readonly="1"/>
+							<field name="questions" readonly="1"/>
+							<field name="tick"/>
+							<field name="comment"/>
+						</tree>
+				</field>
+				</group>
+				</page>
+				
+				<page string="Company Restrictions">
+						<group>
+						<field name="company_restriction_id" colspan="4" nolabel="1">
+					 		<tree editable="bottom" >
+					 			<field name="resign_com_restriction_ids" invisible="1"/>
+						        <field name="sr_no" readonly="1"/>
+						        <field name="item" readonly="1"/>
+						        <field name="tick"/>
+						        <field name="comment"/>
+						</tree>
+				</field>
+				</group>
+				</page>
+				</notebook>
+                    </group>
+                <group  colspan="4" col="4" attrs="{'invisible':[('state','not in',['exit_int'])]}">
+                    <notebook>
+					<page string="Questionnaire">
+					<group>
+						<field name="final_exit_ques_id" colspan="4" nolabel="1">
+					 		<tree editable="bottom" >
+					 			<field name="final_resign_exit_ques_ids" invisible="1"/>
+						        <field name="sr_no" readonly="1"/>
+						        <field name="questions" readonly="1"/>
+						        <field name="answers"/>
+						</tree>
+					</field>
+					</group>
+					</page>
+					
+					<page string="Employee Comments">
+					<field name="emp_comment"/>
+					</page>
+					<page string="Interviewer Comments">
+					<field name="interviewer_comment"/>
+					</page>
+				</notebook>
+                </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+        
+    <record id="action_emp_resign_info" model="ir.actions.act_window">
+        <field name="name">Employee Resign</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">resign.information</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_emp_resign_info_tree"/>
+    </record>
+    
+    <menuitem id="menu_emp_resign_info_id2" name= "Employee Resign" parent="hr.menu_hr_main" action="action_emp_resign_info"/>
+    
+    </data>
+</openerp>

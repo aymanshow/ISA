@@ -1,0 +1,228 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+    
+    	<!-- <record model="ir.ui.view" id="cstm_crm_case_tree_view_helpdesk">
+            <field name="name">CRM - Helpdesk Support Tree</field>
+            <field name="model">crm.helpdesk</field>
+            <field name="inherit_id" ref="crm_helpdesk.crm_case_tree_view_helpdesk"/>
+            <field name="arch" type="xml">
+            <field name="contracts_partner"/>
+            </field>
+            </record> -->
+           
+
+ 		<record model="ir.ui.view" id="cstm_crm_case_form_view_helpdesk">
+            <field name="name">CRM - Helpdesk Support Form</field>
+            <field name="model">crm.helpdesk</field>
+            <field name="inherit_id" ref="crm_helpdesk.crm_case_form_view_helpdesk"/>
+            <field name="arch" type="xml">
+            <data>
+            <xpath expr="/form[@string='Helpdesk Support']/sheet[@string='Helpdesk Support']/group" position="before">
+					<group string="Ticket Form">
+					   <field name="ticket_no" readonly="1"/>
+					   <!--<field name="form_ticket_no" readonly="1" invisible="1"/> -->
+					   <field name="job_order_line" readonly="1"/>
+					</group>
+				</xpath>
+                       
+            	<field name="state" position="replace">
+            		<field name="state" nolabel="1" widget="statusbar" statusbar_visible="draft,open,awaiting,pending,done" statusbar_colors='{"pending":"blue"}'/>
+            	</field>
+            	
+            	<field name="partner_id" position="replace">
+	            <field name="contracts_partner" on_change="onchange_contracts_partner(contracts_partner)"/>
+	          		<field name="contracts" on_change="onchange_partner(contracts)"/>
+	            </field>
+	            <field name="priority" position="after">
+	           		<field name="problem_type"/>
+	            </field>
+	            
+	             <field name="channel_id" position="replace">
+	            </field>
+	            <field name="email_from" position="after">
+	            	<field name="channel_id"/>
+	            	<field name="approved_by" attrs="{'invisible':[('state','in',('draft','cancel','open'))]}"/>
+	            </field>
+	            
+	            <field name="user_id" position="replace">
+	            	<field name="user_id1"/>
+	            </field>
+	            
+	            <field name="categ_id" position="replace">
+	           		<field name="categ_id1" on_change="onchange_categ_id(categ_id1)" widget="selection"/>
+	           		<field name="engineer_id"/>
+	            </field>
+	            
+	            <xpath expr="/form[@string='Helpdesk Support']/header/button[@string='Pending']" position="replace">
+	            <!--button name="case_pending" string="Pending" type="object" states="draft" invisible="1"/-->
+                <button name="case_pending" string="Pending" type="object" 
+                            states="open" invisible="1"/>
+                <button name="case_pending" string="Pending" type="object"
+                            states="draft" invisible="1"/>
+                <button name="print_report" string="Genarate Ticket Report" type="object" icon="gtk-execute"/>
+	            </xpath>
+	            
+	            <xpath expr="/form[@string='Helpdesk Support']/header/button[@string='Escalate']" position="replace">
+	            <!--button name="case_pending" string="Pending" type="object" states="draft" invisible="1"/-->
+                <button name="case_escalate" string="Escalate" type="object" 
+                            states="open,draft,pending" invisible="1"/>
+	            </xpath>
+	            
+				<button name="case_open" position="replace">
+					<!--<button name="case_pending" string="Pending" type="object" invisible="1"/> -->
+					<!-- <button name="case_pending" string="Pending" type="object"
+                            states="draft" invisible="1"/>
+                    <button name="case_pending" string="Pending" type="object" 
+                            states="open" invisible="1"/> -->
+                    <button name="case_reset" string="Reassign" type="object"
+                            states="pending"/>
+                    <button name="case_escalate" string="Escalate" type="object" 
+                            attrs="{'invisible':[('state','in',('cancel','awaiting','pending','done','open','draft'))]}"/>
+					<button name="case_open1" string="Open" type="object" class="oe_highlight"
+	                            attrs="{'invisible':[('state','in',('cancel','awaiting','pending','done','open'))]}"/>
+	                <button name="create_job_order" string="Create Job Order" type="object" class="oe_highlight"
+	                            attrs="{'invisible':[('state','in',('draft','awaiting','pending','cancel','done'))]}"/>
+	                <button name="action_approve" string="Approve" type="object" class="oe_highlight"
+	                            attrs="{'invisible':[('state','in',('draft','open','pending','cancel','done'))]}"/>
+				</button>
+				<xpath expr="/form[@string='Helpdesk Support']/sheet/notebook/page[@string='General']/group" position="inside">
+					<group>
+					   <field name="customer_visit" attrs="{'invisible':[('state','in',('draft','cancel','open','awaiting'))]}"/>
+					   <field name="remark" attrs="{'invisible':[('state','in',('draft','cancel','open','awaiting'))]}"/>
+						
+					</group>
+				</xpath>
+            </data>
+          </field>
+        </record>
+        
+        <record id="view_job_order_number_tree" model="ir.ui.view">
+            <field name="name">job.order.numbers.tree</field>
+            <field name="model">job.order.numbers</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Job Order Numbers">
+			<field name="job_number" invisible="1"/>
+			<field name="name"/>
+			<!-- <field name="date"/>
+			<field name="offence_description"/> 
+			<field name="punishment"/> -->        
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_job_order_number_form" model="ir.ui.view">
+            <field name="name">job.order.numbers.form</field>
+            <field name="model">job.order.numbers</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Job Order Numbers">
+			<field name="job_number" invisible="1"/>
+			<field name="name"/>
+			<!-- <field name="date"/>
+			<field name="offence_description"/> 
+			<field name="punishment"/> -->        
+                </form>
+            </field>
+        </record>
+         
+         
+<!--      Job Order Tree View   -->
+
+
+	<record id="job_order_tree" model="ir.ui.view">
+			<field name="name">job.order1.tree</field>
+			<field name="model">job.order1</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Job Order">
+					<field name="name"/>
+					<field name="customer_name"/>
+	               <field name="address"/>
+	               <field name="phone"/>
+	               <field name="mobile"/>
+	               <field name="email"/>
+	               <field name="contract_id"/>
+	               <field name="visit_date_time"/>
+				</tree>
+			</field>
+		</record>
+		
+		<record id="job_order_form1" model="ir.ui.view">
+			<field name="name">job.order1.form</field>
+			<field name="model">job.order1</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Job Order" version="7.0">
+				 <header>
+                        <button name="action_submit" string="Submit" type="object" attrs="{'invisible':[('job_state','in',('new','completed'))]}"/>
+                        <button name="action_completed" string="Complete" type="object" attrs="{'invisible':[('job_state','in',('draft','completed'))]}"/>
+                        <button name="action_print" string="Print" type="object" attrs="{'invisible':[('job_state','in',('draft','completed'))]}"/>
+						<field name="job_state" nolabel="1" widget="statusbar" statusbar_visible="draft,new,completed" statusbar_colors='{"pending":"blue"}'/>
+				</header>
+			         <sheet>
+			         <group string="Job Order Details">
+			         	<field name="name" readonly="1"/>
+			         	<field name="ticket_form_id" readonly="1"/>
+			         	<field name="customer_name"/>
+			         </group>
+						<group string="Customer Details">
+						<group>
+						<label for="street" string="Address"/>
+                            <div>
+                                <field name="street" placeholder="Street..." />
+                                <field name="street2" />
+                                <div class="address_format">
+                                    <field name="city" placeholder="City" style="width: 40%%"/>
+                                    <field name="state_id" class="oe_no_button" placeholder="State" style="width: 37%%" />
+                                    <field name="zip" placeholder="ZIP" style="width: 20%%"/>
+                                </div>
+                                <field name="country_id" placeholder="Country" class="oe_no_button"/>
+                            </div>
+                            <field name="contract_id"/>
+			               </group>
+			               <group>
+			                <field name="phone"/>
+			               <field name="mobile"/>
+			               <field name="email"/>
+			               <field name="engineer_id"/>
+			               </group>
+						</group>
+						<group string="Approved By" attrs="{'invisible':[('job_state','in',('draft'))]}">
+							<field name="supervisor_name"/>
+			                 <field name="customer" invisible="1"/>	
+						</group>
+						<group>
+							<group string="Visit Details">
+							  <field name="visit_date_time"/>
+				              <field name="tool_require_ids">
+				                <tree editable="bottom" >
+				                	<field name="serial_num"/>
+					                <field name="product"/>
+	              					<field name="product_qty"/>
+	              					<field name="remarks"/>
+				                </tree>
+				                
+				              </field>
+				              <field name="person_at_time_of_visit"/>
+				              <field name="remark" attrs="{'invisible':[('job_state','in',('draft'))]}"/>
+				              <field name="datas" filename="datas_fname" attrs="{'invisible':[('job_state','in',('draft'))]}"/>
+                              <field name="datas_fname" invisible="1"/>
+				            </group>
+			             </group>
+			         </sheet>
+					</form>
+			</field>
+		</record>
+		<record id="action_job_order_id" model="ir.actions.act_window">
+			<field name="name">Job Order Details</field>
+			<field name="res_model">job.order1</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="job_order_tree"/>
+		</record>
+<menuitem action="action_job_order_id" name="Job Order" id="menu_crm_case_job_order" parent="crm_helpdesk.menu_config_helpdesk"/>
+	
+    </data>
+</openerp>

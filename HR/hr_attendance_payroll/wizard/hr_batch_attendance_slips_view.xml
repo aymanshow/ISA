@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="view_hr_batch_attendance_slips" model="ir.ui.view">
+            <field name="name">hr_batch_attendance_slips_form</field>
+            <field name="model">hr.batch.attendance.slips</field>
+            <field name="arch" type="xml">
+                <form string="Batch Attendance Slips by Employees" version="7.0">
+                    <header>
+                        <button icon="gtk-execute" string="Generate" name="compute_sheet" type="object" class="oe_highlight"  />
+                    </header>
+                    <group>
+                        <label colspan="4" nolabel="1" string="This wizard will generate monthly attendance slips for all selected employee(s)" />
+                    </group>
+                    <group colspan="4" >
+                        <separator string="Employees" colspan="4"/>
+                        <field name="notes" invisible="1"/>
+                        <field name="user" invisible="1"/>
+                        <newline/>
+                        <field name="employee_ids" nolabel="1"/>
+                    </group>
+               </form>
+            </field>
+        </record>
+
+        <record id="action_hr_batch_attendance_by_employees" model="ir.actions.act_window">
+            <field name="name">Batch Attendance Slips</field>
+            <field name="res_model">hr.batch.attendance.slips</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_hr_batch_attendance_slips"/>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>

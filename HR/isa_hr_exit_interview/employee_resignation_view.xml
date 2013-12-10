@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+    
+	    <record id="view_add_button_employee_form" model="ir.ui.view">
+            <field name="name">hr.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+            <data>
+                <xpath expr="/form/sheet/notebook/page[@string='HR Settings']" position="after">
+                <page string="Resignation">
+	                <xpath expr="/form/sheet/div[@name='button_box']" position="inside">
+	                <group colspan="4" col="4">
+<!--	               		<button name="%(action_employee_resign)d" string="Submission for resign" type="action"/>-->
+	               		<field name="resignation_id" nolabel="1"/>
+	               		</group>
+	                </xpath>
+                </page>
+                
+                <page string="Policy">
+	                <xpath expr="/form/sheet/div[@name='button_box']" position="inside">
+	               		<field name="policy_id" nolabel="1"/>
+	                </xpath>
+	                
+	                
+                </page>
+                </xpath>
+            
+				</data>
+            </field>
+	    </record>
+
+    </data>
+</openerp>

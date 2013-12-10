@@ -1,0 +1,122 @@
+<openerp>
+      <data>
+      
+      
+      
+	      <record id="account_report_general_ledger_view_inherit" model="ir.ui.view">
+	            <field name="name">General Ledger</field>
+	            <field name="model">account.report.general.ledger</field>
+	            <field name="inherit_id" ref="account.account_report_general_ledger_view" />
+	            <field name="arch" type="xml">
+	            	<xpath expr="//field[@name='amount_currency']" position="after">
+	            		<field name='report_currency'/>
+	            	</xpath>
+	            </field>
+	      </record>
+	      
+	      
+	      <record id="account_report_balance_view_inherit_isa" model="ir.ui.view">
+	            <field name="name">Trial Balance</field>
+          		<field name="model">account.balance.report</field>
+	            <field name="inherit_id" ref="account.account_report_balance_view" />
+	            <field name="arch" type="xml">
+	            	<xpath expr="//field[@name='display_account']" position="after">
+	            		<field name='report_currency'/>
+	            	</xpath>
+	            </field>
+	      </record>
+
+
+		<record id="accounting_report_view_isa_inherit" model="ir.ui.view">
+            <field name="name">Accounting Report</field>
+            <field name="model">accounting.report</field>
+	            <field name="inherit_id" ref="account.accounting_report_view" />
+	            <field name="arch" type="xml">
+	            	<xpath expr="//field[@name='debit_credit']" position="after">
+	            		<field name='report_currency'/>
+	            	</xpath>
+	            </field>
+	     </record>
+		<record id="account_report_print_journal_isa_inherit" model="ir.ui.view">
+            <field name="name">Account Print Journal</field>
+            <field name="model">account.print.journal</field>
+            <field name="inherit_id" ref="account.account_report_print_journal" />
+            <field name="arch" type="xml">
+	            <data>
+		            <xpath expr="//field[@name='amount_currency']" position="after">
+			            <field name='report_currency'/>
+			        </xpath>
+	            </data>
+            </field>
+        </record>
+            
+            
+        <record id="account_report_general_journal_view_isa_inherit" model="ir.ui.view">
+            <field name="name">Account General Journal</field>
+            <field name="model">account.general.journal</field>
+            <field name="inherit_id" ref="account.account_report_general_journal_view" />
+            <field name="arch" type="xml">
+	            <data>
+			       <xpath expr="//field[@name='amount_currency']" position="after">
+				         <field name='report_currency'/>
+				   </xpath>
+		        </data>
+            </field>
+        </record>
+		
+		<record id="view_account_central_journal_isa_inherit" model="ir.ui.view">
+            <field name="name">Account central Journal</field>
+            <field name="model">account.central.journal</field>
+            <field name="inherit_id" ref="account.view_account_central_journal" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='amount_currency']" position="after">
+				    <field name='report_currency'/>
+				</xpath>
+            </field>
+        </record>
+		
+		<record id="account_partner_balance_view_isa_inherit" model="ir.ui.view">
+            <field name="name">Partner Balance</field>
+            <field name="model">account.partner.balance</field>
+            <field name="inherit_id" ref="account.account_partner_balance_view" />
+            <field name="arch" type="xml">
+            <data>
+            <xpath expr="//field[@name='display_partner']" position="after">
+                <field name='report_currency'/>
+                <newline/>
+            </xpath>
+            </data>
+            </field>
+        </record>
+        
+        
+        
+         <record id="account_partner_ledger_view_isa_inherit" model="ir.ui.view">
+            <field name="name">Partner Ledger</field>
+            <field name="model">account.partner.ledger</field>
+            <field name="inherit_id" ref="account.account_partner_ledger_view" />
+            <field name="arch" type="xml">
+            <data>
+            <xpath expr="//field[@name='page_split']" position="after">
+                <field name="report_currency"/>
+            </xpath>
+            </data>
+            </field>
+         </record>
+         
+         
+         <record id="account_aged_balance_view_isa_inhrit" model="ir.ui.view">
+            <field name="name">Aged Partner Balance</field>
+            <field name="model">account.aged.trial.balance</field>
+            <field name="inherit_id" ref="account.account_aged_balance_view" />
+            <field name="arch" type="xml">
+               <xpath expr="//field[@name='direction_selection']" position="after">
+                <field name="report_currency"/>
+           	  </xpath>
+            </field>
+        </record>
+         
+		
+
+</data>
+</openerp>

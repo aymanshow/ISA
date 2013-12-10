@@ -1,0 +1,150 @@
+<?xml version ='1.0'?>
+<openerp>
+	<data>
+		<!-- Hr Inherit view -->
+        <record id="isa_hr_employee_form" model="ir.ui.view">
+            <field name="name">hr.employee form</field>
+            <field name="model">hr.employee</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field eval="1" name="priority"/>
+            <field name="arch" type="xml">
+           <xpath expr="/form/sheet/notebook/page[@string='Personal Information']/group[1]" position="after"> 
+          <group string="Work Experiance">
+                <field name="work_experiane_line1" nolabel="1" readonly="1">
+				<tree editable="bottom" >
+					<field name="name"/>
+					<field name="cargo_exercised1"/>
+					<field name="responsibility1"/>
+					<field name="start_date1"/>
+					<field name="finish_date1"/>
+			   </tree>
+			   </field>
+				</group>	
+				
+		<group string="Education">
+                <field name="education_line1" nolabel="1" readonly="1">
+				<tree editable="bottom" >
+					<field name="name"/>
+					<field name="qualification_obtain1"/>
+					<field name="start_date1"/>
+					<field name="finish_date1"/>
+			   </tree>
+			   </field>
+				</group>
+		<group string="Professional Qualification">
+                <field name="professional_line1" nolabel="1" readonly="1">
+				<tree editable="bottom" >
+					<field name="name"/>
+					<field name="institute"/>
+					<field name="start_date"/>
+					<field name="finish_date"/>
+			   </tree>
+			   </field>
+				</group>
+		<group string="Honors/Award">
+                <field name="honor_awards_line1" nolabel="1" readonly="1">
+				<tree editable="bottom" >
+					<field name="name"/>
+					<field name="local"/>
+					<field name="date"/>
+			   </tree>
+			   </field>
+				</group>
+		<group string="Language Spoken">
+                <field name="language_spoken_line1" nolabel="1" readonly="1">
+				<tree editable="bottom" >
+					<field name="name"/>
+					<field name="basic"/>
+					<field name="intermediate"/>
+					<field name="advance"/>
+			   </tree>
+			   </field>
+				</group>
+				<group string="Reference">
+                <field name="reference_Check_line1" colspan="4" nolabel="1" readonly="1">
+				<tree editable="bottom" >
+					<field name="serial_number"/>
+					<field name="type"/>
+					<field name="name"/>
+					<field name="phone_num"/>
+					<field name="email" widget="email"/>
+					<field name="company"/>
+					<field name="check_mode"/>
+					<field name="feedback"/>
+			   </tree>
+			   </field>
+		  </group>
+         </xpath>
+          <xpath expr="/form/sheet/notebook/page[@string='HR Settings']" position="after" readonly="1"> 
+		  <page string="Attachments">
+        <notebook>	    
+<page string="Personal">
+            <group colspan="2" cols="4">
+            
+					<field name="medical_certificate"/>
+					<field name="residence_prove"/>
+					<field name="id_copy"/>
+					<field name="passport_copy"/>
+					<field name="drives_licenses"/>
+					<field name="working_visa"/>
+					<field name="id_gaurdian"/>
+					<field name="health_insurance_card"/>
+				  
+					
+					 
+		  </group>
+	 </page>
+<page string="Criminal">
+            <group colspan="4" cols="4">
+                <field name="criminal_record_line1" colspan="4" nolabel="1" readonly="1">
+				<tree editable="bottom" >
+					<field name="description"/>
+					<field name="crime_attachment"/>
+			   </tree>
+			   </field>
+		  </group>
+		</page>
+<page string="Family">
+            <group colspan="4" cols="4">
+                <field name="family_information_line1" colspan="4" nolabel="1" readonly="1">
+				<tree editable="bottom" >
+					<field name="child_name"/>
+					<field name="child_birth_cert"/>
+				 </tree>
+			   </field>
+		  </group>
+		</page>
+<page string="Others">
+            <group colspan="4" cols="4">
+                <field name="other_certificate_line1" colspan="4" nolabel="1" readonly="1">
+				<tree editable="bottom" >
+					<field name="desc"/>
+					<field name="name"/>
+			   </tree>
+			   </field>
+		  </group>
+		</page>
+		</notebook>
+		</page>
+	 </xpath>
+<xpath expr="/form/sheet/notebook/page[@string='Attachments']" position="after"> 
+	 <page string="Offer Accepted">
+            <group colspan="4" cols="4">
+                <field name="offer_acceptance_line1" colspan="4" nolabel="1" readonly="1">
+				<tree editable="bottom" >
+					<field name="seq_num"/>
+					<field name="prob_joing_date"/>
+					<field name="offer_latter_acceptance_date"/>
+					<field name="joining_status"/>
+					<field name="attach_offer_latter"/>
+				 </tree>
+			   </field>
+		  </group>
+		</page>	
+      </xpath>
+      </field>
+        </record>
+	</data>
+</openerp> 
+ 

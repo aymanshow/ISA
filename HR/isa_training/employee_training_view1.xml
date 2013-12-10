@@ -1,0 +1,161 @@
+<?xml version ='1.0'?>
+<openerp>
+	<data>
+		<!-- Form view of pnl model-->
+		
+		 <record id="employee_training_tree1" model="ir.ui.view">
+			<field name="name">employee.training tree</field>
+			<field name="model">employee.training1</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Employee Training Form">
+				<field name="traing_id"/>
+					<field name="emp_id"/>
+					<field name="emp_name_id"/>
+					<field name="department_id"/>
+					<field name="date_from"/>
+					<field name="date_to"/>
+					<field name="location"/>
+					<field name="description"/>
+					<field name="training_state"/>
+				</tree>
+			</field>
+		</record>    
+		
+		<record id="employee_training_form1" model="ir.ui.view">
+			<field name="name">employee.training form</field>
+			<field name="model">employee.training1</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Employee Training Form" version="7.0">
+					<header>
+						<button name="action_approve" string="Approve" type="object" class="oe_highlight" attrs="{'invisible':[('training_state','in',['draft','payment','legal_process','awaiting_certificate','pending','done','refuse'])]}" groups="base.group_isa_management"/>
+						<button name="action_cancel" string="Reject" type="object"  class="oe_highlight" attrs="{'invisible':[('training_state','in',['draft','payment','legal_process','awaiting_certificate','pending','done','refuse'])]}" groups="base.group_isa_management"/>
+						<button name="action_paid" string="Paid" type="object" class="oe_highlight" attrs="{'invisible':[('training_state','!=','payment')]}" groups="base.group_isa_management"/>
+						<button name="action_submit" string="Submit" type="object"  class="oe_highlight" attrs="{'invisible':[('training_state','!=','draft')]}"/>
+						<button name="action_complete" string="Complete" type="object" class="oe_highlight" attrs="{'invisible':[('training_state','!=','legal_process')]}" groups="base.group_isa_management"/>
+			            <button name="action_pending_certfied" string="Certified" type="object" class="oe_highlight" attrs="{'invisible':[('training_state','!=','pending')]}" groups="base.group_isa_management"/>
+			   `        <button name="action_certfied" string="Certified" type="object" class="oe_highlight" attrs="{'invisible':[('training_state','in',['draft','approval','legal_process','payment','pending','done','refuse'])]}" groups="base.group_isa_management"/>
+			            <button name="action_pending" string="Pending" type="object" class="oe_highlight" attrs="{'invisible':[('training_state','!=','awaiting_certificate')]}" groups="base.group_isa_management"/>
+			           <field name="training_state" widget="statusbar"/>
+					</header>
+			   <sheet >
+			  
+			   	<group colspan="4" col="4">
+				<group colspan="4" col="4" attrs="{'readonly':[('training_state','in',[('approval','reference_check','legal_process','payment','awaiting_certificate','pending','refuse','done')])]}">
+					<separator string="Employee Information" colspan="4"/>
+					<field name="traing_id"/>
+					<field name="emp_id" attrs="{'readonly':[('training_state','!=','draft')]}"/>
+					<field name="emp_name_id" on_change="onchange_employee_id(emp_name_id)" attrs="{'readonly':[('training_state','!=','draft')]}"/>
+					<field name="department_id" attrs="{'readonly':[('training_state','!=','draft')]}"/>
+					<field name="date_from" attrs="{'readonly':[('training_state','!=','draft')]}"/>
+					<field name="date_to" attrs="{'readonly':[('training_state','!=','draft')]}"/>
+					<field name="location" attrs="{'readonly':[('training_state','!=','draft')]}"/>
+					</group>
+					<group colspan="4" cols="4">
+					<field name="manager_comment" attrs="{'invisible':[('training_state','=','draft')],'readonly':[('training_state','!=','approval')]}"/>
+				</group>
+				<separator string="Certificate Information" colspan="4"/>
+				<group attrs="{'readonly':[('training_state','=','done')]}">
+				   <field name="certificat_approv_line" colspan="4" nolabel="1" attrs="{'readonly':[('training_state','!=','draft')]}">
+                <tree editable="bottom" >
+                <field name="training_state_id" invisible="1"/>
+               		<field name='certificate_inform_id' invisible="1"/>
+					<field name="name"/>
+					<field name="certificate_vendor_id"/>
+                    <field name="cost"/>
+					<field name="invoice_id"/>
+				  <button name="action_crete_invoice" string="Create Invoice" type="object" icon="gtk-ok" attrs="{'invisible':[('training_state_id','!=','legal_process')]}"/>
+				  <button name="invoice_pay_customer1" string="Pay Invoice" type="object" icon="gtk-apply" attrs="{'invisible':[('training_state_id','!=','payment')]}"/>
+			   </tree>
+			     </field>
+				</group>
+			</group>
+ 	<separator string="Legal Process" colspan="4" attrs="{'invisible':[('training_state','in',['draft','approval','refuse'])]}"/>  
+			<notebook colspan="4">
+    <page string="Travel Information" attrs="{'invisible':[('training_state','in',['draft','approval','refuse'])]}">
+            <group colspan="4" cols="4">
+                <field name="travel_mode_line" colspan="4" nolabel="1" attrs="{'readonly':[('training_state','!=','legal_process')]}">
+                <tree editable="bottom" >
+                 <field name="training_state_id" invisible="1"/>
+               		<field name='travel_mide_id' invisible="1"/>
+					<field name="travel_mode"/>
+					<field name="trave_date"/>
+					<field name="agency_name_id"/>
+					<field name="journey_type"/>
+					<field name="source"/>
+					<field name="destination"/>
+					<field name="ticket_cost"/>
+					<field name="invoice_id"/>
+	<button name="action_crete_invoice" string="Create Invoice" type="object" icon="gtk-ok" attrs="{'invisible':[('training_state_id','!=','legal_process')]}"/>
+				  <button name="invoice_pay_customer1" string="Pay Invoice" type="object" icon="gtk-apply" attrs="{'invisible':[('training_state_id','!=','payment')]}"/>			<field name="attach"/>
+							   </tree>
+			   </field>
+			   </group>
+			   </page>
+    <page string="Hotel Information" attrs="{'invisible':[('training_state','in',['draft','approval','refuse'])]}">
+            <group colspan="4" cols="4">
+                <field name="hotel_management_line" colspan="4" nolabel="1" attrs="{'readonly':[('training_state','!=','legal_process')]}">
+				<tree editable="bottom" >
+				 <field name="training_state_id" invisible="1"/>
+				 <field name="hotel_management_id" invisible="1"/>
+					<field name="hotel_name_id" on_change="onchange_hotel_name_id(hotel_name_id)"/>
+					<field name="hotel_address"/>
+					<field name="contact_num"/>
+					<field name="phone_num"/>
+					<field name="hotel_cost"/>
+					<field name="invoice_id"/>
+			<button name="action_crete_invoice" string="Create Invoice" type="object" icon="gtk-ok" attrs="{'invisible':[('training_state_id','!=','legal_process')]}"/>
+				  <button name="invoice_pay_customer1" string="Pay Invoice" type="object" icon="gtk-apply" attrs="{'invisible':[('training_state_id','!=','payment')]}"/>	<field name="attachment"/>
+			   </tree>
+			   </field>
+			   </group>
+			   </page>
+    <page string="Visa Information" attrs="{'invisible':[('training_state','in',['draft','approval','refuse'])]}">
+            <group colspan="4" cols="4">
+                <field name="visa_approval_line" colspan="4" nolabel="1" attrs="{'readonly':[('training_state','!=','legal_process')]}">
+				<tree editable="bottom" >
+				 <field name="training_state_id" invisible="1"/>
+				 <field name="visa_approval_id" invisible="1"/>
+				<field name="visa_company_id"/>
+					<field name="visa_id"/>
+					<field name="country"/>
+					<field name="valid_from"/>
+					<field name="valid_to"/>
+					<field name="visa_cost" />
+					<field name="invoice_id"/>
+	<button name="action_crete_invoice" string="Create Invoice" type="object" icon="gtk-ok" attrs="{'invisible':[('training_state_id','!=','legal_process')]}"/>
+				  <button name="invoice_pay_customer1" string="Pay Invoice" type="object" icon="gtk-apply" attrs="{'invisible':[('training_state_id','!=','payment')]}"/>		   </tree>
+			   </field>
+			   </group>
+			   </page>
+<page string="Certificate Information" attrs="{'invisible':[('training_state','in',['draft','approval','legal_process','payment','refuse'])]}">
+            <group colspan="4" cols="4">
+                <field name="awating_approwal_line" colspan="4" nolabel="1" attrs="{'readonly':[('training_state','!=','awaiting_certificate')]}">
+				<tree editable="bottom" >
+				<field name="training_state_id" invisible="1"/>
+				<field name="certificate_name" />
+					<field name="grade"/>
+					<field name="clear_date"/>
+					<field name="is_certified"/>
+					<field name="attach"/>
+			   </tree>
+			   </field>
+			   </group>
+			   </page>
+			   </notebook>
+			</sheet>
+					</form>
+			</field>
+		</record>
+		<record id="action_employee_training1" model="ir.actions.act_window">
+			<field name="name">Employee training</field>
+			<field name="res_model">employee.training1</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="employee_training_tree1"/>
+		</record>
+			
+	</data>
+</openerp> 
+ 

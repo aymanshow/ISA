@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_vehicle_accident_info_tree" model="ir.ui.view">
+        <field name="name">vehicle.accident.info.tree</field>
+        <field name="model">vehicle.accident.info</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Resign Form" version="7.0">
+                <field name="incident_no"/>
+		        <field name="type"/>
+		        <field name="location"/>
+		        <field name="date_time"/>
+            </tree>
+        </field>
+    	</record>
+
+        <record id="view_vehicle_accident_info_form" model="ir.ui.view">
+        <field name="name">vehicle.accident.info.form</field>
+        <field name="model">vehicle.accident.info</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Enrollment Form" version="7.0">
+                    <sheet>
+                     <group string="Incident Details">
+                        <group>
+							<field name="incident_no"/>
+					        <field name="location"/>
+						</group>
+						<group>
+							<field name="type"/>
+							<field name="date_time"/>
+						 </group>
+		        	</group>
+		         	<group>
+						 <field name="description"/>
+				      </group>
+ 				 	<group>
+                    <group string="Vehicle Details">
+					    <field name="vehicle_detail_id" on_change="on_change_vehicle(vehicle_detail_id)"/>
+					    <field name="odometer_value"/>
+					    <field name="car_value"/>
+					</group>
+					<group string="Driver Details">
+				        <field name="driver_name_id"/>
+				        <field name="contact_details"/>
+					</group>
+					</group>
+					<group>
+                     <group string="Witness Details">
+                    	<group colspan="4" col="4">
+	                    	<group col="2">
+		                     	<field name="witness_details"/>
+		                     	<field name="witness_contact_details"/>
+	                     	</group>
+	                     	<group>
+	                     	</group>
+                     	</group>
+					 </group>
+					</group>
+					<group>
+	                    <group string="Other Details ">
+							<group>
+								<field name="remarks"/>
+							</group>
+						</group>
+					</group>
+				</sheet>
+			</form>
+		</field>
+		</record>
+					
+		<record id="action_vehicle_accident_info" model="ir.actions.act_window">
+        <field name="name">Vehicle Accident</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">vehicle.accident.info</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_vehicle_accident_info_tree"/>
+    </record>
+    <menuitem id="menu_vehicle_accident_info_id" name= "Incident Management" parent="fleet.menu_root" sequence="2"/>
+    <menuitem name="Incident Details" parent="menu_vehicle_accident_info_id" action="action_vehicle_accident_info"/>
+    </data>
+</openerp>			
+					

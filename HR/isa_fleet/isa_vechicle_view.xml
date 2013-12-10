@@ -1,0 +1,97 @@
+<?xml version ='1.0'?>
+<openerp>
+	<data>
+		<!-- Form view of pnl model-->
+		
+		<record id="isa_maintenance_tree" model="ir.ui.view">
+			<field name="name">Vehicle Maintenance Tree</field>
+			<field name="model">isa.vehicle.maintenance</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Vehicle Maintenance">
+					<field name="maintenance_id"/>
+				 	<field name="category"/> 
+					<field name="vehicle_id" attrs="{'invisible':[('category','!=','vehicle')]}"/>
+					<field name="asset_id" attrs="{'invisible':[('category','!=','asset')]}"/>
+					<field name="type"/>
+					<field name="date_id"/>
+					<field name="spare_parts"/>
+					<field name="maintenance_cost"/>
+					<field name="remark" />
+					<field name="maintenance_state"/>
+					
+				</tree>
+			</field>
+		</record>
+		
+		<record id="isa_maintenance_form" model="ir.ui.view">
+			<field name="name">Vehicle Maintenance Form</field>
+			<field name="model">isa.vehicle.maintenance</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Vehicle Maintenance" version="7.0">
+					<header>
+					<button name="action_done" string="Done" type="object" class="oe_highlight" attrs="{'invisible':[('maintenance_state','!=','pending')]}"/>
+					<field name="maintenance_state" widget="statusbar"/>
+					</header>
+			         <sheet>
+			         <group>
+					<group colspan="4" col="4">
+					<group col="2"  attrs="{'readonly':[('maintenance_state','=','done')]}">
+					<separator string="Maintenance Details" colspan="4"/>
+					<field name="maintenance_id"/>
+					<field name="category" attrs="{'readonly':[('maintenance_state','=','done')]}"/>
+					<field name="vehicle_id" attrs="{'invisible':[('category','!=','vehicle')],'readonly':[('maintenance_state','=','done')]}"/>
+					<field name="asset_id" attrs="{'invisible':[('category','!=','asset')],'readonly':[('maintenance_state','=','done')]}"/>
+					<field name="type" attrs="{'readonly':[('maintenance_state','=','done')]}"/>
+					<field name="date_id" attrs="{'readonly':[('maintenance_state','=','done')]}"/>
+					</group>
+					<group>
+					</group>
+					</group>
+					<group colspan="4" col="4">
+					<separator string="Other Details" colspan="4"/>
+					<group col="2">
+					<field name="spare_parts" attrs="{'readonly':[('maintenance_state','=','done')]}"/>
+					<field name="maintenance_cost" attrs="{'readonly':[('maintenance_state','=','done')]}"/>
+					</group>
+					<group>
+					</group>
+					</group>
+					<field name="remark" attrs="{'readonly':[('maintenance_state','=','done')]}"/>
+					</group>
+			         </sheet> 
+					</form>
+			</field>
+		</record>
+	 <record model="ir.ui.view" id="view_vehicle_maintenance_calendar">
+                    <field name="name">Vehicle Maintenance Calendar</field>
+                    <field name="model">isa.vehicle.maintenance</field>
+                    <field name="priority" eval="2"/>
+                    <field name="arch" type="xml">
+                        <calendar string="Vahicle Maintenance" date_start="date_id" color="maintenance_id">
+                        <field name="maintenance_id"/>
+                            <field name="category"/>
+					        <field name="type"/>
+					        <field name="date_id"/>
+					
+                        </calendar>
+                       </field>
+                    </record>
+		
+		
+		<record id="action_isa_maintenance" model="ir.actions.act_window">
+			<field name="name">Vehicle Maintenance</field>
+			<field name="res_model">isa.vehicle.maintenance</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form,calendar</field>
+			<field name="view_id" ref="isa_maintenance_tree"/>
+		</record>
+		
+		
+		
+		
+		
+	</data>
+</openerp> 
+ 

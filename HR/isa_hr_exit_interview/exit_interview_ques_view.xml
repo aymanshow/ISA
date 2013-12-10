@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+
+        <record id="view_exit_interview_ques_tree" model="ir.ui.view">
+        <field name="name">exit.interview.ques.tree</field>
+        <field name="model">exit.interview.ques</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Exit Interview Question" version="7.0">
+		        <field name="question_id"/>
+            </tree>
+        </field>
+     	</record>
+    
+        <record id="view_exit_interview_ques_form" model="ir.ui.view">
+        <field name="name">exit.interview.ques.form</field>
+        <field name="model">exit.interview.ques</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Exit Interview Question" version="7.0">
+                 <sheet>
+                 <notebook>
+					<page string="Test Information">
+					<group>
+					
+					<field name="question_id" colspan="4" nolabel="1">
+				 		<tree editable="bottom" >
+							<field name="serial_number"/>
+						<field name="questions"/>
+					</tree>
+				</field>
+				</group>
+				</page>
+				<page string="Company Property">
+					<group>
+					<field name="company_property_id" colspan="4" nolabel="1">
+				 		<tree editable="bottom" >
+							<field name="serial_number"/>
+							<field name="question"/>
+							
+					</tree>
+				</field>
+				</group>
+				</page>
+				
+				<page string="Company Restriction">
+					<group>
+					<field name="company_restriction_ids" colspan="4" nolabel="1">
+				 		<tree editable="bottom" >
+				 		<field name="serial_number"/>
+		                <field name="item"/>
+					</tree>
+				</field>
+				</group>
+				</page>
+				
+				<page string="Final Exit Interview Ques.">
+					<group>
+					<field name="final_exit_interview_ques_id" colspan="4" nolabel="1">
+				 		<tree editable="bottom" >
+				 		<field name="serial_number"/>
+		                <field name="question"/>
+					</tree>
+				</field>
+				</group>
+				</page>
+				</notebook>
+               </sheet>
+                
+            </form>
+        </field>
+    </record>
+       <record id="action_exit_interview_ques" model="ir.actions.act_window">
+        <field name="name">Exit Interview Question</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">exit.interview.ques</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_exit_interview_ques_tree"/>
+    </record>
+    
+    <menuitem id="menu_exi_interview_ques_id" name= "Exit Interview" parent="hr.menu_hr_main" action="action_exit_interview_ques"/>
+    
+    </data>
+</openerp>

@@ -1,0 +1,40 @@
+<?xml version ='1.0'?>
+<openerp>
+    <data>
+        <!-- Form and Tree view for account module add two field portuguese_name and binary field name is file for importing purpose-->
+        
+        
+         <record id="isa_account_tree1" model="ir.ui.view">
+            <field name="name">ISA Account</field>
+            <field name="model">account.account</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref='account.view_account_tree'/>
+            <field eval="1" name="priority"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='code']" position="after">
+                    <field name='portuguese_name'/>
+                </xpath>
+                
+            </field>
+        </record>
+        <record id="isa_account_form" model="ir.ui.view">
+            <field name="name">ISA Account</field>
+            <field name="model">account.account</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref='account.view_account_form'/>
+            <field eval="1" name="priority"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/label[@for='code']" position="replace">
+                 <label for="code" class="oe_edit_only" string="Account Code Name and Portuguese"/>
+                </xpath>
+                <xpath expr="//form/h1/field[@name='name']" position="after">
+                <field name="portuguese_name" class="oe_inline" placeholder="Portuguese Name"/>
+                </xpath>
+                <xpath expr="//form/h1/field[@name='name']" position="replace">
+                <field name="name" class="oe_inline" placeholder="Account name"/>-
+                </xpath>
+                
+         </field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="view_certification_form_tree" model="ir.ui.view">
+        <field name="name">certification.form.tree</field>
+        <field name="model">certification.form</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="Enrollment Form" version="7.0">
+                <field name="product_id"/>
+                <field name="supplier_id"/>
+                <field name="user_ids" string="User"/>
+                <field name="certification_date"/>
+                <field name="expiration_date"/>
+            </tree>
+        </field>
+    </record>
+    
+        <record id="view_certification_form_form" model="ir.ui.view">
+        <field name="name">certification.form.form</field>
+        <field name="model">certification.form</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Enrollment Form" version="7.0">
+                <sheet>
+                    <group colspan="2" col="4">
+                        <field name="certification_date"/>
+                        <field name="expiration_date"/>
+                    </group>
+                    <group colspan="2" col="2" string="Certification Details">
+                    	<field name="product_id"/>
+                        <field name="supplier_id"/>
+                        <field name="employee_id"/>
+                        <field name="user_ids"/>
+                </group>
+                </sheet>
+            </form>
+        </field>
+        </record>
+        
+        <record id="view_certification_form_search" model="ir.ui.view">
+            <field name="name">certification.form.list.select</field>
+            <field name="model">certification.form</field>
+            <field name="arch" type="xml">
+                <search string="Supplier ">
+                    <separator/>
+                    <field name="supplier_id"/>
+                    <field name="certification_date"/>
+                    <field name="expiration_date"/>
+                    <field name="user_ids"/>
+                    <group expand="0" string="Group By...">
+                        <filter string="Supplier" icon="terp-personal" domain="[]" context="{'group_by':'supplier_id'}"/>
+                        <filter string="User" icon="terp-personal" domain="[]" context="{'group_by':'user_ids'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        
+        <record id="view_certification_form_calendar" model="ir.ui.view">
+            <field name="name">certification.form.calendar</field>
+            <field name="model">certification.form</field>
+            <field name="arch" type="xml">
+                <calendar string="Confirmation Form" date_start="certification_date">
+                    <field name="supplier_id"/>
+                    <field name="expiration_date"/>
+                </calendar>
+            </field>
+        </record>
+    
+    <record id="action_certification_form_tree" model="ir.actions.act_window">
+        <field name="name">Certification Form</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">certification.form</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="search_view_id" ref="view_certification_form_search"/>
+        <field name="view_id" ref="view_certification_form_tree"/>
+    </record>
+        
+    </data>
+</openerp>

@@ -1,0 +1,111 @@
+<?xml version ="1.0"?>
+<openerp>
+	<data>
+	
+
+
+		
+	
+		<record id="purchase_order_form_isa_inherit" model="ir.ui.view">
+            <field name="name">purchase.order.form</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+	            
+            	<xpath expr="//field[@name='partner_ref']" position="after">
+		            <field name='awb_no' />
+	            </xpath>
+				
+				<xpath expr="//page[@string='Incoming Shipments &amp; Invoices']" position="after">
+				<page string='Shipment Related Documents'>
+					
+					<div class='oe_right oe_button_box'>
+						<button name="send_mail" string="Send Mail"  type="object" />
+						<button name="approve_by_admin_sr" string="Approve" type="object" />
+					</div>
+					<group>
+					<group>
+		            <field name='awb_attachment' readonly='1'/>
+		            <field name='du_attachment' readonly='1'/>
+		            <field name='approve' readonly="1"/>
+		            </group>
+		            </group>
+		        </page>
+	            </xpath>
+				
+					            
+	        </field>
+	        </record>
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	
+	    	<record id="view_picking_in_form_inheris1" model="ir.ui.view">
+            <field name="name">stock.picking.in.form</field>
+            <field name="model">stock.picking.in</field>
+            <field name="inherit_id" ref="stock.view_picking_in_form"/>
+            <field name="arch" type="xml">
+	    			<xpath expr="//page[@string='Additional Info']" position="after">
+							<page string='Shipment Related Documents'>
+								<div class='oe_right oe_button_box'>
+									<button name="send_mail" string="Send Mail"  type="object" />
+									
+									<button name="approve_request" string="Approve" type="object" />
+								</div>
+								<group>
+								<field name='state1'/>
+					            <field name='awb_attachment1' />
+					            <field name='du_attachment1' />
+					            <field name='user_id'/>
+					            <field name='approve' />
+					            </group>
+					        </page>
+	            	</xpath>
+	            	
+	            	<xpath expr="//field[@name='auto_picking']" position="after">
+					            <field name='comments' />
+	            	</xpath>
+	            	
+	            	
+		    	</field>
+		    </record>
+		    
+		    
+		    
+		    <record id="stock_partial_picking_form_isa_inherits" model="ir.ui.view">
+            <field name="name">stock.partial.picking.form</field>
+            <field name="model">stock.partial.picking</field>
+	            <field name="inherit_id" ref="stock.stock_partial_picking_form"/>
+	            <field name="arch" type="xml">
+	    			<xpath expr="//field[@name='move_ids']" position="after">
+					   <field name='comments' />
+	            	</xpath>
+		    	</field>
+		    </record>
+		    
+		    
+	    	
+	    	<record id="stock_partial_picking_form_isa_inherits_invoice" model="ir.ui.view">
+	            <field name="name">account.invoice.supplier.form</field>
+            	<field name="model">account.invoice</field>
+	            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+	            <field name="arch" type="xml">
+	    			<xpath expr="//button[@name='invoice_open']" position="after">
+	    				<button name="payment_confirm" type='object' states="payment" string="Approve Payment" class="oe_highlight" groups="account.group_account_invoice"/>
+	            	</xpath>
+	            	<xpath expr="//button[@name='invoice_cancel']" position="replace">
+                        <button name="invoice_cancel" states="draft,proforma2,payment" string="Cancel Invoice" groups="account.group_account_invoice"/>
+	            	</xpath>
+	            	
+	            	
+	    	</field>
+	    	</record>
+	    		
+	    		
+	    		
+	    		
+	    
+	</data>
+</openerp>

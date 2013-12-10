@@ -1,0 +1,692 @@
+<?xml version="1.0"?>
+<openerp>
+   	<data>
+   	
+   	
+      
+        <record id="view_hr_batch_attendance_tree" model="ir.ui.view">
+            <field name="name">attendance.batch.tree</field>
+            <field name="model">attendance.batch</field>
+            <field name="arch" type="xml">
+                <tree string="Batch Attendance Records" version="7.0">
+                	
+                	
+                    
+                        <!--field name="name"/-->
+                        <field name="name"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        
+                        
+                 
+                    
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_hr_batch_attendance_form" model="ir.ui.view">
+            <field name="name">attendance.batch.form</field>
+            <field name="model">attendance.batch</field>
+            <field name="arch" type="xml">
+                <form string="Batch Attendance Records" version="7.0">
+                	
+                		<header>
+                		<button icon="gtk-apply" string="Generate" name="generate_batch" type="object" class="oe_highlight"/>
+                		<field name="state" widget="statusbar"/>
+                		
+                		</header>
+                    
+                        <!--field name="name"/-->
+                        <group>
+                        <field name="name"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        </group>
+                        <group col="2" colspan="2" string="Batch Attendance Slips">
+					
+					       <field name="attendance_batch_line" widget="one2many" colspan="4" nolabel="1"/>
+				   	 	</group>
+                        
+                 
+                    
+                </form>
+            </field>
+        </record>
+
+		<record id="view_hr_payroll_attendance_tree" model="ir.ui.view">
+            <field name="name">hr.payroll.attendance.tree</field>
+            <field name="model">hr.attendance.table.line</field>
+            <field name="arch" type="xml">
+                <tree string="Attendance Record for the Day" version="7.0">
+                	
+                	
+                    
+                        <!--field name="name"/-->
+                        <field name="employee_id"/>
+                        <field name="date"/>
+                        <field name="attendance"/>
+                        <field name="sign_in_time"/>
+                        <field name="sign_out_time"/>
+                        <field name="absent_info"/>
+                        <field name="final_result"/>
+                 
+                    
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_hr_payroll_irt_line_tree" model="ir.ui.view">
+            <field name="name">irt.table.line.tree</field>
+            <field name="model">irt.table.line</field>
+            <field name="arch" type="xml">
+                <tree string="IRT Table Lines" version="7.0" editable="bottom">
+                	
+                	
+                    
+                        <field name="irt_id" invisible="1"/>
+                        <field name="a_from_value"/>
+                        <field name="a_to_value"/>
+                        <field name="b_value"/>
+                        <field name="c_value"/>
+                        <field name="d_value"/>
+                        <field name="e_value" invisible="1"/>
+                        <field name="f_value" invisible="1"/>
+                        <field name="g_value" invisible="1"/>
+                        <field name="h_value" invisible="1"/>
+                        
+                 
+                    
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_hr_payroll_irt_line_form" model="ir.ui.view">
+            <field name="name">irt.table.line.form</field>
+            <field name="model">irt.table.line</field>
+            <field name="arch" type="xml">
+                <form string="IRT Table Lines" version="7.0">
+                	
+                	
+                    
+                       <group>
+                        <field name="irt_id" invisible="1"/>
+                        <field name="a_from_value"/>
+                        <field name="a_to_value"/>
+                        <field name="b_value"/>
+                        <field name="c_value"/>
+                        <field name="d_value"/>
+                        </group>
+                 
+                    
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_hr_payroll_irt_tree" model="ir.ui.view">
+            <field name="name">irt.table.tree</field>
+            <field name="model">irt.table</field>
+            <field name="arch" type="xml">
+                <tree string="IRT Table" version="7.0">
+                	
+                	
+                    
+                        
+                        <field name="name"/>
+                        
+                        
+                 
+                    
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_hr_payroll_irt_form" model="ir.ui.view">
+            <field name="name">irt.table.form</field>
+            <field name="model">irt.table</field>
+            <field name="arch" type="xml">
+                <form string="IRT Table" version="7.0">
+                	
+                	
+                    
+                        <group>
+                        <field name="name"/>
+                        </group>
+                        <group col="2" colspan="2" string="IRT TABLE">
+					
+					       <field name="irt_line" widget="one2many" colspan="4" nolabel="1"/>
+				   	 	</group>
+                        
+                        
+                 
+                    
+                </form>
+            </field>
+        </record>
+	
+	
+	<record id="view_hr_payroll_attendance_form" model="ir.ui.view">
+            <field name="name">hr.payroll.attendance.form</field>
+            <field name="model">hr.attendance.table.line</field>
+            <field name="arch" type="xml">
+                <form string="Attendance Record for the Day" version="7.0">
+                	<header>
+                       <button string="Compute Sheet" name="fetch_attendance_info" type="object" icon="gtk-apply"/>
+                    </header>
+                	
+                    <group col="4">
+                        <field name="name"/>
+                        <field name="employee_id"/>
+                        <field name="date"/>
+                        <field name="attendance"/>
+                        <field name="absent_info"/>
+                        <field name="final_result"/>
+                    </group>
+                    
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_hr_attendance_table_tree" model="ir.ui.view">
+            <field name="name">hr.attendance.table.tree</field>
+            <field name="model">hr.attendance.table</field>
+            <field name="arch" type="xml">
+                <tree string="Attendance Table" version="7.0">
+                	
+                	
+                    
+                        <field name="name"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="employee_id"/>
+                       
+           		                        
+                    
+                </tree>
+            </field>
+        </record>
+        
+        
+        <record id="view_hr_attendance_table_form" model="ir.ui.view">
+            <field name="name">hr.attendance.table.form</field>
+            <field name="model">hr.attendance.table</field>
+            <field name="arch" type="xml">
+                <form string="Attendance Table" version="7.0">
+                	<header>
+                       <button string="ReCompute" name="recompute_attendance" type="object" icon="gtk-apply"/>
+                       <button string="Generate Attendance" name="generate_attendance" type="object" icon="gtk-apply"/>
+                    </header>
+                	
+                    <group col="4">
+                        <field name="name"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="employee_id"/>
+                        
+                    </group>
+           		    <group col="2" colspan="2" string="Attendance Line">
+					
+					       <field name="attendance_line" widget="one2many" colspan="4"/>
+				    </group>
+                    
+                    
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_employee_form456" model="ir.ui.view">
+            <field name="name">view.employee.form.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="type">form</field>
+	    <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+            <xpath expr="/form/sheet/notebook/page[@string='Public Information']/group/group[@string='Position']" position="inside">
+      			
+      			<field name="ssnid"/>
+      			<field name="joining_date"/>
+      			<field name="no_of_months_worked"/>
+      			<field name="work_status"/>
+      			
+            </xpath>
+            <field name="department_id" position="replace">
+            <field name="department_id" on_change="onchange_department_id(department_id)"/>
+            <field name="department_name"/>
+            </field>
+            
+           
+            
+            <!-- <xpath expr="/form/sheet/notebook/page[@string='Personal Information']" position="inside">
+            
+            <field name="children" invisible="1"/>
+            
+            </xpath> -->
+            
+            <xpath expr="/form/sheet/notebook/page[@string='Personal Information']/group" position="inside">
+            <group col="2" colspan="2" string="Children Details">
+                 
+                <field name="no_of_children"/>
+           		<field name="children_line" widget="one2many" colspan="2" col="2"/>
+            </group>
+            <!--button string="Add Leave" name="add_allocated_leave" type="object" icon="gtk-apply"/>
+            <button string="Apply Leave Cycle for December" name="leave_cycle" type="object" icon="gtk-apply"/>
+            <button string="Apply Leave Cycle for March" name="leave_cycle_for_march" type="object" icon="gtk-apply"/>
+            <button string="Send mail on completion of 1 year" name="one_year_completed" type="object" icon="gtk-apply"/-->
+            </xpath>
+            <xpath expr="/form/sheet/notebook/page[@string='HR Settings']/group" position="inside">
+            
+            <field name="carry_forwarded_leaves"/>
+            
+            </xpath>
+            <!-- <group>
+            <field name="children" position="replace">
+            <field name="children" invisible="1"/>
+            </field>
+            </group> -->
+            
+            </field>
+            </record>
+            
+        <record id="view_children_tree" model="ir.ui.view">
+            <field name="name">children.details.tree</field>
+            <field name="model">children.details</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Children Details">
+			<field name="child_id" invisible="1"/>
+			<field name="child_no"/>
+			<field name="dob"/> 
+			<field name="age"/>        
+                </tree>
+            </field>
+        </record>
+
+	<record id="view_children_form" model="ir.ui.view">
+            <field name="name">children.details.form</field>
+            <field name="model">children.details</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Children Details">
+			<field name="child_id" invisible="1"/>
+			<field name="child_no"/>
+			<field name="dob" on_change="onchange_dob(dob)"/> 
+			<field name="age"/>        
+                </form>
+            </field>
+        </record>        
+        
+            
+        
+        
+        <record id="edit_holiday_status_form_inherit1" model="ir.ui.view">
+            <field name="name">edit.holiday.status.form.inherit1</field>
+            <field name="model">hr.holidays.status</field>
+            <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+            <field name="arch" type="xml">
+            <xpath expr="//form/notebook/page/group/group/field[@name='limit']" position="after">
+            	<field name='is_leave_allowance'/>
+            </xpath>
+            
+                <field name="name" position="after">
+                    <field name="payroll_code"/>
+                    <field name="leave_code"/>
+                </field>
+               
+            
+            </field>
+        </record>
+        
+        <record id="edit_holiday_new89" model="ir.ui.view">
+            <field name="name">hr.holiday.new.inherit</field>
+            <field name="model">hr.holidays</field>
+            <field name="type">form</field>
+	    <field name="inherit_id" ref="hr_holidays.edit_holiday_new"/>
+            <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/group/field[@name='category_id']" position="after">
+            <field name="virtual_is_leave_allowance" invisible="1"/>
+            <field name="is_apply_leave_allowance" attrs="{'invisible':[('virtual_is_leave_allowance','!=',True)]}"/>
+            </xpath>
+            <field name="holiday_status_id" position="replace">
+            <field name="holiday_status_id" on_change="onchange_holiday_status_id(holiday_status_id)"/>
+            </field>
+            <field name="number_of_days_temp" position="after">
+            <group string= "Attachment for Doctor's Certificate" attrs="{'invisible':[('onchange_holiday_status_id','!=','Sick Leaves')]}" colspan="2" col="2">
+            <field name="attachment_line" widget="one2many" colspan="4"/>
+            </group>
+            <field name="onchange_holiday_status_id" invisible="1"/>
+            
+           </field>
+           </field>
+           </record>
+           
+           <record id="hr_payslip_inherited_form" model="ir.ui.view">
+            <field name="name">hr.payslip.inherit</field>
+            <field name="model">hr.payslip</field>
+            <field name="type">form</field>
+	    <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+            <field name="arch" type="xml">
+            <!--xpath expr="/form/sheet/group" position="inside"-->
+            <field name="credit_note" position="after">
+            
+            <field name="number_of_months_worked"/>
+            </field>
+            <!--/xpath-->
+            </field>
+            </record>
+        
+        
+        <record id="hr_contract_form_inherit1" model="ir.ui.view">
+            <field name="name">hr.contract.view.form.inherit1</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='wage']" position="after">
+                    <field name="holidays_id"/>
+                    <field name="nutritional_allowance"/>
+                    <field name="attendance_incentive"/>
+                    <field name="da_lta_fa"/>
+                    <field name="special_allowance"/>
+                    <field name="bonus_amount"/>
+                    <field name="hra"/>
+                    <field name="result_telephone_allowance"/>
+                    <field name="irt"/>
+                    <field name="advance"/>
+                    <!--field name="bonus_for_director"/>
+                    <field name="sales_bonus"/-->
+                    <field name="leave_allowance_applicable"/>
+                    <field name="performance_bonus_applicable"/>
+                    <group col="2" colspan="2" string="Telephone Allowance">
+					
+						<field name="telephone_allowance_line" widget="one2many" colspan="4"/>
+					</group>
+                   
+                </xpath>
+               
+            </data>
+            </field>
+        </record>
+        <record id="view_telephone_allowance_tree" model="ir.ui.view">
+            <field name="name">telephone.allowance.tree</field>
+            <field name="model">telephone.allowance</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Telephone Allowance">
+					<field name="contract_id" invisible="1"/>
+					<field name="amount"/>
+					<field name="month" string="With Effective From"/>
+					<field name="year"/>
+					<field name="updation_date"/>
+					<!--field name="with_effective_from"/-->
+			        
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_telephone_allowance_form" model="ir.ui.view">
+            <field name="name">telephone.allowance.form</field>
+            <field name="model">telephone.allowance</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Telephone Allowance">
+                	<group>
+					<field name="contract_id" invisible="1"/>
+					<field name="amount"/>
+					<field name="updation_date" on_change="onchange_updation_date(updation_date)"/>
+					<group string="With Effective From: ">
+						<field name="month"/>
+						<field name="year"/>
+					</group>
+					</group>
+			        
+                </form>
+            </field>
+        </record>
+        
+        
+        
+        
+        <record id="view_leaves_calendar" model="ir.ui.view">
+            <field name="name">Public Holidays</field>
+            <field name="model">leaves.calendar</field>
+            <field name="arch" type="xml">
+                <calendar string="Public Holidays" color="name" date_start="date_from" date_stop="date_from">
+                    <field name="name"/>
+                    <!--field name="leave"/-->
+                    <field name="date_from"/>
+                    <field name="day"/>
+                    <field name="description"/>
+                </calendar>
+            </field>
+        </record>
+        
+        <record id="view_leaves_calendar_tree" model="ir.ui.view">
+            <field name="name">Holidays Calendar Tree</field>
+            <field name="model">leaves.calendar</field>
+            <field name="arch" type="xml">
+                <tree string="Public Holidays" version="7.0">
+                	
+                	
+                    
+                    <field name="name"/>
+                    <!--field name="leave"/-->
+                    <field name="date_from"/>
+                    <!--field name="date_to"/-->
+                    <field name="day"/>
+                    <field name="description"/>
+                    <field name="type"/>
+                       
+           		                        
+                    
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_users_notes_inherit" model="ir.ui.view">
+             <field name="name">res.users.inherit</field>
+             <field name="model">res.users</field>
+             <field name="inherit_id" ref="base.view_users_form"/>
+             <field name="arch" type="xml">
+                 <notebook position="inside">
+                   <page string="Employees with 1 year completion" >
+                     <group>
+                    <!-- <field name="loc_id"/> -->
+                     <field name="notes"/>
+                     <!-- <field name="src_loc_id"/>
+                     <field name="location_ids"  colspan="4"/> -->
+                     </group>
+                   </page>
+                   </notebook>  
+             </field>
+         </record>
+        
+        
+        <record id="view_leaves_calendar_form" model="ir.ui.view">
+            <field name="name">Holidays Calendar Form</field>
+            <field name="model">leaves.calendar</field>
+            <field name="arch" type="xml">
+                <form string="Public Holidays" version="7.0">
+                <header>
+                	<button string="Allocate Monthly 2 Leaves" name="allocate_monthly_two_leaves" type="object" icon="gtk-apply"/>
+                	<button string="Allocate Leaves to Mothers" name="allocate_leaves_to_mothers" type="object" icon="gtk-apply"/>
+                </header>
+                	
+                <group>	
+                    <field name="name"/>
+                    <!--field name="leave"/-->
+                    <field name="date_from" on_change="onchange_date(date_from)"/>
+                    <!--field name="date_to"/-->
+                    <field name="day"/>
+                    <field name="description"/>
+                    <field name="type"/>
+                 </group>   
+                    
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_holidays_calendar_tree" model="ir.ui.view">
+            <field name="name">Holidays Calendar Tree</field>
+            <field name="model">holidays.calendar</field>
+            <field name="arch" type="xml">
+                <tree string="Holidays Calendar" version="7.0">
+                	
+                	
+                    
+                    <field name="name"/>
+                    
+                    
+                       
+           		                        
+                    
+                </tree>
+            </field>
+        </record>
+        
+        <record id="view_holidays_calendar_form" model="ir.ui.view">
+            <field name="name">Holidays Calendar Form</field>
+            <field name="model">holidays.calendar</field>
+            <field name="arch" type="xml">
+                <form string="Holidays Calendar" version="7.0">
+                	
+                	
+                   <group> 
+                    <field name="name"/>
+                    
+                   </group>
+                   <group col="2" colspan="2" string="Public Holidays Line">
+					
+					<field name="holidays_line" widget="one2many" colspan="4"/>
+				   </group> 
+                   
+                    
+                       
+           		                        
+                    
+                </form>
+            </field>
+        </record>
+        
+        <record id="view_department_structure_tree" model="ir.ui.view">
+            <field name="name">department.name.tree</field>
+            <field name="model">hr.department</field>
+            <field name="field_parent">child_ids</field>
+            <field name="arch" type="xml">
+                <tree string="Departments">
+                    <field name="name"/>
+                    <field name="parent_id"/>
+                    
+                </tree>
+                
+            </field>
+        </record>
+        <record id="action_view_department_structure_tree" model="ir.actions.act_window">
+            <field name="name">Departments Structure</field>
+            <field name="res_model">hr.department</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="domain">[('parent_id','=',False)]</field>
+            <field name="view_type">tree</field>
+            <field name="view_id" ref="view_department_structure_tree"/>
+            
+        </record>
+        
+        
+        
+        
+		
+		<record id="action_view_hr_attendance_table_form" model="ir.actions.act_window">
+            <field name="name">Monthly Attendance Slips</field>
+            <field name="res_model">hr.attendance.table</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="view_hr_attendance_table_form"/>
+        </record>
+	
+	
+	<record id="action_view_hr_payroll_attendance_form" model="ir.actions.act_window">
+            <field name="name">Daily Attendance Slips</field>
+            <field name="res_model">hr.attendance.table.line</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="view_hr_payroll_attendance_form"/>
+        </record>
+        
+        <record id="action_view_hr_payroll_irt_table" model="ir.actions.act_window">
+            <field name="name">IRT Table</field>
+            <field name="res_model">irt.table.line</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_hr_payroll_irt_line_tree"/>
+        </record>
+        
+        <record id="action_view_leaves_calendar" model="ir.actions.act_window">
+            <field name="name">Public Holidays</field>
+            <field name="res_model">leaves.calendar</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">calendar,tree,form</field>
+            <field name="view_id" ref="view_leaves_calendar"/>
+        </record>
+        <record id="action_view_holidays_calendar1" model="ir.actions.act_window">
+            <field name="name">Holidays Calendar</field>
+            <field name="res_model">holidays.calendar</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            
+        </record>
+        
+        <record id="action_view_batch_attendance" model="ir.actions.act_window">
+            <field name="name">Batch Attendance Slips</field>
+            <field name="res_model">attendance.batch</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_hr_batch_attendance_form"/>
+        </record>
+        
+
+
+        <menuitem id="menu_hr_attendance" name="Attendances" parent="hr.menu_hr_root" sequence="10"/>
+	
+	    <menuitem
+            id="menu_hr_payroll_attendance_view123"
+            action="action_view_hr_attendance_table_form"
+            parent="menu_hr_attendance"
+            sequence="2"
+        />
+	    
+        <menuitem
+            id="menu_hr_payroll_attendance_view"
+            action="action_view_hr_payroll_attendance_form"
+            parent="menu_hr_attendance"
+            groups="base.group_hr_user"
+            sequence="3"
+        />
+        <menuitem
+            id="menu_hr_batch_attendance_view"
+            action="action_view_batch_attendance"
+            parent="menu_hr_attendance"
+            sequence="4"
+        />
+        <menuitem
+            id="menu_hr_payroll_irt_table_view"
+            action="action_view_hr_payroll_irt_table"
+            parent="menu_hr_attendance"
+            sequence="5"
+        />
+        
+        <menuitem
+            id="menu_hr_leaves_calendar_view"
+            action="action_view_leaves_calendar"
+            parent="menu_hr_attendance"
+            sequence="6"
+        />
+        <menuitem
+            id="menu_hr_holidays_calendar_view"
+            action="action_view_holidays_calendar1"
+            parent="menu_hr_attendance"
+            sequence="7"
+        />
+        <menuitem
+            id="menu_hr_departments_hierarchy_tree_view"
+            action="action_view_department_structure_tree"
+            parent="menu_hr_attendance"
+            sequence="8"
+        />
+        
+	</data>
+</openerp>

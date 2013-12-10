@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+	<data>
+	
+	
+	<record id="view_product_inherit" model="ir.ui.view">
+            <field name="name">product.product.form</field>
+            <field name="model">product.product</field>
+            <field name="inherit_id" ref='product.product_normal_form_view'/>
+            <field name="arch" type="xml">
+            	<xpath expr="//form/sheet/notebook/page/group/group/field[@name='type']" position="replace">
+            	    <field name="type" defaulte_type='asset'/>
+            	</xpath>
+            </field>
+        </record>
+	
+	
+	<!-- _________________________Visitor View_________________________________ -->
+	
+			<record id="view_office_visitors_tree" model="ir.ui.view">
+	            <field name="name">office.visitor.tree</field>
+	            <field name="model">office.visitor</field>
+	            <field name="type">tree</field>
+	            <field name="arch" type="xml">
+	                <tree string="Visitor Tree" version="7.0">
+	                	<field name="visitor_no"/>
+	                	<field name="name"/>
+						<field name="company"/>
+						<field name="reason"/>
+						<field name="in_time"/>
+						<field name="out_time"/>
+						<field name="state"/>
+	                </tree>
+	            </field>
+        	</record>
+
+			<record id="view_office_visitor_form" model="ir.ui.view">
+	             <field name="name">office.visitor.form</field>
+	            <field name="model">office.visitor</field>
+	            <field name="type">form</field>
+	            <field name="arch" type="xml">
+	                <form string="Enrollment Form" version="7.0" >
+	                <header>
+	                <button name="check_in" states="draft" type='object' string="Check IN"/>
+	                <button name="check_out" states="in" type='object' string="Check Out"/>
+						<field name="state" widget="statusbar"/>
+					</header>
+	             <sheet>
+	                <h1>
+                        <label string="Visitor"/>
+                    	<field name="visitor_no" class="oe_inline" readonly="1"/>
+                    </h1>
+	                
+	                <div class="oe_right oe_button_box" name="buttons">
+                        <button string="Schedule Appointment" name="%(action_appointment_wizard)d" type="action"/>
+                    </div>
+                    
+<!--                    	<group colspan="4" col="4">-->
+<!--								<field name="appointment" required="1"/>-->
+<!--								<field name="apt_no" attrs="{'invisible':[('appointment','!=','yes')],'required':[('appointment','=','yes')]}" />-->
+<!--						</group>-->
+						<group string="Visitor Information">
+		                	<group >
+									<field name="name" attrs="{'readonly':[('state','=','out')]}"/>
+									<field name="reason" string="Purpose For Visit" required="1" attrs="{'readonly':[('state','=','out')]}"/>
+									<field name="in_time"/>
+							</group>
+							<group>
+								<field name='phone' string="Contact Number" attrs="{'readonly':[('state','=','out')]}"/>
+								<field name="company" string="Coming From" attrs="{'readonly':[('state','=','out')]}"/>
+								<field name="out_time" attrs="{'readonly':[('state','=','out')]}"/>
+							</group>
+						</group>
+							<group  col="4" string="Employee Detail">
+								<field name="to_whom" required="1" on_change="onchange_department(to_whom)" attrs="{'readonly':[('state','=','out')]}"/>
+								<field name="department" required="1" attrs="{'readonly':[('state','=','out')]}"/>
+								
+							</group>
+							
+						
+						
+	                	<notebook>
+	                	<page string="Equipments">
+							<group colspan="4" col="4" string="Equipments" >
+								<field name="laptop" attrs="{'readonly':[('state','=','out')]}"/>
+								<field name="camera" attrs="{'readonly':[('state','=','out')]}"/>
+								<field name="storage" attrs="{'readonly':[('state','=','out')]}"/>
+								<field name="other_equip" attrs="{'readonly':[('state','=','out')]}"/>
+							</group>
+	                		</page>
+	                		<page string="Mode Of Transport">
+	                			<group colspan="4" col="4">
+		                				<field name="registration" attrs="{'readonly':[('state','=','out')]}"/>
+		                				<field name="model" attrs="{'readonly':[('state','=','out')]}"/>
+		                				<field name="color" attrs="{'readonly':[('state','=','out')]}"/>
+	                			</group>
+	                		</page>
+							<page string="Other Information">
+								<field name="other" attrs="{'readonly':[('state','=','out')]}"/>	
+							</page>				
+	                	</notebook>
+	                </sheet>
+	                </form>
+	            </field>
+	        </record>
+
+        <record id="view_enrollment_form_id" model="ir.actions.act_window">
+            <field name="name">Visitors Form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">office.visitor</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_office_visitors_tree"/>
+            <field name="help"></field>
+        </record>
+        
+        
+        <!-- _______________________meeting_______________________ -->
+		
+				<record id="view_office_meeting_tree" model="ir.ui.view">
+		            <field name="name">shedule.meeting.tree</field>
+		            <field name="model">shedule.meeting</field>
+		            <field name="type">tree</field>
+		            <field name="arch" type="xml">
+	           		     <tree string="Appointment Tree" version="7.0">
+		                	<field name="name"/>
+		                	<field name="subject" string="Subject"/>
+		                	<field name="user_id"/>
+			                <field name="person"/>
+			                <field name="company"/>
+			                <field name="appointment_date"/>
+			                <field name="end_date"/>
+			                <field name="duration" widget="float_time"/>
+			                <field name="state" readonly="1"/>
+			                <field name="reason" attrs="{'invisible':[('state','!=','cancel')]}"/>
+		                </tree>
+		            </field>
+        		</record>
+		
+		
+		<record id="view_office_meeting_form" model="ir.ui.view">
+	            <field name="name">shedule.meeting.form</field>
+	            <field name="model">shedule.meeting</field>
+	            <field name="type">form</field>
+	            <field name="arch" type="xml">
+	                <form string="Visitor Form" version="7.0">
+		                <header>
+							<field name="state" widget="statusbar" statusbar_visible="draft,approved,cancel" readonly="1"/>
+						</header>
+	                <sheet>	
+	                	<div class="oe_right oe_button_box" name="buttons">
+                        	<button string="Approve" states="draft" name="approve" type="object"/>
+                        	<button name='%(action_appointment_reject_wizard)d' states="draft,approved" type='action' string="Reject"/>
+                    	</div>
+	                	<group colspan="4" string="Appointment Details">
+		                	<field name="name" readonly="1"/>
+		                	<field name="subject" string="Subject" readonly="1"/>
+		                	<field name="user_id" readonly="1"/>
+			                <field name="person" readonly="1"/>
+			                <field name="company" readonly="1"/>
+			                <field name="phone" readonly="1"/>
+			                <field name="department" readonly="1"/>
+			                <field name="appointment_date" attrs="{'readonly':[('state','!=','draft')]}"/>
+			                <field name="end_date" attrs="{'readonly':[('state','!=','draft')]}" />
+			                <field name="duration" widget="float_time"/>
+			                <field name="reason" attrs="{'invisible':[('state','!=','cancel')]}"/>
+			            </group>
+			          </sheet>
+	                </form>
+	            </field>
+        	</record>
+        	
+		<!-- ____________________________Conference View________________________________ -->
+		
+				<record id="view_conference_meeting_tree" model="ir.ui.view">
+		            <field name="name">conference.master.tree</field>
+		            <field name="model">conference.master</field>
+		            <field name="type">tree</field>
+		            <field name="arch" type="xml">
+	           		     <tree string="Conference" version="7.0">
+		                	<field name="room_id"/>
+		                	<field name="name" />
+		                	<field name="capacity"/>
+			                <field name="description"/>
+		                </tree>
+		            </field>
+        		</record>
+		
+				<record id="view_conference_meeting_form" model="ir.ui.view">
+		            <field name="name">conference.master.form</field>
+		            <field name="model">conference.master</field>
+		            <field name="type">form</field>
+		            <field name="arch" type="xml">
+	           		     <form string="Conference" version="7.0">
+		                	<sheet>
+				                <h1>
+			                        <label string="Conference"/>
+			                    	<field name="room_id" class="oe_inline" readonly="1"/>
+			                    </h1>
+			                    <group col="4">
+									<group col="4">	                	
+					                	<field name="name" />
+					                	<field name="capacity"/>
+					                </group>
+					                <newline></newline>
+					                <group col="4">
+						                <field name="description"/>
+						            </group>
+					            </group>
+					         </sheet>
+		                </form>
+		            </field>
+        		</record>
+		
+				<record model="ir.ui.view" id="view_conference_calendar">
+			        <field name="name">Conference Calendar</field>
+			        <field name="model">conference.booking</field>
+			        <field name="priority" eval="2"/>
+			        <field name="arch" type="xml">
+			            <calendar string="Conference" date_start="date" color="room" date_stop="end_date" date_delay="duration">
+			                <field name="purpose"/>
+			                <field name="emp_name"/>
+			            </calendar>
+			       	</field>
+		   		 </record>
+		
+		<record id="view_conference_booking_tree" model="ir.ui.view">
+		            <field name="name">conference.booking.tree</field>
+		            <field name="model">conference.booking</field>
+		            <field name="type">tree</field>
+		            <field name="arch" type="xml">
+	           		     <tree string="Conference">
+		                	<field name="request_id"/>
+		                	<field name="emp_name" />
+		                	<field name="department"/>
+			                <field name="designation"/>
+			                <field name="room"/>
+			                <field name="date"/>
+			                <field name="duration"/>
+			                <field name="reason" attrs="{'invisible':[('state','!=','cancel')]}"/>
+			                <field name="state"/>
+			                
+		                </tree>
+		            </field>
+        		</record>
+		
+				<record id="view_conference_booking_form" model="ir.ui.view">
+		            <field name="name">conference.booking.form</field>
+		            <field name="model">conference.booking</field>
+		            <field name="type">form</field>
+		            <field name="arch" type="xml">
+	           		     <form string="Conference" version="7.0">
+		                	<header>
+		                		<button string="Approve" states="pending" name="approve" type="object"/>
+		                        	<button name='%(action_conference_reject_wizard)d' states="pending" type='action' string="Reject"/>
+								<field name="state" widget="statusbar" readonly="1"/>
+							</header>
+		                	<sheet>
+				                <h1>
+			                        <label string="Conference /"/>
+			                    	<field name="request_id" class="oe_inline" readonly="1"/>
+			                    </h1>
+			                    
+									<group col="4" string="Employee Details">	                	
+					                	<field name="emp_name" on_change="onchange_department(emp_name)" attrs="{'readonly':[('state','!=','draft')]}"/>
+					                	<field name="department" attrs="{'readonly':[('state','!=','draft')]}"/>
+						                <field name="designation" attrs="{'readonly':[('state','!=','draft')]}"/>
+						            </group>
+						        <group string="Room Details" cols='4'>     
+						        	<group>
+						                <field name="room" attrs="{'readonly':[('state','!=','draft')]}"/>
+						                <field name="date" attrs="{'readonly':[('state','!=','draft')]}"/>
+						                <field name="purpose"/>
+						                
+						             </group>
+						             <group>
+						             	<field name="priority" attrs="{'readonly':[('state','!=','draft')]}"/>
+						             	<field name="end_date" attrs="{'readonly':[('state','!=','draft')]}"/>
+						                <field name="duration" widget="float_time" readonly="1" attrs="{'readonly':[('state','!=','draft')]}"/>
+						                
+						           </group>
+						         </group>
+						         <group>
+						         <field name="reason" attrs="{'invisible':[('state','!=','cancel')]}"/>
+						         </group>
+					            <group>
+						            <separator colspan="4"/>
+						            	<field name='alternate_date' attrs="{'readonly':[('state','!=','draft')]}"/>
+					         		</group>
+					         </sheet>
+					         
+		                </form>
+		            </field>
+        		</record>
+        		
+        		
+        		
+      <!--____________________ Office Maintenace And Others__________________ -->
+		
+			
+			
+			
+			
+			
+			
+			<record id="view_location_tree" model="ir.ui.view">
+		            <field name="name">other.maintenance.tree</field>
+		            <field name="model">location.master</field>
+		            <field name="type">tree</field>
+		            <field name="arch" type="xml">
+	           		     <tree string="Conference" version="7.0">
+		                	<field name="loc_id"/>
+		                	<field name="name" />
+		                </tree>
+		            </field>
+        		</record>
+		
+				<record id="view_location_form" model="ir.ui.view">
+		            <field name="name">location.master.form</field>
+		            <field name="model">location.master</field>
+		            <field name="type">form</field>
+		            <field name="arch" type="xml">
+	           		     <form string="Conference" version="7.0">
+		                	<sheet>
+				                <h1>
+			                        <label string="ID"/>
+			                    	<field name="loc_id" class="oe_inline" readonly="1" string="ID -"/>
+			                    </h1>
+			                    <group>
+									<group col="2">	                	
+					                	<field name="name" />
+					                </group>
+					                <newline/>
+					            </group>
+					         </sheet>
+		                </form>
+		            </field>
+        		</record>
+			
+			
+				<record id="view_maintenace_tree1" model="ir.ui.view">
+		            <field name="name">other.maintenance.tree</field>
+		            <field name="model">maintenace.master</field>
+		            <field name="type">tree</field>
+		            <field name="arch" type="xml">
+	           		     <tree string="Conference" version="7.0">
+		                	<field name="loc_id"/>
+		                	
+		                	<field name="partner_id" domain="[('supplier','=',True)]" string="Vendor Name" on_change="onchange_partner(partner_id)"/>
+		                	<field name="feedback" readonly='1'/>
+		                	<field name='state'/>
+		                </tree>
+		            </field>
+        		</record>
+		
+				<record id="view_maintenace_form1" model="ir.ui.view">
+		            <field name="name">maintenace.master.form</field>
+		            <field name="model">maintenace.master</field>
+		            <field name="type">form</field>
+		            <field name="arch" type="xml">
+	           		     <form string="Conference" version="7.0">
+			           		     <header>
+                        			<button string="Done" name="%(action_done_wizard)d" type="action" attrs="{'invisible':[('state','=','done')]}"/>
+			           		     	<field name="state" widget="statusbar"/>
+			           		     	
+			           		     </header>
+				         	<sheet>
+				                <h1>
+			                        <label string="ID"/>
+			                    	<field name="loc_id" class="oe_inline" readonly="1" string="ID -"/>
+			                    </h1>
+			                    
+			                    <group>
+					                	<field name="name" invisible="1"/>
+					                	
+<!--					                	<field name="location_id" on_change="onchange_location(location_id)" />-->
+					                <newline/>
+					                <group col="4">
+					                <field name="task_lines" nolabel="1">
+					                	<tree editable="bottom" colspan="4">
+						                	<field name="main_id" invisible="1"/>
+						                	<field name="serial"/>
+						                	<field name="product" domain="[('type','=','asset')]"/>
+						                	<field name="location_id"/>
+						                	<field name="priority"/>
+						                	<field name="issue"/>
+					                	</tree>
+					                </field>
+					                </group>
+					                 </group>
+					                <newline/>
+					                <group colspan="2">
+						                <field name="partner_id" domain="[('supplier','=',True)]" string="Vendor Name" on_change="onchange_partner(partner_id)"/>
+						             </group>
+						             <newline/>
+						             <group colspan='2'>
+						                <field name="feedback" readonly='1'/>
+					                </group>
+					               
+					         </sheet>
+		                </form>
+		            </field>
+        		</record>
+			
+			
+			
+		
+			<record id="view_maintenace_tree" model="ir.ui.view">
+		            <field name="name">other.maintenance.tree</field>
+		            <field name="model">task.master</field>
+		            <field name="type">tree</field>
+		            <field name="arch" type="xml">
+	           		     <tree string="Conference" version="7.0">
+		                	<field name="loc_id"/>
+		                	<field name="location_id" on_change="onchange_location(location_id)" />
+		                	<field name="name" />
+		                </tree>
+		            </field>
+        		</record>
+		
+				<record id="view_maintenace_form" model="ir.ui.view">
+		            <field name="name">task.master.form</field>
+		            <field name="model">task.master</field>
+		            <field name="type">form</field>
+		            <field name="arch" type="xml">
+	           		     <form string="Conference" version="7.0">
+		                	<sheet>
+				                <h1>
+			                        <label string="ID"/>
+			                    	<field name="loc_id" class="oe_inline" readonly="1" string="ID -"/>
+			                    </h1>
+			                    <group>
+									<group col="2">	                	
+					                	<field name="name" invisible="1"/>
+					                	<field name="location_id" on_change="onchange_location(location_id)" />
+					                </group>
+					                <newline/>
+					                <group col="4">
+					                <field name="task_lines" nolabel="1">
+					                	<tree editable="bottom">
+						                	<field name="task_id" invisible="1"/>
+						                	<field name="serial"/>
+						                	<field name="name"/>
+					                	</tree>
+					                </field>
+					                </group>
+					            </group>
+					         </sheet>
+		                </form>
+		            </field>
+        		</record>
+				<record id="view_maintenace_task_tree" model="ir.ui.view">
+		            <field name="name">other.maintenance.tree</field>
+		            <field name="model">select.task</field>
+		            <field name="type">tree</field>
+		            <field name="arch" type="xml">
+	           		     <tree string="Conference" version="7.0">
+		                	<field name="main_id" invisible="1"/>
+		                	<field name="task_id" invisible="1"/>
+		                	<field name="task_mgr_id" invisible="1"/>
+		                	<field name="serial"/>
+		                	<field name="name"/>
+		                	<field name="task"/>
+		                	<field name="product"/>
+		                	<field name="issue"/>
+		                	<field name="priority"/>
+	    	            </tree>
+		            </field>
+        		</record>
+	
+		
+			<record id="view_maintenace_task_tree" model="ir.ui.view">
+		            <field name="name">task.manager.tree</field>
+		            <field name="model">task.manager</field>
+		            <field name="type">tree</field>
+		            <field name="arch" type="xml">
+	           		     <tree string="Conference" version="7.0">
+	           		     	<field name='loc_id'/>
+		                	<field name="emp_id" string="Employee Name" required="1"/>
+		                	<field name="location" string="Office"/>
+		                	<field name="date"/>
+					        <field name="verify" readonly="1"/>
+		                </tree>
+		            </field>
+        		</record>
+		
+				<record id="view_maintenace_task_form" model="ir.ui.view">
+		            <field name="name">task.manager.form</field>
+		            <field name="model">task.manager</field>
+		            <field name="type">form</field>
+		            <field name="arch" type="xml">
+	           		     <form string="Conference" version="7.0">
+		                	<sheet>
+				                <h1>
+			                        <label string="ID"/>
+			                    	<field name="loc_id" class="oe_inline" readonly="1"/>
+			                    </h1>
+			                    <group>
+									<group col="4">	                	
+					                	<field name="emp_id" string="HouseKeeper" required="1"/>
+					                	<field name="location" required="1" on_change="onchange_location(location)" />
+					                	<field name="date"/>
+					                	<field name="verify" readonly="1"/>
+					                </group>
+					                <newline/>
+					                <group col="4">
+					                <field name="task_lines" nolabel="1">
+					                	<tree editable="bottom">
+						                	<field name="task_mgr_id" invisible="1"/>
+						                	<field name="serial"/>
+						                	<field name="name" readonly="1"/>
+						                	<field name="task"/>
+					                	</tree>
+					                </field>
+					                </group>
+					            </group>
+						            <group>
+						            	<field name="description"/>
+						            </group>
+					         </sheet>
+		                </form>
+		            </field>
+        		</record>
+		
+		
+		
+		
+		<record model="ir.ui.view" id="view_isa_meeting_calendar">
+	        <field name="name">Meetings Calendar</field>
+	        <field name="model">shedule.meeting</field>
+	        <field name="priority" eval="2"/>
+	        <field name="arch" type="xml">
+            <calendar string="Meetings" date_start="appointment_date" color="user_id" date_stop="end_date" date_delay="duration">
+                <field name="subject"/>
+                <field name="person"/>
+                <field name="user_id"/>
+            </calendar>
+       			 </field>
+   		 </record>
+   		 
+   		 
+   		 <!-- _________________________Actions____________________________________ -->
+   		 
+		<record id="action_meeting_manage_isa" model="ir.actions.act_window">
+            <field name="name">Meeting Form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">shedule.meeting</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_office_meeting_tree"/>
+            <field name="help"></field>
+        </record>
+		
+		<record id="action_meeting_isa" model="ir.actions.act_window">
+            <field name="name">Meeting Form</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">shedule.meeting</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">calendar</field>
+            <field name="view_id" ref="view_isa_meeting_calendar"/>
+            <field name="help"></field>
+        </record>
+			
+		
+		<record id="action_conference_master" model="ir.actions.act_window">
+            <field name="name">Conference Room</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">conference.master</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_conference_meeting_tree"/>
+            <field name="help"></field>
+        </record>
+		
+		<record id="action_conference_master_booking" model="ir.actions.act_window">
+            <field name="name">Room Booking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">conference.booking</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">calendar,tree,form</field>
+            <field name="view_id" ref="view_conference_calendar"/>
+            <field name="help"></field>
+        </record>
+		
+		<record id="action_location_booking" model="ir.actions.act_window">
+            <field name="name">Location</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">location.master</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_location_tree"/>
+            <field name="help"></field>
+        </record>
+		
+		<record id="action_maintenance_master" model="ir.actions.act_window">
+            <field name="name">Maintenance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">maintenace.master</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_maintenace_tree1"/>
+            <field name="help"></field>
+        </record>
+		
+		
+		
+		<record id="action_maintenance_booking" model="ir.actions.act_window">
+            <field name="name">Maintenance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">task.master</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_maintenace_tree"/>
+            <field name="help"></field>
+        </record>
+		
+		<record id="action_maintenance_task_manager" model="ir.actions.act_window">
+            <field name="name">Maintenance</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">task.manager</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_maintenace_task_tree"/>
+            <field name="help"></field>
+        </record>
+		
+		
+		<!-- ___________________Menu Items_________________________________ -->
+
+            <menuitem name="Office Management"
+            id="mene_base_isa" sequence="0"/>
+            
+            <menuitem name="Certification" id="menu_certification" parent="mene_base_isa" sequence="0" />
+    		<menuitem name="Certification Form" id="menu_certification_form_id" parent="menu_certification" action="isa_supplier.action_certification_form_tree"/>
+            <menuitem id="sub_menu_base_isa" parent="mene_base_isa" name="Office Management" sequence="1" />
+            <menuitem id="menu_isa_visitor" parent="sub_menu_base_isa" name="Visitor Management" sequence="1" action="view_enrollment_form_id"/>	
+        	<menuitem id="menu_isa_meeting_sub" parent="sub_menu_base_isa" name="Appointment" sequence="1"/>
+        	<menuitem id="menu_isa_view" parent="menu_isa_meeting_sub" name="Appointments" sequence="1" action="action_meeting_manage_isa"/>
+        	<menuitem id="menu_isa_schedule" parent="menu_isa_meeting_sub" name="Appointment Schedule" sequence="2" action="action_meeting_isa"/>	
+    		
+    		<menuitem id="menu_conference_main" parent="sub_menu_base_isa" name="Conference" sequence="2"/>
+        	<menuitem id="menu_conference_master_schedule" parent="menu_conference_main" name="Room" sequence="1" action="action_conference_master"/>
+        	<menuitem id="menu_conference_booking" parent="menu_conference_main" name="Booking" sequence="2" action="action_conference_master_booking"/>
+    		
+    		<menuitem id="menu_maintenance_main" parent="sub_menu_base_isa" name="Maintenance" sequence="3"/>
+<!--    		<menuitem id="menu_location_master" parent="menu_maintenance_main" name="Location Master" sequence="1" action="action_location_booking"/>-->
+        	<menuitem id="menu_maintenance_schedule" parent="menu_maintenance_main" name="Housekeeping" sequence="2" action="action_maintenance_booking"/>
+        	<menuitem id="menu_maintenance_master" parent="menu_maintenance_main" name="Maintenance" sequence="2" action="action_maintenance_master"/>
+        	<menuitem id="menu_task_manager" parent="menu_maintenance_main" name="Housekeeping Task" sequence="3" action="action_maintenance_task_manager"/>
+    </data>
+</openerp>

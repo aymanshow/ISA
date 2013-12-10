@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1" >
+        
+        <!-- Sequences for sale.order -->
+        <record id="seq_type_vehicle_maintenance" model="ir.sequence.type">
+            <field name="name">ISA VEHICLE MAINTENANCE</field>
+            <field name="code">isa.vehicle.maintenance</field>
+        </record>
+        
+        <record id="seq_vehicle_maintenance_hr" model="ir.sequence">
+            <field name="name">ISA VEHICLE MAINTENANCE</field>
+            <field name="code">isa.vehicle.maintenance</field>
+            <field name="prefix">MT/</field>
+            <field name="padding">4</field>
+        </record>
+       </data>
+</openerp>

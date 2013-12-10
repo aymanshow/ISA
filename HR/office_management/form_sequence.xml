@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        
+        <!-- Sequences for sale.order -->
+        <record id="seq_visitor_form" model="ir.sequence.type">
+            <field name="name">Visitors Sequence</field>
+            <field name="code">office.visitor</field>
+        </record>
+        
+        <record id="seq_enrolment_form" model="ir.sequence">
+            <field name="name">Visitors Sequence</field>
+            <field name="code">office.visitor</field>
+            <field name="prefix">ISA-VI</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+       <record id="seq_appointment_form1" model="ir.sequence.type">
+            <field name="name">Appointment Sequence</field>
+            <field name="code">shedule.meeting</field>
+        </record>
+         
+        <record id="seq_appointment_form" model="ir.sequence">
+            <field name="name">Appointment Sequence</field>
+            <field name="code">shedule.meeting</field>
+            <field name="prefix">ISA-APT</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="id_conference_room" model="ir.sequence.type">
+            <field name="name">Conference Sequence</field>
+            <field name="code">conference.master</field>
+        </record>
+         
+        <record id="seq_conference_room" model="ir.sequence">
+            <field name="name">Conference Sequence</field>
+            <field name="code">conference.master</field>
+            <field name="prefix">ISA-CNF</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="id_conference_room_book" model="ir.sequence.type">
+            <field name="name">Conference Sequence</field>
+            <field name="code">conference.booking</field>
+        </record>
+         
+        <record id="seq_conference_room_book" model="ir.sequence">
+            <field name="name">Conference Sequence</field>
+            <field name="code">conference.booking</field>
+            <field name="prefix">ISA-CBQ</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="id_task_book" model="ir.sequence.type">
+            <field name="name">Conference Sequence</field>
+            <field name="code">task.master</field>
+        </record>
+         
+        <record id="seq_task_book" model="ir.sequence">
+            <field name="name"> Sequence</field>
+            <field name="code">task.master</field>
+            <field name="prefix">ISA-TSM</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+         
+        <record id="id_vehicle_book" model="ir.sequence.type">
+            <field name="name">Conference Sequence</field>
+            <field name="code">vehicle.choice</field>
+        </record>
+        
+        <record id="seq_conference_vehicle_book" model="ir.sequence">
+            <field name="name">Sequence</field>
+            <field name="code">vehicle.choice</field>
+            <field name="prefix">ISA-VBQ</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        
+        
+        <record id="id_task_manager_id" model="ir.sequence.type">
+            <field name="name">Conference Sequence</field>
+            <field name="code">task.manager</field>
+        </record>
+         
+        <record id="seq_task_manager" model="ir.sequence">
+            <field name="name"> Sequence</field>
+            <field name="code">task.manager</field>
+            <field name="prefix">ISA-TSK</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        
+        <record id="id_isa_maintenamce_seq" model="ir.sequence.type">
+            <field name="name">Maintenance Sequence</field>
+            <field name="code">maintenace.master</field>
+        </record>
+        <record id="seq_maintenance_master" model="ir.sequence">
+            <field name="name">Maintenance Sequence</field>
+            <field name="code">maintenace.master</field>
+            <field name="prefix">ISA-MNT</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+    </data>
+</openerp>

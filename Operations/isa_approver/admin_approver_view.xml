@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    
+<!--    <record model="ir.ui.view" id="approve_email_compose_message_wizard_inherit_form123">-->
+<!--            <field name="name">mail.compose.message.form</field>-->
+<!--            <field name="model">mail.compose.message</field>-->
+<!--            <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>-->
+<!--            <field name="arch" type="xml">-->
+<!--            	<field name="subject" position="after">-->
+<!--            		<field name="receiver_email"/>-->
+<!--            	</field>-->
+<!--            </field>-->
+<!--            -->
+<!--    </record>-->
+    
+     <record id="intiation_tab_edit_project" model="ir.ui.view">
+            <field name="name">project.project.form</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.edit_project"/>
+            <field name="arch" type="xml">
+	            <field name="state" position="replace">
+	            <field name="state" widget="statusbar" statusbar_visible="draft,initiate,planning,open,close" statusbar_colors='{"pending":"blue"}' readonly="1"/>
+	            </field>
+            	<notebook>
+				 <page string="Initiation">
+				    <notebook>
+				    <page string="Kick-off">
+				    <group>
+				      <group colspan="4" col="4">
+					  	<field name="datas" filename="datas_fname"/>
+							<div class="oe_right oe_button_box" name="buttons" groups="base.group_user">
+	                         <button name="send_mail_approve" string="Send Mail" states="sent" type="object" attrs="{'invisible':[('state_for_appr','in',['sent_for_approval','approval'])]}"/>
+	                       	 <button name="approve_by_admin" string="Approve" type="object" attrs="{'invisible':[('state_for_appr','not in',['sent_for_approval'])]}"/>
+	                    	</div>
+	                    	
+	                    </group>
+                    </group>
+                   	<group colspan="4" col="4">
+                   	  <group>
+	                    <field name="approve_id" widget="selection"/>
+						<field name="state_for_appr"/>
+						<field name="comment_datas" class="oe_inline" placeholder="Place your comment..."/>
+					  </group>
+					  <group>
+						<field name="datas_fname" invisible="1"/>
+						<field name="datas_project_charter_fname" invisible="1"/>
+					  </group>
+					</group>
+				    </page>
+				    <page string="Project charter">
+					  <group>
+					   <group colspan="4" col="4">
+					  	<field name="datas_project_charter" filename="datas_project_charter_fname"/>
+							<div class="oe_right oe_button_box" name="buttons" groups="base.group_user">
+	                         <button name="send_mail_approve_doc" string="Send Mail" type="object" attrs="{'invisible':[('state_for_appr_project','in',['sent_for_approval','approval'])]}"/>
+	                         <button name="approve_by_pro_admin" string="Approve" type="object" attrs="{'invisible':[('state_for_appr_project','not in',['sent_for_approval'])]}"/>
+                    		</div>
+                    	</group>
+                       </group>
+                   	   <group colspan="4" col="4">
+                   	   <group>
+	                   	    <field name="approve_project_charter_id" widget="selection"/>
+						 	<field name="state_for_appr_project"/>
+						 	<field name="comment_project" class="oe_inline" placeholder="Place your comment..."/>
+					 	</group>
+					 	<group>
+							<field name="datas_fname" invisible="1"/>
+							<field name="datas_project_charter_fname" invisible="1"/>
+					    </group>
+					  </group>
+				    </page>
+<!--					  <page string="Finance Document">-->
+<!--					  <group>-->
+<!--					 	 <field name="datas_finance_document" filename="datas_finance_document_fname"/>-->
+<!--					 	 <field name="approve_finance_document_id" widget="selection"/>-->
+<!--					 	 <field name="datas_finance_document_fname" invisible="1"/>-->
+<!--					  </group>-->
+<!--					  <field name="comment_finance" class="oe_inline" placeholder="Place your comment..."/>-->
+<!--					    </page>-->
+					</notebook>
+				   </page>
+				</notebook>
+          </field>
+     </record>
+     
+     <record id="open_view_project_all1" model="ir.actions.act_window">
+            <field name="name">Projects</field>
+            <field name="res_model">project.project</field>
+            <field name="view_type">form</field>
+            <field name="domain">[]</field>
+            <field name="view_mode">kanban,tree,form,gantt</field>
+            <field name="view_id" ref="project.view_project_kanban"/>
+            <field name="search_view_id" ref="project.view_project_project_filter"/>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                  Click to start a new project.
+                </p><p>
+                  Projects are used to organize your activities; plan
+                  tasks, track issues, invoice timesheets. You can define
+                  internal projects (R&amp;D, Improve Sales Process),
+                  private projects (My Todos) or customer ones.
+                </p><p>
+                  You will be able collaborate with internal users on
+                  projects or invite customers to share your activities.
+                </p>
+            </field>
+        </record>
+        
+        <menuitem action="open_view_project_all1" id="project.menu_projects" name="Projects" parent="project.menu_project_management" sequence="1"/>
+                  
+    </data>
+</openerp>

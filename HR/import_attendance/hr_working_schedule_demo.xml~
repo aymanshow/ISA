@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        
+
+        <record id="hr_working_schedule1" model="resource.calendar">
+            <field name="name">Working Schedule 1</field>
+        </record>
+
+        <record id="hr_working_schedule2" model="resource.calendar">
+            <field name="name">Working Schedule 2</field>
+        </record>
+
+        <record id="hr_working_schedule3" model="resource.calendar">
+            <field name="name">Working Schedule 3</field>
+        </record>
+
+        <record id="hr_working_schedule4" model="resource.calendar">
+            <field name="name">Working Schedule 4</field>
+        </record>
+
+		<record id="hr_working_schedule5" model="resource.calendar">
+            <field name="name">Working Schedule 5</field>
+        </record>
+		
+		<record id="hr_working_schedule6" model="resource.calendar">
+            <field name="name">Working Schedule 6</field>
+        </record>
+		
+		<record id="hr_working_schedule7" model="resource.calendar">
+            <field name="name">Working Schedule 7</field>
+        </record>
+        
+        
+
+		<record id="hr_monday1" model="resource.calendar.attendance">
+            <field name="name">Monday</field>
+            <field name="dayofweek">0</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule1"/>
+        </record>
+        
+        <record id="hr_tuesday1" model="resource.calendar.attendance">
+            <field name="name">Tuesday</field>
+            <field name="dayofweek">1</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule1"/>
+        </record>
+        
+        <record id="hr_wednesday1" model="resource.calendar.attendance">
+            <field name="name">Wednesday</field>
+            <field name="dayofweek">2</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule1"/>
+        </record>
+        
+        <record id="hr_thursday1" model="resource.calendar.attendance">
+            <field name="name">Thursday</field>
+            <field name="dayofweek">3</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule1"/>
+        </record>
+        
+        <record id="hr_friday1" model="resource.calendar.attendance">
+            <field name="name">Friday</field>
+            <field name="dayofweek">4</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule1"/>
+        </record>
+        
+        <!--record id="hr_saturday1" model="resource.calendar.attendance">
+            <field name="name">Saturday</field>
+            <field name="dayofweek">5</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule1"/>
+        </record-->
+
+
+        
+        
+        <record id="hr_tuesday2" model="resource.calendar.attendance">
+            <field name="name">Tuesday</field>
+            <field name="dayofweek">1</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule2"/>
+        </record>
+        
+        <record id="hr_wednesday2" model="resource.calendar.attendance">
+            <field name="name">Wednesday</field>
+            <field name="dayofweek">2</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule2"/>
+        </record>
+        
+        <record id="hr_thursday2" model="resource.calendar.attendance">
+            <field name="name">Thursday</field>
+            <field name="dayofweek">3</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule2"/>
+        </record>
+        
+        <record id="hr_friday2" model="resource.calendar.attendance">
+            <field name="name">Friday</field>
+            <field name="dayofweek">4</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule2"/>
+        </record>
+        
+        <record id="hr_saturday2" model="resource.calendar.attendance">
+            <field name="name">Saturday</field>
+            <field name="dayofweek">5</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule2"/>
+        </record>
+        
+        <record id="hr_sunday2" model="resource.calendar.attendance">
+            <field name="name">Sunday</field>
+            <field name="dayofweek">6</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule2"/>
+        </record>
+        
+        
+        
+        <record id="hr_monday3" model="resource.calendar.attendance">
+            <field name="name">Monday</field>
+            <field name="dayofweek">0</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule3"/>
+        </record>
+        
+        <record id="hr_wednesday3" model="resource.calendar.attendance">
+            <field name="name">Wednesday</field>
+            <field name="dayofweek">2</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule3"/>
+        </record>
+        
+        <record id="hr_thursday3" model="resource.calendar.attendance">
+            <field name="name">Thursday</field>
+            <field name="dayofweek">3</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule3"/>
+        </record>
+        
+        <record id="hr_friday3" model="resource.calendar.attendance">
+            <field name="name">Friday</field>
+            <field name="dayofweek">4</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule3"/>
+        </record>
+        
+        <record id="hr_saturday3" model="resource.calendar.attendance">
+            <field name="name">Saturday</field>
+            <field name="dayofweek">5</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule3"/>
+        </record>
+        
+        <record id="hr_sunday3" model="resource.calendar.attendance">
+            <field name="name">Sunday</field>
+            <field name="dayofweek">6</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule3"/>
+        </record>
+
+        
+        
+        <record id="hr_monday4" model="resource.calendar.attendance">
+            <field name="name">Monday</field>
+            <field name="dayofweek">0</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule4"/>
+        </record>
+        
+        <record id="hr_tuesday4" model="resource.calendar.attendance">
+            <field name="name">Tuesday</field>
+            <field name="dayofweek">1</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule4"/>
+        </record>
+        
+        <record id="hr_thursday4" model="resource.calendar.attendance">
+            <field name="name">Thursday</field>
+            <field name="dayofweek">3</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule4"/>
+        </record>
+        
+        <record id="hr_friday4" model="resource.calendar.attendance">
+            <field name="name">Friday</field>
+            <field name="dayofweek">4</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule4"/>
+        </record>
+        
+        <record id="hr_saturday4" model="resource.calendar.attendance">
+            <field name="name">Saturday</field>
+            <field name="dayofweek">5</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule4"/>
+        </record>
+        
+        <record id="hr_sunday4" model="resource.calendar.attendance">
+            <field name="name">Sunday</field>
+            <field name="dayofweek">6</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule4"/>
+        </record>
+
+        
+        
+        <record id="hr_monday5" model="resource.calendar.attendance">
+            <field name="name">Monday</field>
+            <field name="dayofweek">0</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule5"/>
+        </record>
+        
+        <record id="hr_tuesday5" model="resource.calendar.attendance">
+            <field name="name">Tuesday</field>
+            <field name="dayofweek">1</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule5"/>
+        </record>
+        
+        <record id="hr_wednesday5" model="resource.calendar.attendance">
+            <field name="name">Wednesday</field>
+            <field name="dayofweek">2</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule5"/>
+        </record>
+        
+        <record id="hr_friday5" model="resource.calendar.attendance">
+            <field name="name">Friday</field>
+            <field name="dayofweek">4</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule5"/>
+        </record>
+        
+        <record id="hr_saturday5" model="resource.calendar.attendance">
+            <field name="name">Saturday</field>
+            <field name="dayofweek">5</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule5"/>
+        </record>
+        
+        <record id="hr_sunday5" model="resource.calendar.attendance">
+            <field name="name">Sunday</field>
+            <field name="dayofweek">6</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule5"/>
+        </record>
+
+
+        
+        
+        <record id="hr_monday6" model="resource.calendar.attendance">
+            <field name="name">Monday</field>
+            <field name="dayofweek">0</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule6"/>
+        </record>
+        
+        <record id="hr_tuesday6" model="resource.calendar.attendance">
+            <field name="name">Tuesday</field>
+            <field name="dayofweek">1</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule6"/>
+        </record>
+        
+        <record id="hr_wednesday6" model="resource.calendar.attendance">
+            <field name="name">Wednesday</field>
+            <field name="dayofweek">2</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule6"/>
+        </record>
+        
+        <record id="hr_thursday6" model="resource.calendar.attendance">
+            <field name="name">Thursday</field>
+            <field name="dayofweek">3</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule6"/>
+        </record>
+        
+        <record id="hr_saturday6" model="resource.calendar.attendance">
+            <field name="name">Saturday</field>
+            <field name="dayofweek">5</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule6"/>
+        </record>
+        
+        <record id="hr_sunday6" model="resource.calendar.attendance">
+            <field name="name">Sunday</field>
+            <field name="dayofweek">6</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule6"/>
+        </record>
+        
+        
+        
+        <record id="hr_monday7" model="resource.calendar.attendance">
+            <field name="name">Monday</field>
+            <field name="dayofweek">0</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule7"/>
+        </record>
+        
+        <record id="hr_tuesday7" model="resource.calendar.attendance">
+            <field name="name">Tuesday</field>
+            <field name="dayofweek">1</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule7"/>
+        </record>
+        
+        <record id="hr_wednesday7" model="resource.calendar.attendance">
+            <field name="name">Wednesday</field>
+            <field name="dayofweek">2</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule7"/>
+        </record>
+        
+        <record id="hr_thursday7" model="resource.calendar.attendance">
+            <field name="name">Thursday</field>
+            <field name="dayofweek">3</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule7"/>
+        </record>
+        
+        <record id="hr_friday7" model="resource.calendar.attendance">
+            <field name="name">Friday</field>
+            <field name="dayofweek">4</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule7"/>
+        </record>
+        
+        <record id="hr_sunday7" model="resource.calendar.attendance">
+            <field name="name">Sunday</field>
+            <field name="dayofweek">6</field>
+            <field name="hour_from">10</field>
+            <field name="hour_to">18</field>
+            <field name="calendar_id" ref="hr_working_schedule7"/>
+        </record>
+        
+        
+        </data>
+</openerp>

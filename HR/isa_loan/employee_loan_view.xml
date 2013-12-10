@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+     
+ 
+ 
+ <record id="hr_employee_loan_tree" model="ir.ui.view">
+            <field name="name">hr.employee.loan.tree</field>
+            <field name="model">hr.employee.loan</field>
+            <field name="priority">4</field>
+            <field name="arch" type="xml">
+                <tree string="Employee Loan" >
+                    <field name="name" />
+                    <field name="employee_id"/>
+                    <field name='loan_type'/>
+                    <field name="request_date"/>
+                    <field name="approval_date"/>
+                    <field name="request_loan_amount"/>
+                    <field name="approve_loan_amount"/>
+                    <field name="interest"/>
+                    <field name="no_of_month"/>
+                    
+                    
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+    
+    
+     <record id="hr_employee_loan_form" model="ir.ui.view">
+            <field name="name">hr.employee.loan.form</field>
+            <field name="model">hr.employee.loan</field>
+            <field name="arch" type="xml">
+                <form string="Employee Loan" version="7.0">
+                    <header>
+                         <button name="loan_cancel" states="confirm,approved" string="Cancel" type="object" />
+                         <!--button name="loan_issue" states="approved" string="Issue" type="object" /-->
+                         <button name="loan_release" states="approved" string="Loan Release" type="object" attrs="{'invisible':[('loan_type','!=','loan')]}"/>
+                         <button name="loan_approve" states="confirm" string="Approve" type="object" />
+                        <button name="loan_confirm" states="draft" string="Confirm" type="object" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,approved,progress,done" />
+                </header>
+                <sheet>
+                    <h1>
+                       
+                        <field name="name" class="oe_inline" readonly="1" />
+                    </h1>
+                        <field name='note'/>
+                    
+                    
+                    <group>
+                        <group >
+		                   <group>
+		                   		<field name="employee_id"/>
+		                   		<field name='loan_type'/>
+		                   		<field name="request_loan_amount"/>
+		                   </group>
+		                   <group>
+		                    	<field name="request_date"/>
+		                    	<field name="emi_start_month" attrs="{'required':[('loan_type','=','loan')]}"/>
+		                    	<field name="approval_date" attrs="{'readonly':[('state','=','draft')]}"/>
+		                     	<field name="loan_date" attrs="{'readonly':[('state','=','draft')]}"/>
+<!--							<label name='Loan For the month'/>-->
+							<!--field name='from_date' />
+							<field name='to_date' /-->
+		                    	<field name="no_of_month" attrs="{'invisible':[('loan_type','=','advance')]}"/>
+		                    </group>
+
+		                    
+		                    <group>
+		                    <field name="interest" attrs="{'invisible':[('loan_type','=','advance')]}"/>
+		                    <field name="approve_loan_amount" states='approved,confirm,progress'/>
+		                    
+		                    <field name="approx_emi" attrs="{'invisible':[('loan_type','=','advance')]}"/>
+		                    <field name="last_emi_date" attrs="{'invisible':[('loan_type','=','advance')]}"/>
+		                    </group>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Jobs Order Lines">
+                            <field name="loan_line" >
+                                    <tree  string="Loan Line" editable="bottom" >
+                                    <field name="name" />
+                                    <field name="month" />
+                                    <field name="emi_date" />
+                                    <field name="bal_loan_amount" />
+                                    <field name="interest_amount" />
+                                    <field name="monthly_principle_paid" />
+                                    <field name="emi_amount" />
+                                    <field name="advance" />
+                                    <field name="payment_date" />
+                                     <field name="payslip_id" />
+                                    <field name="loan_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Reason for Loan/Advance">
+                        <field name="reason" nolabel="1"/>
+                        
+                        </page>
+                    </notebook>
+                </sheet>
+                
+                </form>
+            </field>
+        </record>
+        
+        
+        
+        
+     <record id="action_hr_employee_loan" model="ir.actions.act_window">
+            <field name="name">Employee Loan</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.employee.loan</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+	<menuitem id="menu_hr_loan" name="Loan" parent="hr.menu_hr_root" sequence="11"/>
+        <menuitem
+            action="action_hr_employee_loan"
+            id="menu_hr_employee_loan"
+            parent="menu_hr_loan"
+            name = "Employee Loan"
+            sequence="1"  />
+            
+            
+    
+ <record id="hr_employee_loan__reschedule_tree" model="ir.ui.view">
+            <field name="name">hr.employee.loan.reschedule.tree</field>
+            <field name="model">hr.employee.loan.reschedule</field>
+            <field name="priority">4</field>
+            <field name="arch" type="xml">
+                <tree string="Employee Loan Reschedule" >
+                    <field name="name" />
+                   <field name="amount"/>
+		           <field name="loan_id"/>
+		           <field name="loan_line_id"/>
+		           <field name="adjust_emi"/>
+		           <field name="no_of_emi"/>
+                    
+                    
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+                
+    <record id="hr_employee_loan_reschedule_form" model="ir.ui.view">
+            <field name="name">hr.employee.loan.reschedule.form</field>
+            <field name="model">hr.employee.loan.reschedule</field>
+            <field name="arch" type="xml">
+                <form string="Employee Loan Reschedule" version="7.0">
+                    <header>
+                        <button name="loan_reschedule_confirm" states="draft" string="Confirm" type="object" />
+                        <button name="loan_reschedule_approve" states="confirm" string="Approve" type="object" />
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirm,progress,done" />
+                </header>
+                <sheet>
+                    <h1>
+                        <field name="name" class="oe_inline" readonly="1" />
+                    </h1>
+                    <group>
+                        <group >
+		                    <group>
+		                   <field name="employee_id"/>
+		                    <field name="loan_id" domain="[('employee_id','=',employee_id)]"/>
+		                    <field name="adjust_emi"/>
+		                    </group>
+		                   <group>
+		                    <field name="amount"/>
+		                    <field name="loan_line_id"  domain="[('loan_id','=',loan_id)]"/>
+		                    <field name="no_of_emi"/>
+		                    </group>
+                        </group>
+                    </group>
+                     <notebook>
+                        <page string="notes">
+                        <field name="reason" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                </form>
+            </field>
+        </record>
+        
+        
+        
+        
+     <record id="action_hr_employee_reschedule_loan" model="ir.actions.act_window">
+            <field name="name">Employee Loan Reschedule</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.employee.loan.reschedule</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        
+        <menuitem
+            action="action_hr_employee_reschedule_loan"
+            id="menu_hr_employee_reschedule_loan"
+            parent="menu_hr_loan"
+            name = "Employee Loan Reschedule"
+            sequence="2" />        
+</data>
+</openerp>
