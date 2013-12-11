@@ -6,7 +6,7 @@
     'description':'hello',
     'author': 'Drishti Tech',
     'website': 'http://www.drishtitech.com',
-    'depends': ['base','purchase',],
+    'depends': ['base','purchase','stock','account_voucher','account'],
     'data': [
 #              'sequence.xml',
 #              'wizard/pnl_wizard_view.xml',
