@@ -318,6 +318,41 @@ class project_project(osv.osv):
                     #'res_id': list
                     }
         return res
+    def view_budget(self,cr,uid,ids,context):
+        res={}
+        list=[]
+        obj=self.browse(cr,uid,ids[0])
+        print "budgets====================",obj.budget_id
+        if obj.budget_id:
+            list.append(obj.budget_id.id)
+            print " if============="
+            res = {
+                    'domain': ([('id', 'in', list)]),
+                    'view_type': 'form',
+                    'view_mode': 'form',
+                    'res_model': 'crossovered.budget',
+                    'target':'current',
+                    #'view_id': list[0],
+                    'nodestroy': True,
+                    'type': 'ir.actions.act_window',
+                    'name' : 'Budgets',
+                    'res_id': list[0]
+                    }
+        else:
+            print "else=================="
+            res = {
+                    'domain': ([('id', 'in', list)]),
+                    'view_type': 'form',
+                    'view_mode': 'tree,form',
+                    'res_model': 'crossovered.budget',
+                    'target':'current',
+                    'nodestroy': True,
+                    'type': 'ir.actions.act_window',
+                    'name' : 'Budgets',
+                    'res_id': list
+                    }
+        print "res===============",res
+        return res
     def change_request(self,cr,uid,ids,context):
         res={}
         list=[]

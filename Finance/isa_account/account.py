@@ -865,8 +865,110 @@ class account_voucher(osv.osv):
 class account_move(osv.osv):
     _inherit = "account.move"
     
+    def _get_amount(self, cr,uid,c):
+         res=False
+         val={}
+         res=self.pool.get('base.usd').search(cr,uid,[('name','ilike','USD')])
+         if res:
+             obj=self.pool.get('base.usd').browse(cr,uid,res[0])
+             return obj.amount
+         return val
+    
     _columns = {
                 'rate_usd' : fields.float('USD Rate',required=True),
                 }
 
     
+    _defaults={
+               'rate_usd':lambda self,cr,uid,c: self._get_amount(cr, uid, c),
+               
+               }
+class account_bank_statement_line(osv.osv):
+    _name = "account.bank.statement.line"
+    _inherit='account.bank.statement.line' 
+    _columns={
+              
+             'account_id': fields.many2one('account.account','Account',), 
+             'state':fields.related('statement_id','state',type='selection',string='Status',required=True,selection=[('draft', 'New'),
+                                   ('open','Open'), # used by cash statements
+                                   ('approve','Approval'),
+                                   ('confirm', 'Closed')]),
+              
+              }
+    _defaults={
+               'state':'draft',
+               }    
+class account_bank_statement(osv.osv):
+    _name='account.bank.statement'
+    _inherit='account.bank.statement'
+    _columns={
+              'state': fields.selection([('draft', 'New'),
+                                   ('open','Open'), # used by cash statements
+                                   ('approve','Approval'),
+                                   ('confirm', 'Closed')],
+                                   'Status', required=True, readonly="1",
+                                   help='When new statement is created the status will be \'Draft\'.\n'
+                                        'And after getting confirmation from the bank it will be in \'Confirmed\' status.'),
+              
+              'department_id':fields.many2one('hr.department','Department'),
+              
+              }
+    def get_approve(self,cr,uid,ids,context=None):
+        self.write(cr,uid,ids,{'state':'approve'})
+        return True
+    
+    
+    def check_status_condition(self, cr, uid, state, journal_type='bank'):
+        return state in ('draft','open','approve')
+    
+class account_cash_statement(osv.osv):
+    _inherit = 'account.bank.statement'   
+    def get_approve(self,cr,uid,ids,context=None):
+        self.write(cr,uid,ids,{'state':'approve'})
+        return True
+
+
+
+    
+class payment_request(osv.osv):
+    _name='payment.request'
+    def _get_journal(self, cr, uid, context=None):
+        journal_pool = self.pool.get('account.journal')
+        res=journal_pool.search(cr, uid, [('type', '=', 'cash')],)
+        return res and res[0] or False
+    _columns={
+              
+              'department_id':fields.many2one('hr.department','Department'),
+              'journal_id':fields.many2one('account.journal','Journal'),
+              'amount':fields.integer('Requested Amount'),
+              'account_from_id':fields.many2one('account.account','From Account'),
+              'account_to_id':fields.many2one('account.account','To Account'),
+              'amount_approve':fields.integer('Approved Amount'),
+              'description':fields.char('Description For Cash'),
+              'state': fields.selection([('draft', 'New'),
+                                   ('waiting','Waiting'), # used by cash statements
+                                   ('approve','Approved'),],
+                                   'Status', required=True),
+              'date':fields.date('Date'),
+              
+              }
+    _defaults={
+               'state':'draft',
+               'journal_id':_get_journal,
+               'date': lambda *a: time.strftime('%Y-%m-%d'),
+               
+               }
+    def send_request(self,cr,uid,ids,context):
+        self.write(cr,uid,ids,{'state':'waiting'})
+        return True
+    def approve(self,cr,uid,ids,context):
+        self.write(cr,uid,ids,{'state':'approve'})
+        return True
+    
+    
+class hr_department(osv.osv):
+    _inherit='hr.department'
+    
+    _columns={
+              'issued_amount':fields.integer('Issued Amount'),
+              }

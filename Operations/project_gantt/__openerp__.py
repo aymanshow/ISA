@@ -6,10 +6,11 @@
     'description':'hello',
     'author': 'Drishti Tech',
     'website': 'http://www.drishtitech.com',
-    'depends': ['base','project','isa_pnl'],
+    'depends': ['base','project','isa_pnl','hr'],
     'data': [
 #              'sequence.xml',
 #              'wizard/pnl_wizard_view.xml',
+            'project_gantt_data.xml',
              'project_view.xml',
              ],
     'installable': True,
