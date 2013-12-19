@@ -53,17 +53,6 @@ class employee_training1(osv.osv):
                  'training_state':'draft',
                  'traing_id': lambda self,cr,uid,context={}: self.pool.get('ir.sequence').get(cr, uid, 'employee.training1'),
                  }
-#     def name_get(self,cr,uid,ids, context=None):
-#         records = self.browse(cr, uid, ids, context=context)
-#         employee_obj=self.pool.get('hr.employee')
-#         employee_ids=employee_obj.browse(cr,uid,ids,emp_name_id)
-#         
-#         result = {}
-#         for r in records:
-#             visit_name = r['pod_id']['name'] + '-' + r.visit_nb
-#             print "visit name = %s" % visit_name
-#             result[r.id] = visit_name
-#         return result
     
     def onchange_employee_id(self,cr,uid,ids,emp_name_id,context=None):
              res={}
@@ -79,6 +68,8 @@ class employee_training1(osv.osv):
                        'emp_id':line.identification_id,
                        } 
                  return {'value': res}
+             
+             
     def action_submit(self,cr,uid,ids,context=None):
         list=[]
         certi_obj=self.pool.get('certificate.information'),
@@ -176,10 +167,16 @@ class employee_training1(osv.osv):
             awating_obj=self.pool.get('awating.certificate')
             obj=self.browse(cr,uid,ids[0])
             if obj.awating_approwal_line:
+                flag=0
                 for val in obj.awating_approwal_line:
-                    if val.is_certified =='f':
-                         raise osv.except_osv(('Warning!'),('Please update the result field if the employee has submitted the Pass Certificate'))
-                self.write(cr, uid, ids, {'training_state': 'done'})    
+                    if val.is_certified =='p':
+                        flag=1
+                    else:
+                        flag=0
+                if flag==1:
+                    self.write(cr, uid, ids, {'training_state': 'done'}) 
+                else:
+                     raise osv.except_osv(('Warning!'),('Please attached the certificate and result field set is pass'))           
                 return True
        
     def action_paid(self,cr,uid,ids,context=None):
@@ -229,6 +226,7 @@ class employee_training1(osv.osv):
         return True
 class travel_mode(osv.osv):
     _name='travel.mode'
+    
     def action_crete_invoice(self,cr,uid,ids,context=None):
          curr_user=self.pool.get('res.users').search(cr, uid, [('id','=',uid)])
          for cu in self.pool.get('res.users').browse(cr,uid,curr_user):
@@ -239,21 +237,38 @@ class travel_mode(osv.osv):
             for ac in self.pool.get('account.account').browse(cr, uid, curr_account):
                 account_id = ac.id
          if ids:
-           obj=self.browse(cr,uid,ids[0])
-           invoice_id=self.pool.get('account.invoice').create(cr,uid,{'partner_id':obj.agency_name_id.id,'account_id':account_id,'company_id':1,'reference_type':'none','currency_id':obj.agency_name_id.company_id.currency_id.id,'journal_id':13,'type':'in_invoice'})
-           invoice_line=self.pool.get('account.invoice.line').create(cr,uid,{'invoice_id':invoice_id,'quantity':1,'price_unit':obj.ticket_cost,'name':obj.travel_mode,})
-           self.write(cr,uid,obj.id,{'invoice_id':invoice_id})
-         return {'name':'Invoice',
+            obj=self.browse(cr,uid,ids[0])
+            inv=self.pool.get('account.invoice').onchange_company_id(cr, uid, ids, cu.company_id.id, obj.agency_name_id.id, 'in_invoice', [(0,0,{'quantity':1,'price_unit':obj.ticket_cost,'name':obj.travel_mode,'account_id':account_id})],obj.agency_name_id.company_id.currency_id.id,)
+            journal_id=inv['value']['journal_id']
+            invoice_id=obj.invoice_id and obj.invoice_id.id or False
+            if not invoice_id:
+                invoice_id=self.pool.get('account.invoice').create(cr,uid,{     
+                                                                                  'journal_id':journal_id,
+                                                                                  'type':'in_invoice',
+                                                                                  'partner_id':obj.agency_name_id.id,
+                                                                                  'account_id':account_id,
+                                                                                  'company_id':cu.company_id.id,
+                                                                                  'reference_type':'none',
+                                                                                  'currency_id':obj.agency_name_id.company_id.currency_id.id,
+                                                                                  'invoice_line':[(0,0,{'invoice_id':invoice_id,'quantity':1,'price_unit':obj.ticket_cost,'name':obj.travel_mode})],
+                                                                                  })
+                self.write(cr,uid,obj.id,{'invoice_id':invoice_id})
+                
+         return {
+                 'name':'Invoice',
                 'res_model':'account.invoice',
                 'type':'ir.actions.act_window',
                 'view_type':'form',
                 'view_mode':'form,tree',
                 'target':'current',
                 'res_id':invoice_id,
-                 'target': 'new',
                 'nodestroy': True,
+                'target': 'new',
                 'context':context.update({'active_model':'account.invoice','active_ids':[invoice_id],'active_id':invoice_id}),
-                'domain':[('id','in',[invoice_id])]}
+                'domain':[('id','in',[invoice_id])]
+                }
+         
+         
     def invoice_pay_customer1(self, cr, uid, ids, context=None):
             travel_obj=self.pool.get('travel.mode')
             invoice_obj=self.pool.get('account.invoice')
@@ -286,6 +301,7 @@ class travel_mode(osv.osv):
                     'type': inv.type in ('out_invoice','out_refund') and 'receipt' or 'payment'
                 }
             }
+            
     _columns={
               'travel_mode':fields.selection(TRAVEL_MODE, 'Travel Mode',help="Select The Traveling mode"),
               'trave_date':fields.date('Travel Date'),
@@ -310,6 +326,7 @@ class travel_mode(osv.osv):
               }
 class hotel_management(osv.osv):
     _name='hotel.management'
+    
     def action_crete_invoice(self,cr,uid,ids,context=None):
          curr_user=self.pool.get('res.users').search(cr, uid, [('id','=',uid)])
          for cu in self.pool.get('res.users').browse(cr,uid,curr_user):
@@ -321,10 +338,24 @@ class hotel_management(osv.osv):
                 account_id = ac.id
          if ids:
             obj=self.browse(cr,uid,ids[0])
-            invoice_id=self.pool.get('account.invoice').create(cr,uid,{'partner_id':obj.hotel_name_id.id,'account_id':account_id,'company_id':1,'reference_type':'none','currency_id':obj.hotel_name_id.company_id.currency_id.id,'journal_id':13,'type':'in_invoice'})
-            invoice_line=self.pool.get('account.invoice.line').create(cr,uid,{'invoice_id':invoice_id,'quantity':1,'price_unit':obj.hotel_cost,'name':obj.hotel_address})
-            self.write(cr,uid,obj.id,{'invoice_id':invoice_id})
-         return {'name':'Invoice',
+            inv=self.pool.get('account.invoice').onchange_company_id(cr, uid, ids, cu.company_id.id, obj.hotel_name_id.id, 'in_invoice', [(0,0,{'quantity':1,'price_unit':obj.hotel_cost,'name':obj.hotel_address})],obj.hotel_name_id.company_id.currency_id.id,)
+            journal_id=inv['value']['journal_id']
+            invoice_id=obj.invoice_id and obj.invoice_id.id or False
+            if not invoice_id:
+                invoice_id=self.pool.get('account.invoice').create(cr,uid,{     
+                                                                                  'journal_id':journal_id,
+                                                                                  'type':'in_invoice',
+                                                                                  'partner_id':obj.hotel_name_id.id,
+                                                                                  'account_id':account_id,
+                                                                                  'company_id':cu.company_id.id,
+                                                                                  'reference_type':'none',
+                                                                                  'currency_id':obj.hotel_name_id.company_id.currency_id.id,
+                                                                                  'invoice_line':[(0,0,{'invoice_id':invoice_id,'quantity':1,'price_unit':obj.hotel_cost,'name':obj.hotel_address})],
+                                                                                  })
+                self.write(cr,uid,obj.id,{'invoice_id':invoice_id})
+                
+         return {
+                 'name':'Invoice',
                 'res_model':'account.invoice',
                 'type':'ir.actions.act_window',
                 'view_type':'form',
@@ -334,7 +365,8 @@ class hotel_management(osv.osv):
                 'nodestroy': True,
                 'target': 'new',
                 'context':context.update({'active_model':'account.invoice','active_ids':[invoice_id],'active_id':invoice_id}),
-                'domain':[('id','in',[invoice_id])]}
+                'domain':[('id','in',[invoice_id])]
+                }
     def invoice_pay_customer1(self, cr, uid, ids, context=None):
             hotel_obj=self.pool.get('hotel.management')
             invoice_obj=self.pool.get('account.invoice')
@@ -414,6 +446,7 @@ class hotel_management(osv.osv):
               }
 class visa_approval(osv.osv):
     _name='visa.approval'
+    
     def action_crete_invoice(self,cr,uid,ids,context=None):
          curr_user=self.pool.get('res.users').search(cr, uid, [('id','=',uid)])
          for cu in self.pool.get('res.users').browse(cr,uid,curr_user):
@@ -425,10 +458,23 @@ class visa_approval(osv.osv):
                 account_id = ac.id
          if ids:
             obj=self.browse(cr,uid,ids[0])
-            invoice_id=self.pool.get('account.invoice').create(cr,uid,{'partner_id':obj.visa_company_id.id,'account_id':account_id,'company_id':1,'reference_type':'none','currency_id':obj.visa_company_id.company_id.currency_id.id,'journal_id':13,'type':'in_invoice'})
-            invoice_line=self.pool.get('account.invoice.line').create(cr,uid,{'invoice_id':invoice_id,'quantity':1,'price_unit':obj.visa_cost,'name':obj.country})
-            self.write(cr,uid,obj.id,{'invoice_id':invoice_id})
-         return {'name':'Invoice',
+            inv=self.pool.get('account.invoice').onchange_company_id(cr, uid, ids, cu.company_id.id, obj.visa_company_id.id, 'in_invoice', [(0,0,{'quantity':1,'price_unit':obj.visa_cost,'name':obj.country})],obj.visa_company_id.company_id.currency_id.id,)
+            journal_id=inv['value']['journal_id']
+            invoice_id=obj.invoice_id and obj.invoice_id.id or False
+            if not invoice_id:
+                invoice_id=self.pool.get('account.invoice').create(cr,uid,{     
+                                                                                  'journal_id':journal_id,
+                                                                                  'type':'in_invoice',
+                                                                                  'partner_id':obj.visa_company_id.id,
+                                                                                  'account_id':account_id,
+                                                                                  'company_id':cu.company_id.id,
+                                                                                  'reference_type':'none',
+                                                                                  'currency_id':obj.visa_company_id.company_id.currency_id.id,
+                                                                                  'invoice_line':[(0,0,{'invoice_id':invoice_id,'quantity':1,'price_unit':obj.visa_cost,'name':obj.country})],
+                                                                                  })
+                self.write(cr,uid,obj.id,{'invoice_id':invoice_id}) 
+            return {
+                 'name':'Invoice',
                 'res_model':'account.invoice',
                 'type':'ir.actions.act_window',
                 'view_type':'form',
@@ -438,7 +484,10 @@ class visa_approval(osv.osv):
                 'nodestroy': True,
                 'target': 'new',
                 'context':context.update({'active_model':'account.invoice','active_ids':[invoice_id],'active_id':invoice_id}),
-                'domain':[('id','in',[invoice_id])]}
+                'domain':[('id','in',[invoice_id])]
+                }
+    
+    
     def invoice_pay_customer1(self, cr, uid, ids, context=None):
             visa_obj=self.pool.get('visa.approval')
             invoice_obj=self.pool.get('account.invoice')
@@ -510,8 +559,12 @@ class awating_certificate(osv.osv):
                                                     ('refuse', 'Rejected')] ,help="The related status for the stage. The status of your document will automatically change according to the selected stage. Example, a stage is related to the status 'Close', when your document reach this stage, it will be automatically closed."),
 
               }
+
+awating_certificate()
+
 class certificate_information(osv.osv):
     _name='certificate.information'
+    
     def action_crete_invoice(self,cr,uid,ids,context=None):
          curr_user=self.pool.get('res.users').search(cr, uid, [('id','=',uid)])
          for cu in self.pool.get('res.users').browse(cr,uid,curr_user):
@@ -523,10 +576,25 @@ class certificate_information(osv.osv):
                 account_id = ac.id
          if ids:
             obj=self.browse(cr,uid,ids[0])
-            invoice_id=self.pool.get('account.invoice').create(cr,uid,{'partner_id':obj.certificate_vendor_id.id,'account_id':account_id,'company_id':1,'reference_type':'none','currency_id':obj.certificate_vendor_id.company_id.currency_id.id,'journal_id':13,'type':'in_invoice'})
-            invoice_line=self.pool.get('account.invoice.line').create(cr,uid,{'invoice_id':invoice_id,'quantity':1,'price_unit':obj.cost,'name':obj.name})
-            self.write(cr,uid,obj.id,{'invoice_id':invoice_id})
-         return {'name':'Invoice',
+            inv=self.pool.get('account.invoice').onchange_company_id(cr, uid, ids, cu.company_id.id, obj.certificate_vendor_id.id, 'in_invoice', [(0,0,{'quantity':1,'price_unit':obj.cost,'name':obj.name})], obj.certificate_vendor_id.company_id.currency_id.id)
+            journal_id=inv['value']['journal_id']
+            invoice_id=obj.invoice_id and obj.invoice_id.id or False
+            if not invoice_id:
+                invoice_id=self.pool.get('account.invoice').create(cr,uid,{
+                                                                                 'journal_id':journal_id,
+                                                                                  'type':'in_invoice',
+                                                                                  'partner_id':obj.certificate_vendor_id.id,
+                                                                                  'supplier':1,
+                                                                                  'account_id':account_id,
+                                                                                  'company_id':cu.company_id.id,
+                                                                                  'reference_type':'none',
+                                                                                  'currency_id':obj.certificate_vendor_id.company_id.currency_id.id,
+                                                                                  'invoice_line':[(0,0,{'invoice_id':invoice_id,'quantity':1,'price_unit':obj.cost,'name':obj.name})]
+                                                                                  })
+                self.write(cr,uid,obj.id,{'invoice_id':invoice_id})
+                
+         return {
+                 'name':'Invoice',
                 'res_model':'account.invoice',
                 'type':'ir.actions.act_window',
                 'view_type':'form',
@@ -536,17 +604,20 @@ class certificate_information(osv.osv):
                 'nodestroy': True,
                 'target': 'new',
                 'context':context.update({'active_model':'account.invoice','active_ids':[invoice_id],'active_id':invoice_id}),
-                'domain':[('id','in',[invoice_id])]}
+                'domain':[('id','in',[invoice_id])]
+                }
+         
     def invoice_pay_customer1(self, cr, uid, ids, context=None):
             certificate_obj=self.pool.get('certificate.information')
             invoice_obj=self.pool.get('account.invoice')
             obj=self.browse(cr,uid,ids[0])
+            print'==========invoice_id=====',obj.invoice_id.number
             certificate_id=invoice_obj.search(cr, uid, [('id','=',obj.invoice_id.id),('state','=','open')])
+            print'========certificate_id=========',certificate_id
             if not certificate_id:
                 raise osv.except_osv(('Warning!'),('This Invoice is already paid'))
             if not certificate_id: return []
             dummy, view_id = self.pool.get('ir.model.data').get_object_reference(cr, uid, 'account_voucher', 'view_vendor_receipt_dialog_form')
-    
             inv = invoice_obj.browse(cr, uid, certificate_id[0], context=context)
             return {
                 'name':_("Pay Invoice"),
@@ -585,7 +656,8 @@ class certificate_information(osv.osv):
               'invoice_id':fields.many2one('account.invoice','Invoice Number',readonly=True),
               'certi_rel':fields.many2one('awating.certificate','Certificate Relation'),
               'certificate_inform_id':fields.many2one('employee.training1','Certificate Relation'),
-              }    
+              }
+certificate_information()
 
 
 

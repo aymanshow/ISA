@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+        <!-- EDI related Email Templates menu -->
+        <record model="ir.actions.act_window" id="action_email_templates">
+            <field name="name">Email Templates</field>
+            <field name="res_model">email.template</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="view_id" ref="email_template.email_template_tree" />
+            <field name="search_view_id" ref="email_template.view_email_template_search" />
+            <field name="context"
+                eval="{'search_default_model_id': ref('model_hr_applicant')}" />
+        </record>
+    </data>
+
+    <!-- Mail template are declared in a NOUPDATE block so users can freely 
+        customize/delete them -->
+    <data noupdate="1">
+        <!--Email template -->
+        <record id="email_template_edi_joining_process" model="email.template">
+            <field name="name">Email template for sending Offer Letter to the Applicant</field>
+            <field name="email_from">${object.user_id.email}</field>
+            <field name="subject">Offer Letter for the Designation of ${object.job_id.name} in Department ${object.department_id.name} with Integrated Solutions</field>
+            <field name="email_to"></field>
+            <field name="auto_delete" eval="True" />
+            <field name="model_id" ref="model_hr_applicant" />
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; "> <p>Hello ${object.doctor_name.name},
+</p> 
+<p>Dear Applicant,</p>
+<p>Congratulations! As we are happy to inform you that you have cleared the interview process for the post of ${object.job_id.name}</p>
+
+<p>Please find attached the Offer Letter for the post of ${object.job_id.name} in Department ${object.department_id.name}. The Offer mentioned in this mail will be valid till ${object.date}.
+
+<p>Request you to accept the offer before ${object.date}, as the offer will be void thereafter.</p>
+
+ </p> <div> Web :&nbsp;<a href="${object.company_id.website}">${object.company_id.website}</a> </div>
+ <p> &nbsp; With Regards</p>
+<p>&nbsp;HR Department</p>
+<p>&nbsp;Integrated Solutions</p>
+<p>&nbsp;Note: This is a system generated message do not reply to this email.</p>
+  <p></p>
+   </div>
+    </div>
+            ]]></field>
+        </record>
+    </data>
+</openerp>
+ 

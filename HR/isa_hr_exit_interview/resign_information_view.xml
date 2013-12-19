@@ -139,7 +139,7 @@
     </record>
         
     <record id="action_emp_resign_info" model="ir.actions.act_window">
-        <field name="name">Employee Resign</field>
+        <field name="name">Resignation</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">resign.information</field>
         <field name="view_type">form</field>
@@ -147,7 +147,7 @@
         <field name="view_id" ref="view_emp_resign_info_tree"/>
     </record>
     
-    <menuitem id="menu_emp_resign_info_id2" name= "Employee Resign" parent="hr.menu_hr_main" action="action_emp_resign_info"/>
+    <menuitem id="menu_emp_resign_info_id2" name= "Resignation" action="action_emp_resign_info" parent="employee_resigns" sequence="0"/>
     
     </data>
 </openerp>

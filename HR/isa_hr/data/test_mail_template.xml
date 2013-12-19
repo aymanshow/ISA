@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+        <!-- EDI related Email Templates menu -->
+        <record model="ir.actions.act_window" id="action_email_templates">
+            <field name="name">Email Templates</field>
+            <field name="res_model">email.template</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="view_id" ref="email_template.email_template_tree" />
+            <field name="search_view_id" ref="email_template.view_email_template_search" />
+            <field name="context"
+                eval="{'search_default_model_id': ref('model_hr_applicant')}" />
+        </record>
+    </data>
+
+    <!-- Mail template are declared in a NOUPDATE block so users can freely 
+        customize/delete them -->
+    <data noupdate="1">
+        <!--Email template -->
+        <record id="email_template_edi_test" model="email.template">
+            <field name="name">For Test Information Send by mail</field>
+            <field name="email_from">${object.user_id.email'}</field>
+            <field name="subject">Login ID and Password for Test</field>
+            <field name="email_to">${object.email_from}</field>
+            <field name="auto_delete" eval="True" />
+            <field name="model_id" ref="model_hr_applicant" />
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+
+    <p>Dear Applicant,</p>
+    <P>Your Login details are given below. Request you to reach on time for the test. The system details will be provided to you at the venue.</P>
+<p><b>User Name:${object.email_from}</b></p>
+<p><b>Password: ${object.password}</b></p>
+<p> All the Best!</p>
+    <p>With Regards</p>
+     <p>  HR Department</p>
+      <p> Integrated Solutions</p>
+       <p>Note: This is a system generated message do not reply to this email.</p>
+</div>
+            ]]></field>
+        </record>
+    </data>
+</openerp>
+ 

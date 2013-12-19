@@ -51,7 +51,6 @@ class hr_applicant(osv.osv):
     _name='hr.applicant'
     _inherit='hr.applicant'
     _columns={
-#             'emp_id':fields.many2one('hr.employee','Employee Id'),
             'identification':fields.char('Employee Id'),
             'offer_acceptance_line':fields.one2many('offer.acceptance','hr_appli_id','offer_acceptance_line'),
             'joing_process_line':fields.one2many('joining.process','joining_process_id','Joining Process'),
@@ -107,8 +106,8 @@ class hr_applicant(osv.osv):
               'is_interview_scheduled':fields.boolean('Interview Scheduled'),
               }
     _default={
-                'is_interview_scheduled':False
-               }
+               'is_interview_scheduled':False
+              }
                
     
 #function for mail configuration in the state of director approved 
@@ -126,11 +125,8 @@ class hr_applicant(osv.osv):
             ir_model_data = self.pool.get('ir.model.data')
             ir_model_fields=self.pool.get('ir.model.fields')
             ir_model_fields_ids_offer_acceptance=ir_model_fields.search(cr,uid,[('name','ilike','applicant_name')])
-            print'==========',ir_model_fields_ids_offer_acceptance
             if ir_model_fields_ids_offer_acceptance:
-                print'======ir_model_fields====',ir_model_fields_ids_offer_acceptance
                 template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','hr.applicant'),('model_object_field','=',ir_model_fields_ids_offer_acceptance[0])], context=context)
-                print'=======templates_ids=offeracceptance=====',template_ids
                 if template_ids:
                         values = email_template_obj.generate_email(cr, uid, template_ids[0], ids, context=context)
                         email_obj=self.browse(cr,uid,ids[0])
@@ -163,48 +159,46 @@ class hr_applicant(osv.osv):
             ir_model_data = self.pool.get('ir.model.data')
             ir_model_fields=self.pool.get('ir.model.fields')
             ir_model_fields_ids_medical=ir_model_fields.search(cr,uid,[('name','=','doctor_name')])
-            print'====medical======',ir_model_fields_ids_medical[0]
             if ir_model_fields_ids_medical[0]:
-                print'======ir_model_fields==medical==',ir_model_fields_ids_medical
-            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','hr.applicant'),('model_object_field','=',ir_model_fields_ids_medical[0])], context=context)
-            if template_ids:
-                    values = email_template_obj.generate_email(cr, uid, template_ids[0], ids, context=context)
-                    email_obj=self.browse(cr,uid,ids[0])
-                    try:
-                        compose_form_id = ir_model_data.get_object_reference(cr, uid, 'mail', 'email_compose_message_wizard_form')[1]
-                    except ValueError:
-                        compose_form_id = False 
-                    
-                    if not email_obj.email_from:
-                        raise osv.except_osv(
-                                    _('Error!'),
-                                    _('Please fill the applicant email address'))
-                    else:
-                         test.append(email_obj.email_from)
-                    if not email_obj.doctor_name.email:
-                        raise osv.except_osv(
-                                    _('Error!'),
-                                    _('Please fill the doctor Email Address '))
-                    else:
-                        test.append(email_obj.doctor_name.email)
-                    values['email_to'] = test
-                    values['res_id'] = False
-                    mail_mail_obj = self.pool.get('mail.mail')
-                    msg_id = mail_mail_obj.create(cr, uid, values, context=context)
-                    if msg_id:
-                        mail_mail_obj.send(cr, uid, [msg_id], context=context)
-                    ctx = dict(context)
-                    ctx['default_template_id'] = template_ids[0]
-                    return {
-                            'type': 'ir.actions.act_window',
-                            'view_type': 'form',
-                            'view_mode': 'form',
-                            'res_model': 'mail.compose.message',
-                            'views': [(compose_form_id, 'form')],
-                            'view_id': compose_form_id,
-                            'target': 'new',
-                            'context': ctx,
-                        }
+                template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','hr.applicant'),('model_object_field','=',ir_model_fields_ids_medical[0])], context=context)
+                if template_ids:
+                        values = email_template_obj.generate_email(cr, uid, template_ids[0], ids, context=context)
+                        email_obj=self.browse(cr,uid,ids[0])
+                        try:
+                            compose_form_id = ir_model_data.get_object_reference(cr, uid, 'mail', 'email_compose_message_wizard_form')[1]
+                        except ValueError:
+                            compose_form_id = False 
+                        
+                        if not email_obj.email_from:
+                            raise osv.except_osv(
+                                        _('Error!'),
+                                        _('Please fill the applicant email address'))
+                        else:
+                             test.append(email_obj.email_from)
+                        if not email_obj.doctor_name.email:
+                            raise osv.except_osv(
+                                        _('Error!'),
+                                        _('Please fill the doctor Email Address '))
+                        else:
+                            test.append(email_obj.doctor_name.email)
+                        values['email_to'] = test
+                        values['res_id'] = False
+                        mail_mail_obj = self.pool.get('mail.mail')
+                        msg_id = mail_mail_obj.create(cr, uid, values, context=context)
+                        if msg_id:
+                            mail_mail_obj.send(cr, uid, [msg_id], context=context)
+                        ctx = dict(context)
+                        ctx['default_template_id'] = template_ids[0]
+                        return {
+                                'type': 'ir.actions.act_window',
+                                'view_type': 'form',
+                                'view_mode': 'form',
+                                'res_model': 'mail.compose.message',
+                                'views': [(compose_form_id, 'form')],
+                                'view_id': compose_form_id,
+                                'target': 'new',
+                                'context': ctx,
+                            }
     def action_send_test_email(self, cr, uid, ids, context=None):
             dic=[]
             obj=self.browse(cr,uid,ids[0])
@@ -219,53 +213,7 @@ class hr_applicant(osv.osv):
             ir_model_fields=self.pool.get('ir.model.fields')
             ir_model_fields_ids_test=ir_model_fields.search(cr,uid,[('name','=','survey')])
             if ir_model_fields_ids_test:
-                print'======ir_model_fields====',ir_model_fields_ids_test
                 template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','hr.applicant'),('model_object_field','=',ir_model_fields_ids_test[0])], context=context)
-                print'=======templates_ids=test=====',template_ids
-            if template_ids:
-                    values = email_template_obj.generate_email(cr, uid, template_ids[0], ids, context=context)
-                    email_obj=self.browse(cr,uid,ids[0])
-                    try:
-                        compose_form_id = ir_model_data.get_object_reference(cr, uid, 'mail', 'email_compose_message_wizard_form')[1]
-                    except ValueError:
-                        compose_form_id = False 
-                    values['email_to'] = dic
-                    values['res_id'] = False
-                    mail_mail_obj = self.pool.get('mail.mail')
-                    msg_id = mail_mail_obj.create(cr, uid, values, context=context)
-                    if msg_id:
-                        mail_mail_obj.send(cr, uid, [msg_id], context=context)
-                    ctx = dict(context)
-                    ctx['default_partner_ids'] = dic
-                    ctx['default_template_id'] = template_ids[0]
-                    return {
-                            'type': 'ir.actions.act_window',
-                            'view_type': 'form',
-                            'view_mode': 'form',
-                            'res_model': 'mail.compose.message',
-                            'views': [(compose_form_id, 'form')],
-                            'view_id': compose_form_id,
-                            'target': 'new',
-                            'context': ctx,
-                        }
-   # mail for interview stage 
-    def action_send_joining_process_email(self, cr, uid, ids, context=None):
-            dic=[]
-            obj=self.browse(cr,uid,ids[0])
-            partner_obj=self.pool.get('res.partner')
-            for res in obj.joing_process_line:
-                if res.joing_attachment==True:
-                    search_id=partner_obj.search(cr,uid,[('email','=',res.email_id)])
-                    if search_id:
-                        dic.append(search_id[0])
-            email_template_obj = self.pool.get('email.template')
-            ir_model_data = self.pool.get('ir.model.data')
-            ir_model_fields=self.pool.get('ir.model.fields')
-            ir_model_fields_ids_joining=ir_model_fields.search(cr,uid,[('name','ilike','identification')])
-            if ir_model_fields_ids_joining:
-                print'======ir_model_fields====',ir_model_fields_ids_joining
-                template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','hr.applicant'),('model_object_field','=',ir_model_fields_ids_joining[0])], context=context)
-                print'=======templates_ids=joining_process=====',template_ids
                 if template_ids:
                         values = email_template_obj.generate_email(cr, uid, template_ids[0], ids, context=context)
                         email_obj=self.browse(cr,uid,ids[0])
@@ -291,7 +239,89 @@ class hr_applicant(osv.osv):
                                 'view_id': compose_form_id,
                                 'target': 'new',
                                 'context': ctx,
-                            }    
+                            }
+   # mail for interview stage 
+    def action_send_joining_process_email(self, cr, uid, ids, context=None):
+            dic=[]
+            obj=self.browse(cr,uid,ids[0])
+            partner_obj=self.pool.get('res.partner')
+            for res in obj.joing_process_line:
+                if res.joing_attachment==True:
+                    search_id=partner_obj.search(cr,uid,[('email','=',res.email_id)])
+                    if search_id:
+                        dic.append(search_id[0])
+            email_template_obj = self.pool.get('email.template')
+            ir_model_data = self.pool.get('ir.model.data')
+            ir_model_fields=self.pool.get('ir.model.fields')
+            ir_model_fields_ids_joining=ir_model_fields.search(cr,uid,[('name','ilike','identification')])
+            if ir_model_fields_ids_joining:
+                template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','hr.applicant'),('model_object_field','=',ir_model_fields_ids_joining[0])], context=context)
+                if template_ids:
+                        values = email_template_obj.generate_email(cr, uid, template_ids[0], ids, context=context)
+                        email_obj=self.browse(cr,uid,ids[0])
+                        try:
+                            compose_form_id = ir_model_data.get_object_reference(cr, uid, 'mail', 'email_compose_message_wizard_form')[1]
+                        except ValueError:
+                            compose_form_id = False 
+                        values['email_to'] = dic
+                        values['res_id'] = False
+                        mail_mail_obj = self.pool.get('mail.mail')
+                        msg_id = mail_mail_obj.create(cr, uid, values, context=context)
+                        if msg_id:
+                            mail_mail_obj.send(cr, uid, [msg_id], context=context)
+                        ctx = dict(context)
+                        ctx['default_partner_ids'] = dic
+                        ctx['default_template_id'] = template_ids[0]
+                        return {
+                                'type': 'ir.actions.act_window',
+                                'view_type': 'form',
+                                'view_mode': 'form',
+                                'res_model': 'mail.compose.message',
+                                'views': [(compose_form_id, 'form')],
+                                'view_id': compose_form_id,
+                                'target': 'new',
+                                'context': ctx,
+                                 }    
+                        
+                        
+    def action_interview_send(self, cr, uid, ids, context=None):
+            test=[]
+            email_template_obj = self.pool.get('email.template')
+            ir_model_data = self.pool.get('ir.model.data')
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','hr.applicant')], context=context)
+            if template_ids:
+                    values = email_template_obj.generate_email(cr, uid, template_ids[0], ids, context=context)
+                    email_obj=self.browse(cr,uid,ids[0])
+                    try:
+                        compose_form_id = ir_model_data.get_object_reference(cr, uid, 'mail', 'email_compose_message_wizard_form')[1]
+                    except ValueError:
+                        compose_form_id = False 
+                    
+                    if not email_obj.email_from:
+                        raise osv.except_osv(
+                                    _('Error!'),
+                                    _('Please fill the applicant email address'))
+                    else:
+                         test.append(email_obj.email_from)
+                    values['email_to'] = test
+                    values['res_id'] = False
+                    mail_mail_obj = self.pool.get('mail.mail')
+                    msg_id = mail_mail_obj.create(cr, uid, values, context=context)
+                    if msg_id:
+                        mail_mail_obj.send(cr, uid, [msg_id], context=context)
+                    ctx = dict(context)
+                    ctx['default_template_id'] = template_ids[3]
+                    return {
+                            'type': 'ir.actions.act_window',
+                            'view_type': 'form',
+                            'view_mode': 'form',
+                            'res_model': 'mail.compose.message',
+                            'views': [(compose_form_id, 'form')],
+                            'view_id': compose_form_id,
+                            'target': 'new',
+                            'context': ctx,
+                        }
+
     
 #for previous move to the next stage medical test
     def action_accepted(self, cr, uid, ids, context=None):
@@ -390,13 +420,13 @@ class hr_applicant(osv.osv):
                           'address_home_id': address_id,
                           'department_id': applicant.department_id.id,
                          }
+                    
                     emp_id = self.pool.get('hr.employee').create(cr,uid,dict)
-                    print'=====employee_id====',emp_id
                     if applicant.job_id.no_of_recruitment==0.0:
                         hr_job_obj.job_open(cr, uid, applicant.job_id.id)
-                        requestion_id1=hr_requestion_obj.search(cr,uid,[('unique_id','=',obj.requestion_id.id)])
+                        requestion_id1=hr_requestion_obj.search(cr,uid,[('id','=',obj.requestion_id.id)])
                         hr_requestion_obj.write(cr,uid,requestion_id1,{'state':'done'})
-                        
+                         
                     for val in applicant.offer_acceptance_line:
                         if not val.prob_joing_date:
                             raise osv.except_osv(_('Warning!'), _('You must define the joining date in the recruitment process .'))
@@ -410,14 +440,12 @@ class hr_applicant(osv.osv):
                                     from dateutil.relativedelta import relativedelta
                                     date_after_3months = date(date_from_year,date_from_month,date_from_date) + relativedelta(months = +3)
                                     hr_employee.write(cr, uid,emp_id, {'renewal_date': date_after_3months},context=context)
-                                    print'=====employee_id====',emp_id
                                     vals=hr_job_contract.create(cr,uid,{'name':applicant.name,
                                                                    'employee_id':emp_id,
                                                                    'wage':0.00,
                                                                    'date_start':val.prob_joing_date,
                                                                    'date_end':date_after_3months,
                                                                          })
-                                    print'========vals======',vals
                     self.write(cr, uid, applicant.id, {'emp_id': emp_id}, context=context)
                     if emp_id:
                         emp_obj=hr_employee.browse(cr,uid,emp_id)
@@ -425,6 +453,7 @@ class hr_applicant(osv.osv):
                     self.case_close(cr, uid, [applicant.id], context)
             else:
                 raise osv.except_osv(_('Warning!'), _('You must define Applied Job for this applicant.'))
+            
             if not obj.work_experiane_line:
                raise osv.except_osv(_('Warning!'), _('You can not fill working Experiance for this applicant')) 
             for res in obj.work_experiane_line:
@@ -435,7 +464,6 @@ class hr_applicant(osv.osv):
                raise osv.except_osv(_('Warning!'), _('You can not fill Candidate education information')) 
             for res in obj.education_line:
                 lst=[]
-                print'=========education_information======',res.qualification_obtain
                 lst.append((0,0,{'name':res.name,'qualification_obtain1':res.qualification_obtain,'start_date1':res.start_date,'finish_date1':res.finish_date})),
                 hr_employee.write(cr,uid,emp_id,{'education_line1':lst})
             if not obj.professional_line:
@@ -445,19 +473,19 @@ class hr_applicant(osv.osv):
                 lst.append((0,0,{'name':res.name,'institute':res.institute,'start_date':res.start_date,'finish_date':res.finish_date})),
                 hr_employee.write(cr,uid,emp_id,{'professional_line1':lst})
             if not obj.honor_awards_line:
-               raise osv.except_osv(_('Warning!'), _('You can not fill Candidate professional information')) 
+               raise osv.except_osv(_('Warning!'), _('You can not fill Candidate honor award')) 
             for res in obj.honor_awards_line:
                 lst=[]
                 lst.append((0,0,{'name':res.name,'local':res.local,'date':res.date})),
                 hr_employee.write(cr,uid,emp_id,{'honor_awards_line1':lst})
             if not obj.language_spoken_line:
-               raise osv.except_osv(_('Warning!'), _('You can not fill Candidate professional information')) 
+               raise osv.except_osv(_('Warning!'), _('You can not fill language spoken information')) 
             for res in obj.language_spoken_line:
                 lst=[]
                 lst.append((0,0,{'name':res.name,'basic':res.basic,'intermediate':res.intermediate,'advance':res.advance})),
                 hr_employee.write(cr,uid,emp_id,{'language_spoken_line1':lst})
             if not obj.offer_acceptance_line:
-               raise osv.except_osv(_('Warning!'), _('You can not fill Candidate professional information')) 
+               raise osv.except_osv(_('Warning!'), _('You can not fill offer acceptance information')) 
             for res in obj.offer_acceptance_line:
                 lst=[]
                 lst.append((0,0,{'seq_num':res.seq_num,'prob_joing_date':res.prob_joing_date,'offer_latter_acceptance_date':res.offer_latter_acceptance_date,'joining_status':res.joining_status,'attach_offer_latter':res.attach_offer_latter})),
@@ -591,7 +619,6 @@ class hr_applicant(osv.osv):
         if obj.state=='test':
                     record3= value1.browse(cr,uid,record_id3[0],context=context)
                     for val in obj.survey_ids:
-                        print'=====val.min_score1===',val.min_score1,val.marks,val.total_marks1
                         if val.marks >= val.min_score1:
                             continue
                             if val.marks <= val.total_marks1:
@@ -707,13 +734,13 @@ class hr_applicant(osv.osv):
     ###create the user and fill in the survey test line in the test stage
         user_obj = self.pool.get('res.users')
         if not obj.work_experiane_line:
-            raise osv.except_osv(('Warning !'),('Please fill the details of work experiance.'))
+            raise osv.except_osv(('Warning !'),('Please fill the details of work experience.'))
         else:
            for a in  obj.work_experiane_line:
                 if a.start_date < a.finish_date:
                     pass
                 else:
-                    raise osv.except_osv(('Warning !'),('In Work Experiance Tab From Date is not greater then or equal to To date.'))
+                    raise osv.except_osv(('Warning !'),('In Work Experience Tab From date mentioned is not appropriate'))
         if not obj.education_line:
             raise osv.except_osv(('Warning !'),('Please fill the details of Education.'))
         else:
@@ -721,7 +748,7 @@ class hr_applicant(osv.osv):
                 if a.start_date < a.finish_date:
                     pass
                 else:
-                    raise osv.except_osv(('Warning !'),('In Education Tab From Date is not greater then or equal to To date.'))
+                    raise osv.except_osv(('Warning !'),('In Education Tab From date mentioned is not appropriate'))
         if not obj.professional_line:
             raise osv.except_osv(('Warning !'),('Please fill the details of Professional line.'))
         else:
@@ -729,7 +756,7 @@ class hr_applicant(osv.osv):
                 if a.start_date < a.finish_date:
                     pass
                 else:
-                    raise osv.except_osv(('Warning !'),('In Professional Tab From Date is not greater then or equal to To date.'))
+                    raise osv.except_osv(('Warning !'),('In Professional Tab From date mentioned is not appropriate'))
         if not obj.language_spoken_line:
             raise osv.except_osv(('Warning !'),('Please fill the details of Language Spoken.'))
         else:
@@ -768,14 +795,10 @@ class hr_applicant(osv.osv):
         else:
             list.append(user)
             list=[]
-            print'======list=====',list,stage.recruitment_test_ids
             for val in stage.recruitment_test_ids:
                   cr_id=self.pool.get('survey.test.line').create(cr,uid,{'survey_id':val.exam_name.id,'total_marks1':val.total_marks,'min_score1':val.min_score,'user_id':user,'aplicant_id':obj.id})
                   survey_obj=self.pool.get('survey').browse(cr,uid,val.exam_name.id)
                   self.pool.get('survey').write(cr,uid,survey_obj.id,{'invited_user_ids':[[6,0,list]]})
-#                   cr_id=self.pool.get('survey.test.line').create(cr,uid,{'survey_id':val.exam_name.id,'total_marks1':val.total_marks,'min_score1':val.min_score,'user_id':user,'aplicant_id':obj.id})
-#                   survey_obj=self.pool.get('survey').browse(cr,uid,val.exam_name.id)
-#                   self.pool.get('survey').write(cr,uid,survey_obj.id,{'invited_user_ids':[[6,0,list]]})
         if not stage.interview_ids:
             raise osv.except_osv(('Warning !'),('Please configure the Interview.'))
         else:
@@ -794,8 +817,6 @@ class hr_applicant(osv.osv):
             self.write(cr,uid,obj.id,{'medical_test_line':list})
         vals=record.id
         self.write(cr, uid, ids,{'candidate_id': value,'stage_id':vals,})
-
- ########################################create the user
         return True
     _defaults = {
              'state': 'draft',
@@ -992,8 +1013,6 @@ class survey_test_line(osv.osv):
               'aplicant_id':fields.many2one('hr.applicant'),
               'date_deadline':fields.date('Date'),
               'marks':fields.char('Scored',size=32),
-
-#############
 ############# it is used for the test configuration 
                 'exam_name1':fields.char('Exam Name',size=64,readonly=True),
               'total_marks1':fields.integer('Total Marks',readonly=True),
@@ -1043,3 +1062,21 @@ class mail_compose_message(osv.Model):
         if context.get('default_model') == 'hr.applicant' and context.get('default_res_id') and context.get('mark_so_as_sent'):
             context = dict(context, mail_post_autofollow=True)
         return super(mail_compose_message, self).send_mail(cr, uid, ids, context=context)
+class hr_employee(osv.osv):
+    _inherit='hr.employee'
+    def create(self, cr, uid, vals, context=None):
+        super(hr_employee, self).create(cr, uid, vals, context=context)
+        start= self.pool.get('ir.sequence').get(cr, uid, 'hr.employee') or '/'
+        val1=int(start)
+        seq=val1+105
+        from datetime import datetime
+        date = datetime.now()
+        today=date.today()
+        days=date.day
+        month=date.month
+        year=date.year
+        fraction_year=year%100
+        get_seq= 'S'+''+str(seq)+''+str(month)+''+str(fraction_year)
+        vals['identification_id']=get_seq
+        return super(hr_employee, self).create(cr, uid, vals, context=context)
+

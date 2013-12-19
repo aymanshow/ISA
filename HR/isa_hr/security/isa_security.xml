@@ -5,7 +5,7 @@
             <field name="name">ISA Management</field>
         </record>  
         <record id="base.group_isa_hr_departemnt" model="res.groups">
-            <field name="name">ISA HR DEPARTMENT</field>
+            <field name="name">ISA </field>
         </record>
         
         <record id="base.group_online_test" model="res.groups">

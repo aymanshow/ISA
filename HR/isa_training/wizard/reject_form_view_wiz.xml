@@ -4,11 +4,11 @@
 		<!-- Rejected stege Form View -->
 
   <record id="training_hr_rejected_tree" model="ir.ui.view">
-			<field name="name">Rejected form</field>
+			<field name="name">Rejected Requests</field>
 			<field name="model">rejected.form.training</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree string="Rejected Form">
+				<tree string="Rejected Requests">
 					<field name="name_id"/>
 					<field name="requestion_id1"/>
 					<field name="department"/>
@@ -18,11 +18,11 @@
 			</field>
 		</record>
 <record id="training_hr_rejected_form" model="ir.ui.view">
-			<field name="name">Rejected form </field>
+			<field name="name">Rejected Requests</field>
 			<field name="model">rejected.form.training</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
-				<form string="Rejected Information" version="7.0">
+				<form string="Rejected Requests" version="7.0">
 				<header>
                 <button name="action_cancel" type="object" string="Cancel" icon="gtk-cancel" special="cancel"/>
 				<button name="create_record1" type="object" string="Save" icon="gtk-save" help="Approve this  applicant for the next stage"/>
@@ -41,7 +41,7 @@
 		</record>
 		
 		<record model="ir.actions.act_window" id="action_training_hr_rejected1">
-                <field name="name">Rejected form</field>
+                <field name="name">Rejected Requests</field>
                 <field name="type">ir.actions.act_window</field>
                 <field name="res_model">rejected.form.training</field>
                 <field name="view_type">form</field>
@@ -52,10 +52,10 @@
     </record> 
     
     <record id="action_training_hr_rejected2" model="ir.actions.act_window">
-			<field name="name">Rejected form</field>
+			<field name="name">Rejected Requests</field>
 			<field name="res_model">rejected.form.training</field>
 			<field name="view_type">form</field>
-			<field name="view_mode">tree,form</field>
+			<field name="view_mode">form,tree</field>
 			<field name="view_id" ref="training_hr_rejected_tree"/>
 		</record>
  </data>

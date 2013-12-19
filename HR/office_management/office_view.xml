@@ -105,7 +105,7 @@
 	        </record>
 
         <record id="view_enrollment_form_id" model="ir.actions.act_window">
-            <field name="name">Visitors Form</field>
+            <field name="name">Visitor Management</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">office.visitor</field>
             <field name="view_type">form</field>
@@ -542,7 +542,7 @@
    		 <!-- _________________________Actions____________________________________ -->
    		 
 		<record id="action_meeting_manage_isa" model="ir.actions.act_window">
-            <field name="name">Meeting Form</field>
+            <field name="name">Appointments</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">shedule.meeting</field>
             <field name="view_type">form</field>
@@ -552,7 +552,7 @@
         </record>
 		
 		<record id="action_meeting_isa" model="ir.actions.act_window">
-            <field name="name">Meeting Form</field>
+            <field name="name">Appointments Calendar</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">shedule.meeting</field>
             <field name="view_type">form</field>
@@ -573,7 +573,7 @@
         </record>
 		
 		<record id="action_conference_master_booking" model="ir.actions.act_window">
-            <field name="name">Room Booking</field>
+            <field name="name">Conference Room</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">conference.booking</field>
             <field name="view_type">form</field>
@@ -593,7 +593,7 @@
         </record>
 		
 		<record id="action_maintenance_master" model="ir.actions.act_window">
-            <field name="name">Maintenance</field>
+            <field name="name">Office Equipments</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">maintenace.master</field>
             <field name="view_type">form</field>
@@ -605,7 +605,7 @@
 		
 		
 		<record id="action_maintenance_booking" model="ir.actions.act_window">
-            <field name="name">Maintenance</field>
+            <field name="name">Housekeeping Tasks</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">task.master</field>
             <field name="view_type">form</field>
@@ -615,7 +615,7 @@
         </record>
 		
 		<record id="action_maintenance_task_manager" model="ir.actions.act_window">
-            <field name="name">Maintenance</field>
+            <field name="name">Office Cleaning</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">task.manager</field>
             <field name="view_type">form</field>
@@ -630,10 +630,37 @@
             <menuitem name="Office Management"
             id="mene_base_isa" sequence="0"/>
             
-            <menuitem name="Certification" id="menu_certification" parent="mene_base_isa" sequence="0" />
-    		<menuitem name="Certification Form" id="menu_certification_form_id" parent="menu_certification" action="isa_supplier.action_certification_form_tree"/>
-            <menuitem id="sub_menu_base_isa" parent="mene_base_isa" name="Office Management" sequence="1" />
-            <menuitem id="menu_isa_visitor" parent="sub_menu_base_isa" name="Visitor Management" sequence="1" action="view_enrollment_form_id"/>	
+            <menuitem name="Certification" id="menu_certification" parent="mene_base_isa" sequence="1" />
+    		<menuitem name="Vendor Certification" id="menu_certification_form_id" parent="menu_certification" action="isa_supplier.action_certification_form_tree"/>
+            
+            <menuitem name="Reception" id="menu_reception" parent="mene_base_isa" sequence="2" />
+            <menuitem name="Visitor Management" id="menu_visitor_mgmt" parent="menu_reception" sequence="0" action="view_enrollment_form_id"/>
+            <menuitem name="Appointments" id="menu_appointments" parent="menu_reception" sequence="1" action="action_meeting_manage_isa"/>
+            <menuitem name="Appointments Calendar" id="menu_appointment_calendar" parent="menu_reception" sequence="2" action="action_meeting_isa"/>
+            
+            
+            <menuitem name="Booking" id="menu_booking" parent="mene_base_isa" sequence="3" />
+            <menuitem name="Conference Room" id="menu_conference_rooms" parent="menu_booking" action="action_conference_master_booking"/>
+            
+            
+            <menuitem name="Maintenance" id="menu_maintenance" parent="mene_base_isa" sequence="4" />
+            <menuitem name="Office Equipments" id="menu_conf_room" parent="menu_maintenance" sequence="0" action="action_maintenance_master"/>
+            <menuitem name="Office Cleaning" id="menu_office_cleaning" parent="menu_maintenance" sequence="1" action="action_maintenance_task_manager"/>
+            
+            
+            <menuitem name="Configuration" id="menu_configuration" parent="mene_base_isa" sequence="5" />
+            <menuitem name="Conference Room" id="menu_conference_room" parent="menu_configuration" sequence="0" action="action_conference_master"/>
+            <menuitem name="Housekeeping Tasks" id="menu_housekeeping_tasks" parent="menu_configuration" sequence="1" action="action_maintenance_booking"/>
+            
+            
+            
+            
+            <!--menuitem name="Vehicle" id="menu_vehicle" parent="menu_reception" sequence="0" action="view_enrollment_form_id"/>
+            <menuitem name="Appointments" id="menu_appointments" parent="menu_reception" sequence="1" action="action_meeting_manage_isa"/>
+            <menuitem name="Appointments Calendar" id="menu_appointment_calendar" parent="menu_reception" sequence="2" action="action_meeting_isa"/-->
+            
+            <!--menuitem id="sub_menu_base_isa" parent="mene_base_isa" name="Reception" sequence="1" /-->
+            <!--menuitem id="menu_isa_visitor" parent="sub_menu_base_isa" name="Visitor Management" sequence="1" action="view_enrollment_form_id"/>	
         	<menuitem id="menu_isa_meeting_sub" parent="sub_menu_base_isa" name="Appointment" sequence="1"/>
         	<menuitem id="menu_isa_view" parent="menu_isa_meeting_sub" name="Appointments" sequence="1" action="action_meeting_manage_isa"/>
         	<menuitem id="menu_isa_schedule" parent="menu_isa_meeting_sub" name="Appointment Schedule" sequence="2" action="action_meeting_isa"/>	
@@ -642,10 +669,10 @@
         	<menuitem id="menu_conference_master_schedule" parent="menu_conference_main" name="Room" sequence="1" action="action_conference_master"/>
         	<menuitem id="menu_conference_booking" parent="menu_conference_main" name="Booking" sequence="2" action="action_conference_master_booking"/>
     		
-    		<menuitem id="menu_maintenance_main" parent="sub_menu_base_isa" name="Maintenance" sequence="3"/>
+    		<menuitem id="menu_maintenance_main" parent="sub_menu_base_isa" name="Maintenance" sequence="3"/-->
 <!--    		<menuitem id="menu_location_master" parent="menu_maintenance_main" name="Location Master" sequence="1" action="action_location_booking"/>-->
-        	<menuitem id="menu_maintenance_schedule" parent="menu_maintenance_main" name="Housekeeping" sequence="2" action="action_maintenance_booking"/>
+        	<!--menuitem id="menu_maintenance_schedule" parent="menu_maintenance_main" name="Housekeeping" sequence="2" action="action_maintenance_booking"/>
         	<menuitem id="menu_maintenance_master" parent="menu_maintenance_main" name="Maintenance" sequence="2" action="action_maintenance_master"/>
-        	<menuitem id="menu_task_manager" parent="menu_maintenance_main" name="Housekeeping Task" sequence="3" action="action_maintenance_task_manager"/>
+        	<menuitem id="menu_task_manager" parent="menu_maintenance_main" name="Housekeeping Task" sequence="3" action="action_maintenance_task_manager"/-->
     </data>
 </openerp>

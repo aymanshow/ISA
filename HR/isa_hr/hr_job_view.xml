@@ -12,12 +12,6 @@
                 <xpath expr="//form/header/button[@name='job_open']" position="after">
                     <button name="action_quotation_send" string="Send Email" state='confirmed' type="object" class="oe_highlight" groups="base.group_user"/>
                    </xpath>
-                
-         <xpath expr="//form/sheet/div/label[@for='name']" position="before">
-               <!--    <label for="unique_id1" class="oe_edit_only"/>
-          <h1>  <field name='unique_id1' on_change="onchange_unique_id(unique_id1)" class="oe_inline"/> </h1>
-       -->
-         </xpath>  
          </field>
         </record>
                 

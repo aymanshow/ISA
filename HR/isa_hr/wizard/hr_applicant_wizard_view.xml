@@ -7,7 +7,7 @@
 		<!-- Rejected stege Form View -->
 
   <record id="drishti_hr_rejected_tree" model="ir.ui.view">
-			<field name="name">Rejected form</field>
+			<field name="name">Rejected Applications</field>
 			<field name="model">rejected.form</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
@@ -21,7 +21,7 @@
 			</field>
 		</record>
 <record id="drishti_hr_rej_state_form" model="ir.ui.view">
-			<field name="name">Rejected form </field>
+			<field name="name">Rejected Applications</field>
 			<field name="model">rejected.form</field>
 			<field name="type">form</field>
 			<field name="arch" type="xml">
@@ -50,7 +50,7 @@
 		
 		<record model="ir.actions.act_window" id="action_drishti_hr_rej_state_id1">
                 <field name="name">rejected form Details</field>
-                <field name="name">Rejected form</field>
+                <field name="name">Rejected Applications</field>
                 <field name="type">ir.actions.act_window</field>
                 <field name="res_model">rejected.form</field>
                 <field name="view_type">form</field>
@@ -71,7 +71,7 @@
 
     
     <record id="action_drishti_hr_rej_state_id2" model="ir.actions.act_window">
-			<field name="name">Rejected form</field>
+			<field name="name">Rejected Applications</field>
 			<field name="res_model">rejected.form</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>

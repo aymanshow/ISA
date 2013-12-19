@@ -91,7 +91,7 @@
        		</record>
        		
 	        <record id="action_vehicle_booking" model="ir.actions.act_window">
-	            <field name="name">Vehicle Booking</field>
+	            <field name="name">Vehicle</field>
 	            <field name="type">ir.actions.act_window</field>
 	            <field name="res_model">vehicle.choice</field>
 	            <field name="view_type">form</field>
@@ -99,6 +99,6 @@
 	            <field name="view_id" ref="view_vehicle_booking_tree"/>
 	            <field name="help">This help for the Booking Vehicle</field>
 	        </record>
-			<menuitem id="menu_vehicle_booking_id" parent="menu_conference_main" name="Vehicle" sequence="3" action="action_vehicle_booking"/>
+			<menuitem id="menu_vehicle_booking_id" name="Vehicle" parent="menu_booking" sequence="1" action="action_vehicle_booking"/>
      </data>
 </openerp>

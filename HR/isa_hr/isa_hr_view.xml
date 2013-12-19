@@ -8,7 +8,7 @@
 			<field name="model">drishti.hr</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree string="Recruitment Request">
+				<tree string="Recruitment Requests">
 					<field name="unique_id"/>
 					<field name="name"/>
 					<field name="emp_id"/>
@@ -32,7 +32,6 @@
 						<button name="action_approve" string="Approve" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','waiting')]}"/>
 						<button name="action_submit" string="Submit to Manager" type="object" class="oe_highlight" attrs="{'invisible':[('state','!=','draft')]}"/>
 						<button name="action_cancel" string="Reject" type="object"  class="oe_highlight" attrs="{'invisible':[('state','!=','waiting')]}"/>
-						<button name="action_quotation_send" string="Send Email" type="object"  class="oe_highlight" attrs="{'invisible':[('state','!=','draft')]}"/>
 					<field name="state" widget="statusbar"/>
 					</header>
 			         <sheet>

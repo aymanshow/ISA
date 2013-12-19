@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- Top menu item -->
+       
+        <!--menuitem name="ISA HR Recruitment" parent="hr.menu_hr_root" id="menu_drishti_hr_root" groups="base.group_hr_manager,base.group_hr_user,base.group_user" sequence="6"/-->
+		 
+       <menuitem id="menu_hr_configuration_depttest" action="action_drishti_hr_depttest_id"  name="Recruitment Test" parent="hr.menu_hr_configuration" groups="base.group_hr_manager" sequence="8"/>
+    
+        
+        <!--Menu to execute the above action in order to open the form view of pnl model-->
+		
+	<menuitem id='menu_action_view_drishti_hr_form' action="action_drishti_hr_id" name='Recruitment Requests' parent='base.menu_crm_case_job_req_main' sequence='0'/> 
+ 	<menuitem id='menu_action_view_interview' action="base_calendar.action_crm_meeting" name='Interviews Calendar' parent='base.menu_crm_case_job_req_main' sequence='4'/> 
+	<menuitem id='menu_action_view_drishti_hr_rejected_form' action='action_drishti_hr_rej_state_id2' name='Rejected Applications' parent='base.menu_crm_case_job_req_main' sequence='3'/> 	
+    </data>
+</openerp>
+

@@ -2,14 +2,13 @@
 <openerp>
     <data>
         <!-- Form view of hr.job with unique id-->
-<!--       -->
 	<record model="ir.ui.view" id="recruitment_interview_calendar">
         <field name="name">Recruitment Interview</field>
         <field name="model">hr.applicant</field>
-        <field name="type">form</field>
+        
         <field name="priority" eval="1"/>
         <field name="arch" type="xml">
-            <calendar string="Scheduled Interview" date_start="date" color="user_id" mode="month">
+            <calendar string="Interviews Calendar" date_start="date" date_stop="date" color="user_id" mode="month">
                          <field name='name'/>
 						<field name='employee_id'/>
 						<field name='department_id'/>
@@ -17,6 +16,8 @@
             </calendar>
         </field>
     </record>
+    
+    
 <record id="action_interview_calender_view" model="ir.actions.act_window">
 			<field name="name">Interview Schedule</field>
 			<field name="res_model">hr.applicant</field>
@@ -62,7 +63,7 @@
                 <button name="action_cleared" type="object" string="Pass" attrs="{'invisible':[('state','!=','medical_test')]}"/>
             <button name="action_pass" type="object" string="Pass" attrs="{'invisible':[('state','in',['test','document_submission','reference_check','offer_acceptance','medical_test','joining_process','cancel','draft','done'])]}"/>
            
-           <button name="%(action_drishti_hr_rej_state_id1)d" string="Reject" type="action" help="Rejected Candidate" attrs="{'invisible':[('state','in',['done','cancel'])]}"/>
+           <button name="%(action_drishti_hr_rej_state_id1)d" string="Reject" type="action" help="Rejected Candidate" attrs="{'invisible':[('state','in',['done','cancel','draft'])]}"/>
              <field name="stage_id" widget="statusbar" attrs="{'readonly':[('state','in',['test','interview','reference_check','document_submission','offer_acceptance','medical_test','joining_process','done'])]}"/>
                 <field name="emp_id" invisible="1"/>
             </header>
@@ -73,7 +74,7 @@
                         string="Schedule Meeting" help="Schedule interview with this applicant" attrs="{'invisible':[('state','!=','draft')]}"/>
               <button name="%(action_interview_calender_view)d" type="action" 
                         string="Interview Schedule" attrs="{'invisible':[('state','!=','interview')]}" help="Person whose taking the interview"/>
-               <button name="action_quotation_send5" type="object"
+               <button name="action_interview_send" type="object"
                         string="Email" attrs="{'invisible':[('state','!=','interview')]}" help="For Interview scheduled for the candidate"/>
                <button name="action_calender" type="object"
                         string="Appointment Schedule" attrs="{'invisible':[('state','!=','medical_test')]}" help="For Medical Test Appointment scheduled for the applicant"/>
@@ -85,11 +86,7 @@
                         string="Email" attrs="{'invisible':[('state','!=','test')]}"/>
              <button name="action_offer_acceptance_mail" type="object"
                         string="Email" attrs="{'invisible':[('state','!=','offer_acceptance')]}"/>
-             
-              <!--    <button name="action_quotation_send2" type="object"
-                        string="Email" attrs="{'invisible':[('state','!=','joining_process')]}" help="For Joining Process mail is seding to the applicant and employee"/>  -->
-           <!--       <button name="%(action_create_test)d" string="Create Test" attrs="{'invisible':[('state','!=','test')]}" type="action" class="oe_highlight"/>  -->
-                </div>
+              </div>
                  <div class="oe_title"> 
                  <group colspan="4" attrs="{'invisible':[('state','!=','document_submission')]}">
                  
@@ -115,7 +112,6 @@
 				
             <group colspan="2" col="4" attrs="{'invisible':[('state','!=','document_submission')]}">
 			<field name="no_children"/>
-		<!-- 	<field name="is_interview_scheduled" invisible="1"/>  -->
      		<field name="bank_account_no"/>		
 			<field name="social_security_no"/>
 			<field name="declarations"/>
@@ -243,21 +239,7 @@
 			   </field>
 		  </group>
 		</page>
-<!-- 
-<page string="Test Details" attrs="{'invisible':[('state','not in',['test','interview','reference_check','document_submission','director_approved','offer_acceptance','medical_test','joining_process','done'])]}">
-            <group colspan="4" cols="4">
-                <field name="test_line" colspan="4" nolabel="1"  attrs="{'readonly':[('state','!=','test')]}">
-				<tree editable="bottom" >
-					<field name="exam_name1"/>
-					<field name="total_marks1"/>
-					<field name="min_score1"/>
-					<field name="scored"/>
-					<field name="comment"/>
-					<field name="attach"/>
-			   </tree>
-			   </field>
-		  </group>
-		</page>  -->
+
 <page string="Interview" attrs="{'invisible':[('state','not in',['interview','reference_check','document_submission','director_approved','offer_acceptance','medical_test','joining_process','done'])]}">
             <group colspan="4" cols="4">
                 <field name="inter_line" colspan="4" nolabel="1" attrs="{'readonly':[('state','!=','interview')]}">
@@ -289,31 +271,6 @@
 					<field name="user_id" string="Interviewer" invisible="1"/>
                      </tree>
                       </field>
-                           <!--  <form string="Interview Appraisal" version="7.0">
-                                <div class="oe_right oe_button_box">
-                                    <button name="%(survey.action_view_survey_question_message)d" string="Answer Survey" type="action" states="waiting_answer" icon="gtk-execute" context="{'survey_id': survey_id, 'response_id': [response], 'response_no':0, 'active' : response,'request' : True, 'object' : 'survey.test.line', 'cur_id' : active_id}" attrs="{'readonly':[('survey_id','=',False)]}"/>
-                                    <button name="%(survey.survey_browse_response)d" string="Print Interview" type="action" states="done" icon="gtk-print" context="{'survey_id': survey_id, 'response_id' : [response], 'response_no':0,}" attrs="{'readonly':[('response','=',False)]}" />
-                                </div>
-                                <group>
-                                    <group>
-                                        <field name="survey_id" string="Exam Name"/>
-                                        <field name="user_id" string="Interviewer" invisible="1"/>
-                                    </group>
-                                    <group>              
-                                        <field name="date_deadline" invisible="1"/>
-                                        <field name="response" readonly="1"/>
-                                    </group>
-                                </group>
-                                <group col="4" string="Status" invisible="1">
-                                     <field name="state"/>
-                                     <field name="comment"/>
-                                     <field name="attach"/>
-                                     <div>
-                                         <button string="Done" name="survey_req_done" states="waiting_answer" type="object" icon="gtk-jump-to" />
-                                     </div>
-                                </group>
-                            </form> 
-                        </field> -->
 		</page>
 <page string="Reference Check Form" attrs="{'invisible':[('state','not in',['reference_check','document_submission','director_approved','offer_acceptance','medical_test','joining_process','done'])]}">
             <group colspan="4" cols="4">
@@ -380,16 +337,7 @@
 		</notebook>
 		</page>
 		
-<!-- <page string="Director Approved" attrs="{'invisible':[('state','not in',['offer_acceptance','medical_test','joining_process','done'])]}">
-            <group colspan="4" cols="4">
-                <field name="director_approved_line" colspan="4" nolabel="1" attrs="{'invisible':[('state','!=','director_approved')]}">
-				<tree editable="bottom" >
-					<field name="state1"/>
-					<field name="comment"/>
-				 </tree>
-			   </field>
-		  </group>
-		</page>  -->
+
 <page string="Offer Acceptance" attrs="{'invisible':[('state','not in',['offer_acceptance','medical_test','joining_process','done'])]}">
             <group colspan="4" cols="4">
                 <field name="offer_acceptance_line" colspan="4" nolabel="1" attrs="{'readonly':[('state','!=','offer_acceptance')]}">
@@ -554,10 +502,7 @@
                     <button name="%(mail.action_email_compose_message_wizard)d" string="Send Reminder Email" icon="terp-mail-message-new" type="action" states="waiting_answer"/>
                     <field name="state"/>
                      <field name="attach"/>
-              <!--       <button string="Send Request" name="survey_req_waiting_answer" states="draft" type="object" icon="gtk-yes" />
-                    <button string="Done" name="survey_req_done" states="waiting_answer" type="object" icon="gtk-jump-to" />
-              
-               -->  </tree>
+                </tree>
             </field>
         </record>
         
@@ -569,10 +514,7 @@
                 <search string="Technical Test">
                     
                     <field name="user_id" string="Interviewer"  select="1"/>
-              <!--       <button string="Send Request" name="survey_req_waiting_answer" states="draft" type="object" icon="gtk-yes" />
-                    <button string="Done" name="survey_req_done" states="waiting_answer" type="object" icon="gtk-jump-to" />
-              
-               -->  </search>
+                </search>
             </field>
         </record>
         
@@ -598,7 +540,7 @@
         </record>
         
 		<record id="action_applicant_test_" model="ir.actions.act_window">
-			<field name="name">survey.test.line</field>
+			<field name="name">Online Test</field>
 			<field name="res_model">survey.test.line</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">form,tree</field>
@@ -909,12 +851,22 @@
 			<field name="view_mode">tree</field>
 			<field name="view_id" ref="isa_offer_acceptance_tree"/>
 		</record>
+		
+		<record id="action_interviews_calendar" model="ir.actions.act_window">
+			<field name="name">Interviews Calendar</field>
+			<field name="type">ir.actions.act_window</field>
+			<field name="res_model">hr.applicant</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">calendar</field>
+			<field name="view_id" ref="recruitment_interview_calendar"/>
+		</record>
+		
 		<!-- action of hr.applicant  -->
 		 <record model="ir.actions.act_window" id="hr_recruitment.crm_case_categ0_act_job">
             <field name="name">Applications</field>
             <field name="res_model">hr.applicant</field>
             <field name="view_mode">kanban,tree,form,graph,calendar</field>
-			<!--<field name="domain">[('is_interview_scheduled','=',False)]</field-->
+			<field name="domain">[('is_interview_scheduled','=',False)]</field>
             <field name="view_id" eval="False"/>
             <field name="search_view_id" ref="hr_recruitment.view_crm_case_jobs_filter"/>
             <field name="help" type="html">
@@ -932,9 +884,5 @@
               </p>
             </field>
         </record>
-
-		
-		
-		
     </data>
 </openerp>

@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<openerp>
+    <data>
+        <!-- EDI related Email Templates menu -->
+        <record model="ir.actions.act_window" id="action_email_templates">
+            <field name="name">Email Templates</field>
+            <field name="res_model">email.template</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form,tree</field>
+            <field name="view_id" ref="email_template.email_template_tree" />
+            <field name="search_view_id" ref="email_template.view_email_template_search" />
+            <field name="context"
+                eval="{'search_default_model_id': ref('model_hr_applicant')}" />
+        </record>
+    </data>
+
+    <!-- Mail template are declared in a NOUPDATE block so users can freely 
+        customize/delete them -->
+    <data noupdate="1">
+        <!--Email template -->
+        <record id="email_template_edi_medical_test" model="email.template">
+            <field name="name">Email template for informing about the applicant about the medical test</field>
+            <field name="email_from">${object.user_id.email}</field>
+            <field name="subject">Medical Exam for ${object.partner_name} is scheduled on ${object.create_date}</field>
+            <field name="email_to">${object.email_from},${object.doctor_name.email}</field>
+            <field name="auto_delete" eval="True" />
+            <field name="model_id" ref="model_hr_applicant" />
+            <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; "> <p>Hello ${object.doctor_name.name},
+</p> 
+<p>Dear Doctor/Applicant,</p>
+<p>This is to inform you that the medical exam for ${object.applicant_name} is scheduled on ${object.create_date} at the below mentioned Venue.
+<p>Medical Test Venue: </p> 
+<p style="border-left: 1px solid #8e0000; margin-left: 30px;"> 
+
+&nbsp;&nbsp;<strong>Address-${object.doctor_name.contact_address}</strong><br/> 
+ </p> <div> Web :&nbsp;<a href="${object.company_id.website}">${object.company_id.website}</a> </div> <p></p> </div> </div>
+           <p>Request ${object.applicant_name} to reach the venue on time.</p>
+  <p>  With Regards</p>
+<p>HR Department</p>
+<p>Integrated Solutions</p>
+<p>Note: This is a system generated message do not reply to this email.</p>
+    
+            ]]></field>
+        </record>
+    </data>
+</openerp>
+ 

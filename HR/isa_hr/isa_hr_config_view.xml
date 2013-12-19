@@ -44,7 +44,7 @@
 			</field>
 		</record>
 		<record id="action_drishti_hr_test_id" model="ir.actions.act_window">
-			<field name="name">recruitment.test Details</field>
+			<field name="name">Recruitment Test Details</field>
 			<field name="res_model">recruitment.test</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
@@ -121,17 +121,13 @@
 			</field>
 		</record>
 		<record id="action_drishti_hr_depttest_id" model="ir.actions.act_window">
-			<field name="name">recruitment.form Details</field>
+			<field name="name">Recruitment Test</field>
 			<field name="res_model">recruitment.form</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>
 			<field name="view_id" ref="drishti_hr_depttest_tree"/>
 		</record>		
-		<!--Menu to execute the above action in order to open the form view of pnl model-->
-		 
-       
-<!--        <menuitem id="menu_hr_configuration_depttest1" action='action_drishti_hr_test_id'  name="Test Information" parent="hr.menu_hr_configuration" groups="base.group_hr_manager" sequence="0"/>-->
-         	 -->
+		
 	</data>
 </openerp> 
  

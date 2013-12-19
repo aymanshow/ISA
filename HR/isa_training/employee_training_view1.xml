@@ -4,7 +4,7 @@
 		<!-- Form view of pnl model-->
 		
 		 <record id="employee_training_tree1" model="ir.ui.view">
-			<field name="name">employee.training tree</field>
+			<field name="name">Employee Training Tree</field>
 			<field name="model">employee.training1</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
@@ -30,13 +30,13 @@
 				<form string="Employee Training Form" version="7.0">
 					<header>
 						<button name="action_approve" string="Approve" type="object" class="oe_highlight" attrs="{'invisible':[('training_state','in',['draft','payment','legal_process','awaiting_certificate','pending','done','refuse'])]}" groups="base.group_isa_management"/>
-						<button name="action_cancel" string="Reject" type="object"  class="oe_highlight" attrs="{'invisible':[('training_state','in',['draft','payment','legal_process','awaiting_certificate','pending','done','refuse'])]}" groups="base.group_isa_management"/>
 						<button name="action_paid" string="Paid" type="object" class="oe_highlight" attrs="{'invisible':[('training_state','!=','payment')]}" groups="base.group_isa_management"/>
 						<button name="action_submit" string="Submit" type="object"  class="oe_highlight" attrs="{'invisible':[('training_state','!=','draft')]}"/>
 						<button name="action_complete" string="Complete" type="object" class="oe_highlight" attrs="{'invisible':[('training_state','!=','legal_process')]}" groups="base.group_isa_management"/>
 			            <button name="action_pending_certfied" string="Certified" type="object" class="oe_highlight" attrs="{'invisible':[('training_state','!=','pending')]}" groups="base.group_isa_management"/>
-			   `        <button name="action_certfied" string="Certified" type="object" class="oe_highlight" attrs="{'invisible':[('training_state','in',['draft','approval','legal_process','payment','pending','done','refuse'])]}" groups="base.group_isa_management"/>
+			           <button name="action_certfied" string="Certified" type="object" class="oe_highlight" attrs="{'invisible':[('training_state','in',['draft','approval','legal_process','payment','pending','done','refuse'])]}" groups="base.group_isa_management"/>
 			            <button name="action_pending" string="Pending" type="object" class="oe_highlight" attrs="{'invisible':[('training_state','!=','awaiting_certificate')]}" groups="base.group_isa_management"/>
+			           <button name="%(action_training_hr_rejected1)d" string="Reject" type="action"  class="oe_highlight" attrs="{'invisible':[('training_state','in',['draft','payment','legal_process','awaiting_certificate','done','refuse'])]}" groups="base.group_isa_management"/>
 			           <field name="training_state" widget="statusbar"/>
 					</header>
 			   <sheet >
@@ -131,7 +131,7 @@
 			   </page>
 <page string="Certificate Information" attrs="{'invisible':[('training_state','in',['draft','approval','legal_process','payment','refuse'])]}">
             <group colspan="4" cols="4">
-                <field name="awating_approwal_line" colspan="4" nolabel="1" attrs="{'readonly':[('training_state','!=','awaiting_certificate')]}">
+                <field name="awating_approwal_line" colspan="4" nolabel="1">
 				<tree editable="bottom" >
 				<field name="training_state_id" invisible="1"/>
 				<field name="certificate_name" />
@@ -149,7 +149,7 @@
 			</field>
 		</record>
 		<record id="action_employee_training1" model="ir.actions.act_window">
-			<field name="name">Employee training</field>
+			<field name="name">Training Requests</field>
 			<field name="res_model">employee.training1</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>

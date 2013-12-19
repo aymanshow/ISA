@@ -7,7 +7,7 @@
         <field name="model">exit.interview.ques</field>
         <field name="type">tree</field>
         <field name="arch" type="xml">
-            <tree string="Exit Interview Question" version="7.0">
+            <tree string="Exit Interview" version="7.0">
 		        <field name="question_id"/>
             </tree>
         </field>
@@ -18,7 +18,7 @@
         <field name="model">exit.interview.ques</field>
         <field name="type">form</field>
         <field name="arch" type="xml">
-            <form string="Exit Interview Question" version="7.0">
+            <form string="Exit Interview" version="7.0">
                  <sheet>
                  <notebook>
 					<page string="Test Information">
@@ -72,7 +72,7 @@
         </field>
     </record>
        <record id="action_exit_interview_ques" model="ir.actions.act_window">
-        <field name="name">Exit Interview Question</field>
+        <field name="name">Exit Interview</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">exit.interview.ques</field>
         <field name="view_type">form</field>
@@ -80,7 +80,9 @@
         <field name="view_id" ref="view_exit_interview_ques_tree"/>
     </record>
     
-    <menuitem id="menu_exi_interview_ques_id" name= "Exit Interview" parent="hr.menu_hr_main" action="action_exit_interview_ques"/>
+    <menuitem id="employee_resigns" parent="hr.menu_hr_root" name="Employee Resignation" sequence="46"/>
+    
+    <menuitem id="menu_exi_interview_ques_id" name= "Exit Interview" action="action_exit_interview_ques" parent="employee_resigns" sequence="0"/>
     
     </data>
 </openerp>

@@ -9,18 +9,15 @@
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
 				<tree string="Insurance Policy">
+					<field name="emp_id"/>
+					<field name="position"/>
+					<field name="dob"/>
+					<field name="age" />
+					<field name="department_id"/>
 					<field name="policy_no"/>
 					<field name="valid_from"/>
 					<field name="valid_to"/>
-					<field name="policy_attach"/>
 					<field name="policy_value"/>
-					<field name="policy_provider_id"/>
-					<field name="emp_id"/>
-					<field name="gender"/>
-					<field name="age" />
-					<field name="dob"/>
-					<field name="position"/>
-					<field name="department_id"/>
 					<field name="state"/>
 				</tree>
 			</field>
@@ -71,7 +68,7 @@
 			</field>
 		</record>
 		<record id="action_isa_insurance" model="ir.actions.act_window">
-			<field name="name">Isa Insurance</field>
+			<field name="name">Employee Insurance</field>
 			<field name="res_model">insurance.policy</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>

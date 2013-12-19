@@ -22,7 +22,6 @@ class drishti_hr(osv.osv):
         This function opens a window to compose an email, with the edi sale template message loaded by default
         '''
         assert len(ids) == 1, 'This option should only be used for a single id at a time.'
-#         self.write(cr, uid, ids, {'state': 'confirmed'})
         ir_model_data = self.pool.get('ir.model.data')
         try:
             template_id = ir_model_data.get_object_reference(cr, uid, 'isa_hr', 'drishti.hr')[1]
@@ -105,7 +104,6 @@ class drishti_hr(osv.osv):
         hr_job_obj=self.pool.get('hr.job')
         obj=self.browse(cr,uid,ids[0])
         hr_job_id=hr_job_obj.search(cr,uid,[('name','=',obj.designation.name),('state','=','open'),('department_id','=',obj.department_id.id)])
-        print'=====hr_job_id====',hr_job_id
         if not hr_job_id:
             raise osv.except_osv(('Warning !'),('For this designation recruitment is being process.'))
         else:
@@ -178,7 +176,6 @@ class hr_job(osv.osv):
             return {'value': res}
 #THis method is used for the mail send 
         def action_quotation_send(self, cr, uid, ids, context=None):
-            print'=========hr_job=============',ids
             test=[]
             email_template_obj = self.pool.get('email.template')
             ir_model_data = self.pool.get('ir.model.data')
@@ -187,7 +184,6 @@ class hr_job(osv.osv):
                 raise osv.except_osv(
                                 _('Error!'),
                                 _('Please Create the template for this module'))
-            print'===========template_ids=====',template_ids
             if template_ids:
                     values = email_template_obj.generate_email(cr, uid, template_ids[0], ids, context=context)
                     email_obj=self.browse(cr,uid,ids[0])
