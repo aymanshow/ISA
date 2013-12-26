@@ -289,7 +289,8 @@ class sale_order(osv.osv):
                                        'planned_amount': -vals.subtotal,
                                        }
                 self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
-                self.pool.get('pnl.order').write(cr,uid,obj.pnl.id,{'budget_id':budget_id})
+            self.pool.get('pnl.order').write(cr,uid,obj.pnl.id,{'budget_id':budget_id})
+            self.pool.get('project.project').write(cr,uid,project_id,{'budget_id':budget_id})
         
         
         
@@ -898,8 +899,9 @@ class pnl_cogs_line(osv.osv):
         res={}
         amt=0.0
         for val in self.browse(cr,uid,ids):
-            if val.quotation_id:
+            if val.quotation_id or val.requisition_id:
                amt=val.quote_amt*val.perc_cif/100
+            
             
         
         res[val.id]=amt
@@ -918,6 +920,9 @@ class pnl_cogs_line(osv.osv):
                 'consultancy_amt' : fields.float('Consultancy'),
                 'amount': fields.function(_compute_total,string='Total'), #Function needs to be worked on and expanded
                 }
+    _defaults={
+               'quote_amt':0.0,
+               }
     def onchange_quotation(self, cr, uid, ids, quotation_id):
         print "quotation_id",quotation_id
         if not quotation_id:
