@@ -35,6 +35,7 @@
                ],
     'depends': ['base', 'account','account_voucher','partner_unique_account'],
     'data': [    'wizard/report_wizard_view.xml',
+                'wizard/account_wizard_view.xml',
                 'data.xml',
                 'security/ir.model.access.csv',
                  'account_view.xml',

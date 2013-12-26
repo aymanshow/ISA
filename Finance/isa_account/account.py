@@ -174,7 +174,7 @@ class account_account(osv.osv):
               'debit_usd':fields.function(__compute, fnct_inv=_set_credit_debit, digits_compute=dp.get_precision('Account'), string='Debit USD', multi='balance'),
               'credit_usd':fields.function(__compute, fnct_inv=_set_credit_debit, digits_compute=dp.get_precision('Account'), string='Credit USD', multi='balance'),
               'balance_usd': fields.function(__compute, digits_compute=dp.get_precision('Account'), string='Balance USD', multi='balance'),
-              
+              'budget':fields.float('Budget Amount',help='This Field will show the Budget For current fiscal year'),
               }
 class account_move_line(osv.osv):
     _inherit='account.move.line'
@@ -947,7 +947,8 @@ class payment_request(osv.osv):
               'description':fields.char('Description For Cash'),
               'state': fields.selection([('draft', 'New'),
                                    ('waiting','Waiting'), # used by cash statements
-                                   ('approve','Approved'),],
+                                   ('approve','Approved'),
+                                   ('receive','Received')],
                                    'Status', required=True),
               'date':fields.date('Date'),
               
@@ -958,10 +959,44 @@ class payment_request(osv.osv):
                'date': lambda *a: time.strftime('%Y-%m-%d'),
                
                }
+    def onchange_journal(self,cr,uid,ids,journal_id,context=None):
+        res={}
+        if journal_id:
+            obj=self.pool.get('account.journal').browse(cr,uid,journal_id)
+            from_acct=obj.default_debit_account_id.id
+            to_acct=obj.default_credit_account_id.id
+            res={
+                 'account_from_id':from_acct,
+                 'account_to_id':to_acct
+                 }
+        return{'value':res} 
+    def onchange_amount(self,cr,uid,ids,amount,context=None):
+        res={}
+        if amount:
+            
+            res={
+                 'amount_approve':amount,
+                 }
+        return{'value':res} 
     def send_request(self,cr,uid,ids,context):
         self.write(cr,uid,ids,{'state':'waiting'})
         return True
     def approve(self,cr,uid,ids,context):
+        obj=self.browse(cr,uid,ids[0])
+        journal_id=obj.journal_id.id
+        ref=obj.department_id.name
+        amount=obj.amount_approve
+        from_id=obj.account_from_id.id
+        to_id=obj.account_to_id.id
+        move_obj=self.pool.get('account.move')
+        move_line=self.pool.get('account.move.line')
+        move={
+              'journal_id':journal_id,
+              'ref':ref,
+              }
+        move_id=move_obj.create(cr,uid,move)
+        move_line_debit=move_line.create(cr,uid,{'move_id':move_id,'name':ref,'account_id':from_id,'debit':amount})
+        move_line_credit=move_line.create(cr,uid,{'move_id':move_id,'name':ref,'account_id':to_id,'credit':amount})
         self.write(cr,uid,ids,{'state':'approve'})
         return True
     

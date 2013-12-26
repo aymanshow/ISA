@@ -27,6 +27,9 @@
             <xpath expr="//field[@name='balance']" position='after'>
             	<field name="balance_usd"/>
             </xpath>
+            <xpath expr="//field[@name='active']" position='after'>
+            	<field name="budget" attrs="{'invisible':[('type','=','view')]}"/>
+            </xpath>
             </field>
         </record> 
         
@@ -280,8 +283,9 @@
                 <form string="Payment Request" version="7.0">
                   <header>
                     	
-                      <button name="send_request" string="Send Request" states="draft" type='object' class="oe_highlight"/>
-                      <button name="approve" string="Approve" type="object" states="waiting" confirm="Are you sure you want to Confirm"/>
+                      <button name="send_request" string="Send Request" states="draft" type='object' class="oe_highlight" default_focus='1'/>
+                      <button name="%(action_recieve_amount)d" string="Recieve" states="approve" type='action' class="oe_highlight" default_focus='1'/>
+                      <button name="approve" string="Approve" type="object" states="waiting" confirm="Are you sure you want to Confirm" default_focus='1'/>
 <!--                      <button name="cancel_voucher" string="Cancel Voucher" states="draft,proforma" />-->
 <!--                      <button name="action_cancel_draft" type="object" states="cancel" string="Set to Draft"/>-->
 <!--                      <field name="state" widget="statusbar" statusbar_visible="draft,posted" statusbar_colors='{"proforma":"blue"}'/>-->
@@ -290,17 +294,17 @@
                   	<sheet>
 	                  	<group>
 	                  		<group>
-	                  			<field name='department_id' required='1'/>
-	                  			<field name='amount' required='1'/>
-	                  			<field name='account_from_id' required='1'/>
-	                  			<field name='description' required='1'/>
+	                  			<field name='department_id' required='1' attrs="{'readonly':[('state','!=','draft')]}"/>
+	                  			<field name='amount' required='1' attrs="{'readonly':[('state','!=','draft')]}" on_change='onchange_amount(amount)'/>
+	                  			<field name='account_from_id' required='1' attrs="{'readonly':[('state','=','approve')]}"/>
+	                  			<field name='description' required='1' attrs="{'readonly':[('state','!=','draft')]}"/>
 	                  		
 	                  		</group>
 	                  		<group>
-		                  		<field name='journal_id' required='1' domain="[('type','=','cash')]"/>
-		                  		<field name='amount_approve' required='1'/>
-		                  		<field name='account_to_id' required='1'/>
-		                  		<field name='date' required='1'/>
+		                  		<field name='journal_id' required='1' on_change="onchange_journal(journal_id)" domain="[('type','=','cash')]" attrs="{'readonly':[('state','=','approve')]}"/>
+		                  		<field name='amount_approve' required='1' attrs="{'readonly':[('state','=','approve')]}"/>
+		                  		<field name='account_to_id' required='1' attrs="{'readonly':[('state','=','approve')]}"/>
+		                  		<field name='date' required='1' attrs="{'readonly':[('state','=','approve')]}"/>
 	                  		</group>
 	                  	</group>
                   	</sheet>
