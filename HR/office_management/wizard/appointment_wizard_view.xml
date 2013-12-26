@@ -138,7 +138,7 @@
         </record>
         
         <record id="action_done_wizard" model="ir.actions.act_window">
-            <field name="name">Reject Appointment</field>
+            <field name="name">Feedback</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">action.done</field>
             <field name="view_type">form</field>

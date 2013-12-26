@@ -18,7 +18,7 @@ class hr_employee(osv.osv):
             'professional_line1':fields.one2many('professional.qualification1','professional_id1','Professional Qualification'),
             'honor_awards_line1':fields.one2many('honour.award1','honour_id1','Honours/Awards'),
             'language_spoken_line1':fields.one2many('language.spoken1','language_id1','Language Spoken'),
-            'personel_document_line1':fields.one2many('personal.document1','personel_document_id','Personal Document'),
+            #'personel_document_line1':fields.one2many('personal.document1','personel_document_id','Personal Document'),
             'offer_acceptance_line1':fields.one2many('offer.acceptance1','hr_appli_id','Offer Acceptance'),
             'criminal_record_line1':fields.one2many('criminal.record1','crim_id','Criminal Record'),
             'other_certificate_line1':fields.one2many('other.certificate1','cerificate_id','Other Certificate'),
@@ -32,8 +32,20 @@ class hr_employee(osv.osv):
               'working_visa':fields.binary('Working Visa'), 
                'id_gaurdian':fields.binary('ID Guardian'), 
                 'health_insurance_card':fields.binary('Health Insurance Card'), 
-               'personel_document_id':fields.many2one('hr.employee','Personal Document'),
+               
                 }
+    
+# class personal_document1(osv.osv):
+#     _name='personal.document1' 
+#     _columns={
+#               'personel_document_id':fields.many2one('hr.employee','Personal Document'),
+#               'name':fields.char('Description',size=64),
+#               'local':fields.char('Local',size=64),
+#               'date':fields.date('Date'),
+#               'honour_id1':fields.many2one('hr.employee','Honour/Award'),
+#                }            
+
+
 class honour_award1(osv.osv):
     _name='honour.award1' 
     _columns={

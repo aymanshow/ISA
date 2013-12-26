@@ -222,7 +222,29 @@
 			<field name="view_mode">tree,form</field>
 			<field name="view_id" ref="job_order_tree"/>
 		</record>
-<menuitem action="action_job_order_id" name="Job Order" id="menu_crm_case_job_order" parent="crm_helpdesk.menu_config_helpdesk"/>
+<menuitem name="Helpdesk"
+            id="base_menu_isa"/>
+
+<menuitem name="Helpdesk"
+            id="base_menu_isa_child" parent="base_menu_isa"/>
+            
+<menuitem name="Configuration"
+            id="base_menu_isa_config_child" parent="base_menu_isa"/>
+            
+<menuitem id="crm_helpdesk.menu_config_helpdesk" name="Helpdesk"
+        parent="base_menu_isa_config_child"/>
+
+
+<menuitem name="Tickets"
+            id="crm_helpdesk.menu_help_support_main" parent="base_menu_isa_child" action="crm_helpdesk.crm_case_helpdesk_act111" sequence="0"/>
+
+<menuitem name="Job Orders"
+            id="base_menu_isa_job_orders" parent="base_menu_isa_child" action="action_job_order_id" sequence="1"/>
+
+<menuitem action="crm_helpdesk.crm_helpdesk_categ_action" name="Categories"
+            id="crm_helpdesk.menu_crm_case_helpdesk-act" parent="crm_helpdesk.menu_config_helpdesk" sequence="2"/>
+
+<!--menuitem action="action_job_order_id" name="Job Order" id="menu_crm_case_job_order" parent="crm_helpdesk.menu_config_helpdesk"/-->
 	
     </data>
 </openerp>

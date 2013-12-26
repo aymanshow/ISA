@@ -1,0 +1,81 @@
+<?xml version ='1.0'?>
+<openerp>
+    <data>		
+		<!-- Rejectedstegr Form View -->
+
+  
+		<!-- Rejected stege Form View -->
+
+  <record id="drishti_hr_rejected_tree" model="ir.ui.view">
+			<field name="name">Rejected form</field>
+			<field name="model">rejected.form</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Rejected Form">
+					<field name="name_id"/>
+					<field name="requestion_id1"/>
+					<field name="partner_name"/>
+					<field name="stage1"/>
+					<field name="comment"/>
+				</tree>
+			</field>
+		</record>
+<record id="drishti_hr_rej_state_form" model="ir.ui.view">
+			<field name="name">Rejected form </field>
+			<field name="model">rejected.form</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Rejected Information" version="7.0">
+				<header>
+				<group colspan="4" cols="4" >
+          <!--     <button name="action_apply" type="object" string="Apply" icon="gtk-apply"/>
+	 		<button name="create_record" type="object" string="Save" help="Approve this  applicant for the next stage"/>
+          -->	
+                 <button name="action_cancel" string="Cancel" icon="gtk-cancel" special="cancel"/>
+				<button name="create_record2" type="object" string="Save" icon="gtk-save" help="Approve this  applicant for the next stage"/>
+				</group>
+				</header>
+			         <sheet>
+					<group colspan="4" cols="4">
+					<field name="name_id"/>
+					<field name="requestion_id1"/>
+					<field name="partner_name"/>
+					<field name="stage1"/>
+					<field name="comment"/>
+					</group>
+			         </sheet>
+					</form>
+			</field>
+		</record>
+		
+		<record model="ir.actions.act_window" id="action_drishti_hr_rej_state_id1">
+                <field name="name">rejected form Details</field>
+                <field name="name">Rejected form</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">rejected.form</field>
+                <field name="view_type">form</field>
+                <field name="view_mode">form</field>
+                <field name="view_id" ref="drishti_hr_rej_state_form" />
+                <field name="nodestroy">True</field>
+                <field name="target">new</field>
+    </record> 
+    <record model="ir.actions.act_window" id="action_drishti_hr_rej_state_id2">
+                <field name="name">rejected form Details</field>
+                <field name="type">ir.actions.act_window</field>
+                <field name="res_model">rejected.form</field>
+                <field name="view_type">tree</field>
+                <field name="view_mode">tree,form</field>
+                <field name="view_id" ref="drishti_hr_rejected_tree" />
+    </record> 
+     	
+
+    
+    <record id="action_drishti_hr_rej_state_id2" model="ir.actions.act_window">
+			<field name="name">Rejected form</field>
+			<field name="res_model">rejected.form</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="drishti_hr_rejected_tree"/>
+		</record>
+ </data>
+ </openerp>

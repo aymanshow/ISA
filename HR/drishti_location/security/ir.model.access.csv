@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_product_user_location,product.product,model_product_product,group_user_location,1,1,1,1
+access_stock_location_user_location,stock.location,model_stock_location,group_user_location,1,1,1,1
+access_request_product,request.product,model_request_product,group_user_location,1,1,1,1
+access_request_product_line,request.product.line,model_request_product_line,group_user_location,1,1,1,1
+access_stock_picking_user1,stock.picking user,stock.model_stock_picking,group_user_location,1,1,1,1
+access_stock_picking_in_user1,stock.picking.in,stock.model_stock_picking_in,group_user_location,1,1,1,1
+access_stock_picking_out_user1,stock.picking.out,stock.model_stock_picking_out,group_user_location,1,1,1,1
+access_stock_move_user1,stock.move manager,stock.model_stock_move,group_user_location,1,1,1,1
+access_job_order_user,job.order,model_job_order,group_user_maintenance,1,1,1,1
+access_job_order_line_user,job.order.line,model_job_order_line,group_user_maintenance,1,1,1,1
+
+

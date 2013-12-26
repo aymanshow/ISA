@@ -6,7 +6,7 @@
     'description':'ISA Modules',
     'author':'Drishti Tech',
     'website':'http://www.drishtitech.com',
-    'depends':['base','hr_attendance_payroll','import_attendance','isa_hr_employee','isa_insurance','isa_hr','isa_fleet','isa_fleet_mng','isa_training','survey', 'office_management','isa_hr_exit_interview','isa_loan','isa_purchase'],
+    'depends':['base','hr_attendance_payroll','import_attendance','isa_hr_employee','isa_insurance','isa_hr','isa_fleet','isa_fleet_mng','isa_training','survey', 'office_management','isa_hr_exit_interview','isa_loan','isa_purchase','drishti_location'],
     'data':[],
     'installable':True,
     'auto_install':False,

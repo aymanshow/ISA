@@ -36,7 +36,7 @@ class attendance_import(osv.osv_memory):
     _columns={
               'file':fields.binary("File Path:"),
               'file_name':fields.char('File Name:'),
-              'location':fields.selection([('1', 'Mumbai'), ('2', 'Goa')],'Location',required=True),
+              'location':fields.selection([('1', 'Branch1'), ('2', 'Branch2')],'Location',required=True),
               }
     def import_attendance(self,cr,uid,ids,context=None):
 

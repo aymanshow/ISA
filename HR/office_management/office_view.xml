@@ -323,7 +323,7 @@
 	           		     <form string="Conference" version="7.0">
 		                	<sheet>
 				                <h1>
-			                        <label string="ID"/>
+			                        <label string="Office Equipments"/>
 			                    	<field name="loc_id" class="oe_inline" readonly="1" string="ID -"/>
 			                    </h1>
 			                    <group>
@@ -366,7 +366,7 @@
 			           		     </header>
 				         	<sheet>
 				                <h1>
-			                        <label string="ID"/>
+			                        <label string="Office Equipments"/>
 			                    	<field name="loc_id" class="oe_inline" readonly="1" string="ID -"/>
 			                    </h1>
 			                    

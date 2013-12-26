@@ -226,17 +226,171 @@ class mail_thread(osv.osv):
            if parent_ids:
               msg_dict['parent_id'] = parent_ids[0]
          
-        
+        print msg_dict['subject'], "----------------------------------THIS IS SUBJECT OF THE MAIL-------------------------------------"
         msg_dict['body'], msg_dict['attachments'] = self._message_extract_payload(cr, uid, message, save_original=save_original)
         return msg_dict
     
+#     def message_process(self, cr, uid, model, message, custom_values=None,
+#                         save_original=False, strip_attachments=False,
+#                         thread_id=None, context=None):
+#         """ Process an incoming RFC2822 email message, relying on
+#             ``mail.message.parse()`` for the parsing operation,
+#             and ``message_route()`` to figure out the target model.
+# 
+#             Once the target model is known, its ``message_new`` method
+#             is called with the new message (if the thread record did not exist)
+#             or its ``message_update`` method (if it did).
+# 
+#             There is a special case where the target model is False: a reply
+#             to a private message. In this case, we skip the message_new /
+#             message_update step, to just post a new message using mail_thread
+#             message_post.
+# 
+#            :param string model: the fallback model to use if the message
+#                does not match any of the currently configured mail aliases
+#                (may be None if a matching alias is supposed to be present)
+#            :param message: source of the RFC2822 message
+#            :type message: string or xmlrpclib.Binary
+#            :type dict custom_values: optional dictionary of field values
+#                 to pass to ``message_new`` if a new record needs to be created.
+#                 Ignored if the thread record already exists, and also if a
+#                 matching mail.alias was found (aliases define their own defaults)
+#            :param bool save_original: whether to keep a copy of the original
+#                 email source attached to the message after it is imported.
+#            :param bool strip_attachments: whether to strip all attachments
+#                 before processing the message, in order to save some space.
+#            :param int thread_id: optional ID of the record/thread from ``model``
+#                to which this mail should be attached. When provided, this
+#                overrides the automatic detection based on the message
+#                headers.
+#         """
+#         if context is None:
+#             context = {}
+# 
+#         # extract message bytes - we are forced to pass the message as binary because
+#         # we don't know its encoding until we parse its headers and hence can't
+#         # convert it to utf-8 for transport between the mailgate script and here.
+#         if isinstance(message, xmlrpclib.Binary):
+#             message = str(message.data)
+#         # Warning: message_from_string doesn't always work correctly on unicode,
+#         # we must use utf-8 strings here :-(
+#         if isinstance(message, unicode):
+#             message = message.encode('utf-8')
+#         msg_txt = email.message_from_string(message)
+# 
+#         # parse the message, verify we are not in a loop by checking message_id is not duplicated
+#         msg = self.message_parse(cr, uid, msg_txt, save_original=save_original, context=context)
+#         if strip_attachments:
+#             msg.pop('attachments', None)
+#         if msg.get('message_id'):   # should always be True as message_parse generate one if missing
+#             existing_msg_ids = self.pool.get('mail.message').search(cr, SUPERUSER_ID, [
+#                                                                 ('message_id', '=', msg.get('message_id')),
+#                                                                 ], context=context)
+#             if existing_msg_ids:
+#                # _logger.info('Ignored mail from %s to %s with Message-Id %s:: found duplicated Message-Id during processing',
+#                #                 msg.get('from'), msg.get('to'), msg.get('message_id'))
+#                 return False
+# 
+#         # find possible routes for the message
+#         routes = self.message_route(cr, uid, msg_txt, model,
+#                                     thread_id, custom_values,
+#                                     context=context)
+# 
+#         # postpone setting msg.partner_ids after message_post, to avoid double notifications
+#         partner_ids = msg.pop('partner_ids', [])
+# 
+#         thread_id = False
+#         for model, thread_id, custom_values, user_id in routes:
+#             if self._name == 'mail.thread':
+#                 context.update({'thread_model': model})
+#             if model:
+#                 model_pool = self.pool.get(model)
+#                 assert thread_id and hasattr(model_pool, 'message_update') or hasattr(model_pool, 'message_new'), \
+#                     "Undeliverable mail with Message-Id %s, model %s does not accept incoming emails" % \
+#                         (msg['message_id'], model)
+# 
+#                 # disabled subscriptions during message_new/update to avoid having the system user running the
+#                 # email gateway become a follower of all inbound messages
+#                 nosub_ctx = dict(context, mail_create_nosubscribe=True)
+#                 if thread_id and hasattr(model_pool, 'message_update'):
+#                     model_pool.message_update(cr, user_id, [thread_id], msg, context=nosub_ctx)
+#                 else:
+#                     nosub_ctx = dict(nosub_ctx, mail_create_nolog=True)
+#                     thread_id = model_pool.message_new(cr, user_id, msg, custom_values, context=nosub_ctx)
+#             else:
+#                 assert thread_id == 0, "Posting a message without model should be with a null res_id, to create a private message."
+#                 model_pool = self.pool.get('mail.thread')
+#             new_msg_id = model_pool.message_post(cr, uid, [thread_id], context=context, subtype='mail.mt_comment', **msg)
+# 
+#             if partner_ids:
+#                 # postponed after message_post, because this is an external message and we don't want to create
+#                 # duplicate emails due to notifications
+#                 self.pool.get('mail.message').write(cr, uid, [new_msg_id], {'partner_ids': partner_ids}, context=context)
+# 
+#         return thread_id
+# 
+#     def message_new(self, cr, uid, msg_dict, custom_values=None, context=None):
+#         """Called by ``message_process`` when a new message is received
+#            for a given thread model, if the message did not belong to
+#            an existing thread.
+#            The default behavior is to create a new record of the corresponding
+#            model (based on some very basic info extracted from the message).
+#            Additional behavior may be implemented by overriding this method.
+# 
+#            :param dict msg_dict: a map containing the email details and
+#                                  attachments. See ``message_process`` and
+#                                 ``mail.message.parse`` for details.
+#            :param dict custom_values: optional dictionary of additional
+#                                       field values to pass to create()
+#                                       when creating the new thread record.
+#                                       Be careful, these values may override
+#                                       any other values coming from the message.
+#            :param dict context: if a ``thread_model`` value is present
+#                                 in the context, its value will be used
+#                                 to determine the model of the record
+#                                 to create (instead of the current model).
+#            :rtype: int
+#            :return: the id of the newly created thread object
+#         """
+#         
+#         print msg_dict, "***************************** NEW MESSAGE ARRIVED *******************************************"
+#         
+#         if context is None:
+#             context = {}
+#         data = {}
+#         if isinstance(custom_values, dict):
+#             data = custom_values.copy()
+#         model = context.get('thread_model') or self._name
+#         model_pool = self.pool.get(model)
+#         fields = model_pool.fields_get(cr, uid, context=context)
+#         if 'name' in fields and not data.get('name'):
+#             data['name'] = msg_dict.get('subject', '')
+#         res_id = model_pool.create(cr, uid, data, context=context)
+#         return res_id
+# 
+#     def message_update(self, cr, uid, ids, msg_dict, update_vals=None, context=None):
+#         """Called by ``message_process`` when a new message is received
+#            for an existing thread. The default behavior is to update the record
+#            with update_vals taken from the incoming email.
+#            Additional behavior may be implemented by overriding this
+#            method.
+#            :param dict msg_dict: a map containing the email details and
+#                                attachments. See ``message_process`` and
+#                                ``mail.message.parse()`` for details.
+#            :param dict update_vals: a dict containing values to update records
+#                               given their ids; if the dict is None or is
+#                               void, no write operation is performed.
+#         """
+#         if update_vals:
+#             self.write(cr, uid, ids, update_vals, context=context)
+#         return True
 
  
      
     def _message_extract_payload(self, cr, uid, message, save_original=False):
         """Extract body as HTML and attachments from the mail message"""
          
-        
+        print "tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt"
          
         attachments = []
         body = u''
@@ -287,7 +441,7 @@ class mail_thread(osv.osv):
                      
                     attachments.append((filename or 'attachment', part.get_payload(decode=True)))
          
-        
+        #print body, "uuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu"
         return body, attachments
 
 
@@ -899,7 +1053,16 @@ class leaves_calendar(osv.osv):
                 create_carry_forward = self.pool.get('hr.holidays').create(cr, uid, {'employee_id':s.id, 'holiday_type':'employee', 'holiday_status_id':carry_forward_leave_type, 'type':'remove', 'number_of_days_temp': s.remaining_leaves, 'date_from' : date_after_2days, 'date_to' : date_after_2days})
                 
             
+            ####### Logic by Ankit Sir
+           # if remaining_leaves > 14:
+            #    print "ttttttttttttttttttttttttttt"
+                #create CARRIED FORWARD LEAVES = 14
+            #else:
+            #    print "kkkkkkkkkkkkkkkkkkkkkkkkkk"
+                #create CARRIED FORWARD LEAVES = remaining_leaves
             
+            #apply and approve legal leaves = remaining_leaves. Description: "Reset"
+            ######## end of Logic by Ankit Sir
             if leaves_consumed < 10:
                 leaves_to_be_deducted = (10 - leaves_consumed)
                 

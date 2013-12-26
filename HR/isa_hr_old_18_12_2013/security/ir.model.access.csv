@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_partner_management1,res.partner manag,model_drishti_hr,base.group_isa_hr_departemnt,1,1,1,1
+access_recruitment_request_manager,drishti.hr,model_drishti_hr,base.group_employee_requestion,1,1,0,0
+access_test_user,survey.test.line,model_survey_test_line,base.group_online_test,1,1,0,0
+access_test_hr_user,hr.applicant,model_hr_applicant,base.group_online_test,1,1,0,0
+access_test_user1,survey.request,model_survey_request,base.group_online_test,1,1,0,0

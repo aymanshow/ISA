@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+          
+
+        <record id="product_1" model="product.product">
+            <field name="name">Products</field>
+            <field name="categ_id">1</field>
+            <field name="type">service</field>
+        </record>
+        <record id="product_2" model="product.product">
+            <field name="name">Services</field>
+            <field name="categ_id">1</field>
+            <field name="type">service</field>
+        </record>
+        <record id="product_3" model="product.product">
+            <field name="name">CIFS</field>
+            <field name="categ_id">1</field>
+            <field name="type">service</field>
+        </record>
+
+
+    </data>
+</openerp>

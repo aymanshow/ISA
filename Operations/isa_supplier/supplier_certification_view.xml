@@ -68,7 +68,7 @@
         </record>
     
     <record id="action_certification_form_tree" model="ir.actions.act_window">
-        <field name="name">Certification Form</field>
+        <field name="name">Vendor Certification</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">certification.form</field>
         <field name="view_type">form</field>

@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data >
+       
+       
+      <!-- North Zone Location-->
+      <record id="stock_location_north_zone" model="stock.location">
+            <field name="name">North Zone</field>
+            <field name="location_id" ref="stock.stock_location_company"/>
+            <field name="usage">view</field>
+      </record>
+      
+      <record id="stock_location_stock" model="stock.location">
+            <field name="name">North Beach Store</field>
+            <field name="location_id" ref="stock_location_north_zone"/>
+            <field name="sequence_id" ref="seq_rp_north"/>
+      </record>
+      <record id="stock_location_keri" model="stock.location">
+            <field name="name">Keri</field>
+            <field name="location_id" ref="stock_location_north_zone"/>
+            <field name="sequence_id" ref="seq_rp_keri"/>
+      </record>
+      
+      <record id="stock_location_arambol" model="stock.location">
+            <field name="name">Arambol</field>
+            <field name="location_id" ref="stock_location_north_zone"/>
+            <field name="sequence_id" ref="seq_rp_arambol"/>
+      </record>
+      
+      
+      <record id="stock_location_ashwam" model="stock.location">
+            <field name="name">Ashwam</field>
+            <field name="location_id" ref="stock_location_north_zone"/>
+            <field name="sequence_id" ref="seq_rp_ashwam"/>
+      </record>
+      <record id="stock_location_morjim" model="stock.location">
+            <field name="name">Morjim</field>
+            <field name="location_id" ref="stock_location_north_zone"/>
+            <field name="sequence_id" ref="seq_rp_morjim"/>
+      </record>
+      
+      <record id="stock_location_vagator" model="stock.location">
+            <field name="name">Vagator</field>
+            <field name="location_id" ref="stock_location_north_zone"/>
+            <field name="sequence_id" ref="seq_rp_vagator"/>
+      </record>
+      <record id="stock_location_anjuna" model="stock.location">
+            <field name="name">Anjuna</field>
+            <field name="location_id" ref="stock_location_north_zone"/>
+            <field name="sequence_id" ref="seq_rp_anjuna"/>
+      </record>
+      <record id="stock_location_baga" model="stock.location">
+            <field name="name">Baga</field>
+            <field name="location_id" ref="stock_location_north_zone"/>
+            <field name="sequence_id" ref="seq_rp_baga"/>
+      </record>
+      
+     
+      <record id="stock_location_calangute" model="stock.location">
+            <field name="name">Calangute</field>
+            <field name="location_id" ref="stock_location_north_zone"/>
+            <field name="sequence_id" ref="seq_rp_calangute"/>
+      </record>
+      <record id="stock_location_candolim" model="stock.location">
+            <field name="name">Candolim</field>
+            <field name="location_id" ref="stock_location_north_zone"/>
+            <field name="sequence_id" ref="seq_rp_candolim"/>
+      </record>
+      
+      <record id="stock_location_sinquerim" model="stock.location">
+            <field name="name">Sinquerim</field>
+            <field name="location_id" ref="stock_location_north_zone"/>
+            <field name="sequence_id" ref="seq_rp_sinquerim"/>
+      </record>
+      <record id="stock_location_miramar" model="stock.location">
+            <field name="name">Miramar</field>
+            <field name="location_id" ref="stock_location_north_zone"/>
+            <field name="sequence_id" ref="seq_rp_miramar"/>
+      </record>
+      <record id="stock_location_donapaula" model="stock.location">
+            <field name="name">Dona Paula</field>
+            <field name="location_id" ref="stock_location_north_zone"/>
+            <field name="sequence_id" ref="seq_rp_donapaula"/>
+      </record>
+      
+       <record id="stock_location_vainguinim" model="stock.location">
+            <field name="name">Vainguinim</field>
+            <field name="location_id" ref="stock_location_north_zone"/>
+            <field name="sequence_id" ref="seq_rp_vainguinim"/>
+      </record>
+      <record id="stock_location_bambolim" model="stock.location">
+            <field name="name">Bambolim</field>
+            <field name="location_id" ref="stock_location_north_zone"/>
+            <field name="sequence_id" ref="seq_rp_bambolim"/>
+      </record>
+      <record id="stock_location_sridao" model="stock.location">
+            <field name="name">Sridao</field>
+            <field name="location_id" ref="stock_location_north_zone"/>
+            <field name="sequence_id" ref="seq_rp_sridao"/>
+      </record>
+      
+      
+      
+      
+      <!-- South Zone Location-->
+      <record id="stock_location_south_zone" model="stock.location">
+            <field name="name">South Zone</field>
+            <field name="location_id" ref="stock.stock_location_company"/>
+            <field name="usage">view</field>
+      </record>
+      
+      <record id="stock_location_south_stock" model="stock.location">
+            <field name="name">South Beach Store</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_south"/>
+      </record>
+      
+      <record id="stock_location_baina" model="stock.location">
+            <field name="name">Baina</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_baina"/>
+      </record>
+       <record id="stock_location_bogmallo" model="stock.location">
+            <field name="name">Bogmallo</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_bogmallo"/>
+      </record>
+       <record id="stock_location_hollant" model="stock.location">
+            <field name="name">Hollant</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_hollant"/>
+      </record>
+       <record id="stock_location_velsao_arrosim" model="stock.location">
+            <field name="name">Velsao  Arrosim</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_velsao_arrosim"/>
+      </record>
+      
+      
+      <record id="stock_location_uttorda" model="stock.location">
+            <field name="name">Uttorda</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_uttorda"/>
+      </record>
+       <record id="stock_location_majorda" model="stock.location">
+            <field name="name">Majorda</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_majorda"/>
+      </record>
+       <record id="stock_location_betalbatim" model="stock.location">
+            <field name="name">Betalbatim</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_betalbatim"/>
+      </record>
+       <record id="stock_location_colva" model="stock.location">
+            <field name="name">Colva</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_colva"/>
+      </record>
+      
+      
+      <record id="stock_location_sernabatim" model="stock.location">
+            <field name="name">Sernabatim</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_sernabatim"/>
+      </record>
+       <record id="stock_location_benaulim" model="stock.location">
+            <field name="name">Benaulim</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_benaulim"/>
+      </record>
+       <record id="stock_location_varca" model="stock.location">
+            <field name="name">Varca</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_varca"/>
+      </record>
+       <record id="stock_location_fatrade" model="stock.location">
+            <field name="name">Fatrade</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_fatrade"/>
+      </record>
+      
+      
+      <record id="stock_location_cavellosim" model="stock.location">
+            <field name="name">Cavellosim</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_cavellosim"/>
+      </record>
+      
+       <record id="stock_location_mobor" model="stock.location">
+            <field name="name">Mobor</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_mobor"/>
+      </record>
+       <record id="stock_location_betul" model="stock.location">
+            <field name="name">Betul</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_betul"/>
+      </record>
+      
+      <record id="stock_location_canaguinim" model="stock.location">
+            <field name="name">Canaguinim</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_canaguinim"/>
+      </record>
+       <record id="stock_location_cola" model="stock.location">
+            <field name="name">Cola</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_cola"/>
+      </record>
+       <record id="stock_location_agonda" model="stock.location">
+            <field name="name">Agonda</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_agonda"/>
+      </record>
+       <record id="stock_location_palolem" model="stock.location">
+            <field name="name">Palolem</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_palolem"/>
+      </record>
+      
+      <record id="stock_location_colomb" model="stock.location">
+            <field name="name">Colomb</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_colomb"/>
+      </record>
+       <record id="stock_location_patnem" model="stock.location">
+            <field name="name">Patnem</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_patnem"/>
+      </record>
+       <record id="stock_location_rajbagh" model="stock.location">
+            <field name="name">Rajbagh</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_rajbagh"/>
+      </record>
+       <record id="stock_location_galgibag" model="stock.location">
+            <field name="name">Galgibag</field>
+            <field name="location_id" ref="stock_location_south_zone"/>
+            <field name="sequence_id" ref="seq_rp_galgibag"/>
+      </record>
+      
+      
+      
+      
+      
+      <!-- North Zone virtual Location-->
+      <record id="virtual_location_north_zone" model="stock.location">
+            <field name="name">North Zone Consumption</field>
+            <field name="location_id" ref="stock.stock_location_locations_virtual"/>
+            <field name="usage">view</field>
+      </record>
+      
+      <record id="virtual_location_stock" model="stock.location">
+            <field name="name">North Beach Store Consumption</field>
+            <field name="location_id" ref="virtual_location_north_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      <record id="virtual_location_keri" model="stock.location">
+            <field name="name">Keri Consumption</field>
+            <field name="location_id" ref="virtual_location_north_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+      <record id="virtual_location_arambol" model="stock.location">
+            <field name="name">Arambol Consumption</field>
+            <field name="location_id" ref="virtual_location_north_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+      
+      <record id="virtual_location_ashwam" model="stock.location">
+            <field name="name">Ashwam Consumption</field>
+            <field name="location_id" ref="virtual_location_north_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      <record id="virtual_location_morjim" model="stock.location">
+            <field name="name">Morjim Consumption</field>
+            <field name="location_id" ref="virtual_location_north_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+      <record id="virtual_location_vagator" model="stock.location">
+            <field name="name">Vagator Consumption</field>
+            <field name="location_id" ref="virtual_location_north_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      <record id="virtual_location_anjuna" model="stock.location">
+            <field name="name">Anjuna Consumption</field>
+            <field name="location_id" ref="virtual_location_north_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      <record id="virtual_location_baga" model="stock.location">
+            <field name="name">Baga Consumption</field>
+            <field name="location_id" ref="virtual_location_north_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+     
+      <record id="virtual_location_calangute" model="stock.location">
+            <field name="name">Calangute Consumption</field>
+            <field name="location_id" ref="virtual_location_north_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      <record id="virtual_location_candolim" model="stock.location">
+            <field name="name">Candolim Consumption</field>
+            <field name="location_id" ref="virtual_location_north_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+      <record id="virtual_location_sinquerim" model="stock.location">
+            <field name="name">Sinquerim Consumption</field>
+            <field name="location_id" ref="virtual_location_north_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      <record id="virtual_location_miramar" model="stock.location">
+            <field name="name">Miramar Consumption</field>
+            <field name="location_id" ref="virtual_location_north_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      <record id="virtual_location_donapaula" model="stock.location">
+            <field name="name">Dona Paula Consumption</field>
+            <field name="location_id" ref="virtual_location_north_zone"/>
+            <field name="usage">inventory</field> 
+      </record>
+      
+       <record id="virtual_location_vainguinim" model="stock.location">
+            <field name="name">Vainguinim Consumption</field>
+            <field name="location_id" ref="virtual_location_north_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      <record id="virtual_location_bambolim" model="stock.location">
+            <field name="name">Bambolim Consumption</field>
+            <field name="location_id" ref="virtual_location_north_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      <record id="virtual_location_sridao" model="stock.location">
+            <field name="name">Sridao Consumption</field>
+            <field name="location_id" ref="virtual_location_north_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+      
+      
+      
+      <!-- South Zone Virtual Location-->
+      <record id="virtual_location_south_zone" model="stock.location">
+            <field name="name">South Zone Consumption</field>
+            <field name="location_id" ref="stock.stock_location_locations_virtual"/>
+            <field name="usage">view</field>
+      </record>
+      
+      <record id="virtual_location_south" model="stock.location">
+            <field name="name">South Beach Store Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+      <record id="virtual_location_baina" model="stock.location">
+            <field name="name">Baina Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+       <record id="virtual_location_bogmallo" model="stock.location">
+            <field name="name">Bogmallo Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+       <record id="virtual_location_hollant" model="stock.location">
+            <field name="name">Hollant Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+       <record id="virtual_location_velsao_arrosim" model="stock.location">
+            <field name="name">Velsao  Arrosim Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+      
+      <record id="virtual_location_uttorda" model="stock.location">
+            <field name="name">Uttorda Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+       <record id="virtual_location_majorda" model="stock.location">
+            <field name="name">Majorda Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+       <record id="virtual_location_betalbatim" model="stock.location">
+            <field name="name">Betalbatim Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+           <field name="usage">inventory</field>
+      </record>
+       <record id="virtual_location_colva" model="stock.location">
+            <field name="name">Colva Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+      
+      <record id="virtual_location_sernabatim" model="stock.location">
+            <field name="name">Sernabatim Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+       <record id="virtual_location_benaulim" model="stock.location">
+            <field name="name">Benaulim Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+       <record id="virtual_location_varca" model="stock.location">
+            <field name="name">Varca Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+       <record id="virtual_location_fatrade" model="stock.location">
+            <field name="name">Fatrade Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+      
+      <record id="virtual_location_cavellosim" model="stock.location">
+            <field name="name">Cavellosim Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+       <record id="virtual_location_mobor" model="stock.location">
+            <field name="name">Mobor Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+       <record id="virtual_location_betul" model="stock.location">
+            <field name="name">Betul Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+      <record id="virtual_location_canaguinim" model="stock.location">
+            <field name="name">Canaguinim Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+       <record id="virtual_location_cola" model="stock.location">
+            <field name="name">Cola Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+       <record id="virtual_location_agonda" model="stock.location">
+            <field name="name">Agonda Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+       <record id="virtual_location_palolem" model="stock.location">
+            <field name="name">Palolem Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+      <record id="virtual_location_colomb" model="stock.location">
+            <field name="name">Colomb Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+       <record id="virtual_location_patnem" model="stock.location">
+            <field name="name">Patnem Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+       <record id="virtual_location_rajbagh" model="stock.location">
+            <field name="name">Rajbagh Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+           <field name="usage">inventory</field>
+      </record>
+       <record id="virtual_location_galgibag" model="stock.location">
+            <field name="name">Galgibag Consumption</field>
+            <field name="location_id" ref="virtual_location_south_zone"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+      
+      
+      
+      <!-- Maintenance Location -->
+      <record id="stock_location_it" model="stock.location">
+            <field name="name">IT Location</field>
+            <field name="location_id" ref="stock.stock_location_company"/>
+            
+      </record>
+      
+      <record id="stock_location_jet_ski" model="stock.location">
+            <field name="name">Jet Ski Maintenance Location</field>
+            <field name="location_id" ref="stock.stock_location_company"/>
+            
+      </record>
+      
+      <record id="stock_location_vehicle" model="stock.location">
+            <field name="name">Jeep/Vehicle Maintenance Location</field>
+            <field name="location_id" ref="stock.stock_location_company"/>
+            
+      </record>
+      
+     <record id="stock_location_maintenance" model="stock.location">
+            <field name="name">Infrastructure Maintenace Location</field>
+            <field name="location_id" ref="stock.stock_location_company"/>
+            
+      </record> 
+      
+      <record id="emp_location" model="stock.location">
+            <field name="name">Employee Location</field>
+            <field name="location_id" ref="stock.stock_location_company"/>  
+      </record> 
+      
+      
+      
+      
+     <record id="virtual_location_it" model="stock.location">
+            <field name="name">IT Location Consumption</field>
+            <field name="location_id" ref="stock.stock_location_locations_virtual"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+      <record id="virtual_location_jet_ski" model="stock.location">
+            <field name="name">Jet Ski Maintenance Location Consumption</field>
+            <field name="location_id" ref="stock.stock_location_locations_virtual"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+      <record id="virtual_location_vehicle" model="stock.location">
+            <field name="name">Jeep/Vehicle Maintenance Location Consumption</field>
+            <field name="location_id" ref="stock.stock_location_locations_virtual"/>
+            <field name="usage">inventory</field>
+      </record>
+      
+     <record id="virtual_location_maintenance" model="stock.location">
+            <field name="name">Infrastructure Maintenace Location Consumption</field>
+            <field name="location_id" ref="stock.stock_location_locations_virtual"/>
+            <field name="usage">inventory</field>
+      </record>  
+        
+    </data>
+</openerp>

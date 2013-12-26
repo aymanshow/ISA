@@ -1064,19 +1064,19 @@ class mail_compose_message(osv.Model):
         return super(mail_compose_message, self).send_mail(cr, uid, ids, context=context)
 class hr_employee(osv.osv):
     _inherit='hr.employee'
-    def create(self, cr, uid, vals, context=None):
-        super(hr_employee, self).create(cr, uid, vals, context=context)
-        start= self.pool.get('ir.sequence').get(cr, uid, 'hr.employee') or '/'
-        val1=int(start)
-        seq=val1+105
-        from datetime import datetime
-        date = datetime.now()
-        today=date.today()
-        days=date.day
-        month=date.month
-        year=date.year
-        fraction_year=year%100
-        get_seq= 'S'+''+str(seq)+''+str(month)+''+str(fraction_year)
-        vals['identification_id']=get_seq
-        return super(hr_employee, self).create(cr, uid, vals, context=context)
+#     def create(self, cr, uid, vals, context=None):
+#         super(hr_employee, self).create(cr, uid, vals, context=context)
+#         start= self.pool.get('ir.sequence').get(cr, uid, 'hr.employee') or '/'
+#         val1=int(start)
+#         seq=val1+105
+#         from datetime import datetime
+#         date = datetime.now()
+#         today=date.today()
+#         days=date.day
+#         month=date.month
+#         year=date.year
+#         fraction_year=year%100
+#         get_seq= 'S'+''+str(seq)+''+str(month)+''+str(fraction_year)
+#         vals['identification_id']=get_seq
+#         return super(hr_employee, self).create(cr, uid, vals, context=context)
 

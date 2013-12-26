@@ -6,7 +6,7 @@
             <field name="model">attendance.import</field>
             <field name="type">form</field>
             <field name="arch" type="xml">
-                <form string="Import Attendance" version="7.0">
+                <form string="Import Data" version="7.0">
                     <sheet>
                         <group>
                         	<group>
@@ -20,7 +20,7 @@
                         </group>               
                         <div class="oe_title">
                         <button name="import_attendance" string="Import Attendance" type="object" class="oe_highlight"/>
-                        <!--button name="import_leave" string="Import Leaves" type="object" class="oe_highlight"/-->
+                        <button name="import_leave" string="Import Leaves" type="object" class="oe_highlight"/>
                         <button name="import_employees" string="Import Employee Details" type="object" class="oe_highlight"/>
                         <button name="import_payment_info" string="Import Contracts" type="object" class="oe_highlight"/>
                         <button name="update_category_info" string="Update Category Info" type="object" class="oe_highlight" invisible="1"/>
@@ -32,6 +32,17 @@
             </field>
         </record>      
         
+        <!-- <record id="contract_renewal_inherited_view" model="ir.ui.view">
+            <field name="name">hr.payslip.run.inherit</field>
+            <field name="model">hr.payslip.run</field>
+            <field name="type">form</field>
+	    <field name="inherit_id" ref="hr_payroll.hr_payslip_run_form"/>
+            <field name="arch" type="xml">
+            <xpath expr="/form/header/button[@name='close_payslip_run']" position="after">
+                 <button name="contracts_renewal" type="object" string="Import Other Details" icon="gtk-apply"/>
+            </xpath>
+            </field>
+        </record> -->
          
           <record id="action_attendance_import_wizard" model="ir.actions.act_window">
             <field name="name">Import Attendance</field>

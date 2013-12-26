@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <!-- Sequences for request.product -->
+        <record id="seq_type_request_product" model="ir.sequence.type">
+            <field name="name">Request Product</field>
+            <field name="code">request.product</field>
+        </record>
+
+        <record id="seq_request_product" model="ir.sequence">
+            <field name="name">Request Product</field>
+            <field name="code">request.product</field>
+            <field name="prefix">RP</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rp_central" model="ir.sequence">
+            <field name="name">Request Product Central</field>
+            <field name="prefix">Central</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rp_north" model="ir.sequence">
+            <field name="name">Request Product North</field>
+            <field name="prefix">North</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rp_south" model="ir.sequence">
+            <field name="name">Request Product South</field>
+            <field name="prefix">South</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+
+
+        <record id="seq_rp_arambol" model="ir.sequence">
+            <field name="name">Request Product Arambol</field>
+            <field name="prefix">Arambol</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_ashwam" model="ir.sequence">
+            <field name="name">Request Product Ashwam</field>
+            <field name="prefix">Ashwam</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_anjuna" model="ir.sequence">
+            <field name="name">Request Product Anjuna</field>
+            <field name="prefix">Anjuna</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_baga" model="ir.sequence">
+            <field name="name">Request Product Baga</field>
+            <field name="prefix">Baga</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_bambolim" model="ir.sequence">
+            <field name="name">Request Product Bambolim</field>
+            <field name="prefix">Bambolim</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_keri" model="ir.sequence">
+            <field name="name">Request Product Keri</field>
+            <field name="prefix">Keri</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_morjim" model="ir.sequence">
+            <field name="name">Request Product Morjim</field>
+            <field name="prefix">Morjim</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+         <record id="seq_rp_vagator" model="ir.sequence">
+            <field name="name">Request Product Vagator</field>
+            <field name="prefix">Vagator</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_calangute" model="ir.sequence">
+            <field name="name">Request Product Calangute</field>
+            <field name="prefix">Calangute</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+         <record id="seq_rp_candolim" model="ir.sequence">
+            <field name="name">Request Product Candolim</field>
+            <field name="prefix">Candolim</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_sinquerim" model="ir.sequence">
+            <field name="name">Request Product Sinquerim</field>
+            <field name="prefix">Sinquerim</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+         <record id="seq_rp_miramar" model="ir.sequence">
+            <field name="name">Request Product Miramar</field>
+            <field name="prefix">Miramar</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_donapaula" model="ir.sequence">
+            <field name="name">Request Product Dona Paula</field>
+            <field name="prefix">DonaPaula</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_vainguinim" model="ir.sequence">
+            <field name="name">Request Product Vainguinim</field>
+            <field name="prefix">Vainguinim</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_sridao" model="ir.sequence">
+            <field name="name">Request Product Sridao</field>
+            <field name="prefix">Sridao</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        
+        <record id="seq_rp_agonda" model="ir.sequence">
+            <field name="name">Request Product Agonda</field>
+            <field name="prefix">Agonda</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_baina" model="ir.sequence">
+            <field name="name">Request Product Baina</field>
+            <field name="prefix">Baina</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_bogmallo" model="ir.sequence">
+            <field name="name">Request Product Bogmallo</field>
+            <field name="prefix">Bogmallo</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_hollant" model="ir.sequence">
+            <field name="name">Request Product Hollant</field>
+            <field name="prefix">Hollant</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_velsao_arrosim" model="ir.sequence">
+            <field name="name">Request Product Velsao Arrosim</field>
+            <field name="prefix">Velsao_Arrosim</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_uttorda" model="ir.sequence">
+            <field name="name">Request Product Uttorda</field>
+            <field name="prefix">Uttorda</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_majorda" model="ir.sequence">
+            <field name="name">Request Product Majorda</field>
+            <field name="prefix">Majorda</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+         <record id="seq_rp_betalbatim" model="ir.sequence">
+            <field name="name">Request Product Betalbatim</field>
+            <field name="prefix">Betalbatim</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_colva" model="ir.sequence">
+            <field name="name">Request Product Colva</field>
+            <field name="prefix">Colva</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_sernabatim" model="ir.sequence">
+            <field name="name">Request Product Sernabatim</field>
+            <field name="prefix">Sernabatim</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_benaulim" model="ir.sequence">
+            <field name="name">Request Product Benaulim</field>
+            <field name="prefix">Benaulim</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_varca" model="ir.sequence">
+            <field name="name">Request Product Varca</field>
+            <field name="prefix">Varca</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_fatrade" model="ir.sequence">
+            <field name="name">Request Product Fatrade</field>
+            <field name="prefix">Fatrade</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_cavellosim" model="ir.sequence">
+            <field name="name">Request Product Cavellosim</field>
+            <field name="prefix">Cavellosim</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_mobor" model="ir.sequence">
+            <field name="name">Request Product Mobor</field>
+            <field name="prefix">Mobor</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_betul" model="ir.sequence">
+            <field name="name">Request Product Betul</field>
+            <field name="prefix">Betul</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_canaguinim" model="ir.sequence">
+            <field name="name">Request Product Canaguinim</field>
+            <field name="prefix">Canaguinim</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_cola" model="ir.sequence">
+            <field name="name">Request Product Cola</field>
+            <field name="prefix">Cola</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_palolem" model="ir.sequence">
+            <field name="name">Request Product Palolem</field>
+            <field name="prefix">Palolem</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_colomb" model="ir.sequence">
+            <field name="name">Request Product Colomb</field>
+            <field name="prefix">Colomb</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        <record id="seq_rp_patnem" model="ir.sequence">
+            <field name="name">Request Product Patnem</field>
+            <field name="prefix">Patnem</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_galgibag" model="ir.sequence">
+            <field name="name">Request Product Galgibag</field>
+            <field name="prefix">Galgibag</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        <record id="seq_rp_rajbagh" model="ir.sequence">
+            <field name="name">Request Product Rajbagh</field>
+            <field name="prefix">Rajbagh</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+        
+        
+        
+        <record id="seq_type_job_order" model="ir.sequence.type">
+            <field name="name">Job Order</field>
+            <field name="code">job.order</field>
+        </record>
+
+        <record id="seq_job_order" model="ir.sequence">
+            <field name="name">Job Order</field>
+            <field name="code">job.order</field>
+            <field name="prefix">JO</field>
+            <field name="padding">6</field>
+            <field name="company_id" eval="False"/>
+        </record>
+        
+         
+    </data>
+</openerp>

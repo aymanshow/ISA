@@ -20,6 +20,6 @@
 ##############################################################################
 
 import import_attendance
-#import import_employee_leave
+import import_employee_leave
 import import_employee_info
 

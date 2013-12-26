@@ -20,8 +20,8 @@
 				<page string='Shipment Related Documents'>
 					
 					<div class='oe_right oe_button_box'>
-						<button name="send_mail" string="Send Mail"  type="object" />
-						<button name="approve_by_admin_sr" string="Approve" type="object" />
+<!--						<button name="send_mail" string="Send Mail"  type="object" />-->
+<!--						<button name="approve_by_admin_sr" string="Approve" type="object" />-->
 					</div>
 					<group>
 					<group>

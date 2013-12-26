@@ -147,13 +147,8 @@
 	            <xpath expr="/form/sheet/div[@name='buttons']/button[@string='Tasks']" position='after'>
 	           	 	<button name="view_po" string="Purchase Order"
                             type="object"/>
-                       <newline/>
-                       <newline/>
-                      <button name='view_budget' string="Budget" type='object'/>
-                     
-                     <button name='change_request' string="Change Project" type='object'/>
                      <button name="view_risk" string="Risk Management" type="object"/>
-                     
+                     <button name='change_request' string="Change Project" type='object'/>
 	            </xpath>
 	            <xpath expr="/form/sheet/notebook/page[@string='Project Stages']" position="after">
 	            	<page string='Initiation' attrs="{'invisible':[('state','in',['draft'])]}">

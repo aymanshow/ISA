@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_purchase_requisition_group" model="ir.ui.view">
+            <field name="name">Generate Purchase Requisition</field>
+            <field name="model">purchase.requisition.group</field>
+            <field name="arch" type="xml">
+               <form string="Purchase Requisition" version="7.0">
+                    <group>
+                        <separator string="Are you sure you want to generate purchase requisition?"/>
+                        <label string="
+Please note that: &#10; &#10;
+Request Product will only be merged if: &#10;
+* All Request Product are in same  state &#10;"
+/>
+                    </group>
+                    
+                    <footer>
+                        <button name="merge_request" string="Merge Request" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window name="Generate Purchase Requisition"
+            context="{'search_default_draft': 1, 'search_default_approved': False}"
+            res_model="purchase.requisition.group"
+            src_model="request.product"
+            view_mode="form"
+            target="new"
+            multi="True"
+            key2="client_action_multi"
+            id="action_view_request_product_group12"/>
+
+    </data>
+</openerp>
+
+

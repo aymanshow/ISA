@@ -1,0 +1,124 @@
+<?xml version ='1.0'?>
+<openerp>
+	<data>
+		<!-- Form view of pnl model-->
+		
+		<record id="isa_insurance_tree" model="ir.ui.view">
+			<field name="name">insurance.policy tree</field>
+			<field name="model">insurance.policy</field>
+			<field name="type">tree</field>
+			<field name="arch" type="xml">
+				<tree string="Insurance Policy">
+					<field name="policy_no"/>
+					<field name="valid_from"/>
+					<field name="valid_to"/>
+					<field name="policy_attach"/>
+					<field name="policy_value"/>
+					<field name="policy_provider_id"/>
+					<field name="emp_id"/>
+					<field name="gender"/>
+					<field name="age" />
+					<field name="dob"/>
+					<field name="position"/>
+					<field name="department_id"/>
+					<field name="state"/>
+				</tree>
+			</field>
+		</record>
+		
+		<record id="isa_insurance_form" model="ir.ui.view">
+			<field name="name">Insurance form</field>
+			<field name="model">insurance.policy</field>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<form string="Insurance Form" edit="false" version="7.0">
+				<header>
+				 <button name="action_confirm" string="Confirmed" type="object" class="oe_highlight" attrs="{'invisible':[('state','=','done')]}"/>
+				<field name="state" widget="statusbar"/>
+				
+				</header>
+			         <sheet>
+					<separator string="Employee Details" colspan="4"/>
+					<group col="4" colspan="4" attrs="{'readonly':[('state','=','done')]}">
+					<field name="emp_id" on_change="onchange_employee_id(emp_id)" attrs="{'readonly':[('state','=','done')]}"/>
+					<field name="gender" attrs="{'readonly':[('state','=','done')]}"/>
+					<field name="age" attrs="{'readonly':[('state','=','done')]}"/>
+					<field name="dob" attrs="{'readonly':[('state','=','done')]}"/>
+					<field name="position" attrs="{'readonly':[('state','=','done')]}"/>
+					<field name="department_id" attrs="{'readonly':[('state','=','done')]}"/>
+					<field name="nominee_id" attrs="{'readonly':[('state','=','done')]}"/>
+                        </group>
+                       <separator string="Policy Details" colspan="4"/>
+                        <group col="4" colspan="4" attrs="{'readonly':[('state','=','done')]}">
+						<field name="policy_no" attrs="{'readonly':[('state','=','done')]}"/>
+						<field name="policy_value" attrs="{'readonly':[('state','=','done')]}"/>
+					<field name="valid_from" attrs="{'readonly':[('state','=','done')]}"/>
+					<field name="valid_to" attrs="{'readonly':[('state','=','done')]}"/>
+					<field name="policy_attach" attrs="{'readonly':[('state','=','done')]}"/>
+					<field name="policy_provider_id" attrs="{'readonly':[('state','=','done')]}"/>
+					</group>
+					<separator string="Premium Paid" colspan="4"/>
+              <field name="premium_paid_line"  string="Insurance Premimum" nolabel="1" attrs="{'readonly':[('state','=','done')]}">
+						<tree editable="bottom" >
+							<field name="installment_no"/>
+							<field name="date" />
+							<field name="amount"/>
+						</tree>
+					</field>					
+			
+			         </sheet>
+					</form>
+			</field>
+		</record>
+		<record id="action_isa_insurance" model="ir.actions.act_window">
+			<field name="name">Isa Insurance</field>
+			<field name="res_model">insurance.policy</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+			<field name="view_id" ref="isa_insurance_tree"/>
+		</record>
+		
+		
+		
+		<!-- Hr Inherit view -->
+		
+		
+		 <record id="isa_employee_insurance_tree" model="ir.ui.view">
+            <field name="name">hr.employee.tree</field>
+            <field name="model">hr.employee</field>
+            <field name="type">tree</field>
+            <field name="inherit_id" ref='hr.view_employee_tree'/>
+            <field eval="1" name="priority"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='job_id']" position="after">
+                    <field name='nominee' />
+                    <field name="policy_number"/>
+                    <field name="renewal_date"/>
+                </xpath>
+                
+            </field>
+        </record>
+        
+        <record id="isa_employee_insurance_form" model="ir.ui.view">
+            <field name="name">hr.employee form</field>
+            <field name="model">hr.employee</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field eval="1" name="priority"/>
+            <field name="arch" type="xml">
+           <xpath expr="/form/sheet/notebook/page[@string='HR Settings']" position="after"> 
+           <page string="Insurance">
+               <group colspan="4" col="4">
+               <group colspan="4" col="4">
+					<field name="nominee"/>
+					<field name="policy_number"/>
+					<field name="renewal_date"/>
+			   </group>
+			   </group>
+         </page>
+         </xpath>
+        </field>
+        </record>
+	</data>
+</openerp> 
+ 

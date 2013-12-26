@@ -35,9 +35,11 @@
                     <header>
                          <button name="loan_cancel" states="confirm,approved" string="Cancel" type="object" />
                          <!--button name="loan_issue" states="approved" string="Issue" type="object" /-->
-                         <button name="loan_release" states="approved" string="Loan Release" type="object" attrs="{'invisible':[('loan_type','!=','loan')]}"/>
+                         <!--button name="loan_release" states="approved" string="Loan/Advance Release" type="object" attrs="{'invisible':[('loan_type','!=','loan'),('state','!=','progress')]}"/-->
+                         <button name="loan_release" states="approved" string="Loan Release" type="object" attrs="{'invisible':[('state','in',('progress','confirm','draft','done'))]}"/>
                          <button name="loan_approve" states="confirm" string="Approve" type="object" />
                         <button name="loan_confirm" states="draft" string="Confirm" type="object" />
+                        <button name="loan_complete" states="progress" string="Done" type="object" attrs="{'invisible':[('state','in',('done','draft','approved','confirm'))]}"/>
                         <field name="state" widget="statusbar" statusbar_visible="draft,confirm,approved,progress,done" />
                 </header>
                 <sheet>
@@ -57,7 +59,7 @@
 		                   </group>
 		                   <group>
 		                    	<field name="request_date"/>
-		                    	<field name="emi_start_month" attrs="{'required':[('loan_type','=','loan')]}"/>
+		                    	<field name="emi_start_month"/>
 		                    	<field name="approval_date" attrs="{'readonly':[('state','=','draft')]}"/>
 		                     	<field name="loan_date" attrs="{'readonly':[('state','=','draft')]}"/>
 <!--							<label name='Loan For the month'/>-->
@@ -77,7 +79,7 @@
                         </group>
                     </group>
                     <notebook>
-                        <page string="Jobs Order Lines">
+                        <page string="EMI Lines">
                             <field name="loan_line" >
                                     <tree  string="Loan Line" editable="bottom" >
                                     <field name="name" />

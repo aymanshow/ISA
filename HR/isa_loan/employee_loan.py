@@ -22,7 +22,7 @@ class hr_employee_loan(osv.osv):
                   'state': fields.selection([
                         ('draft', 'Draft'),
                         ('confirm','Confirm'),
-                        ('approved','Approve'),
+                        ('approved','Approved'),
                         ('cancel', 'Cancelled'),
                         ('progress', 'In Progress'),
                         ('issued', 'Issued'),
@@ -42,7 +42,7 @@ class hr_employee_loan(osv.osv):
                   'from_date':fields.date('From Date'),
                   'to_date':fields.date('To Date'),
                   'loan_line': fields.one2many('hr.employee.loan.line', 'loan_id', 'Loan Lines',),
-                  'emi_start_month' : fields.date('EMI Start Date',),
+                  'emi_start_month' : fields.date('EMI/Advance Start Date',required="True"),
                   'last_emi_date': fields.date('EMI Last Date',readonly=True),
                   'note':fields.char('Note',size=128,readonly=True),
                   'reason': fields.text('Reason For Loan',required=True),
@@ -107,6 +107,12 @@ class hr_employee_loan(osv.osv):
         context = context or {}
         for o in self.browse(cr, uid, ids):
             self.write(cr, uid, o.id, {'state': 'cancel'}) 
+        return True
+    
+      def loan_complete(self, cr, uid, ids, context=None):
+        context = context or {}
+        for o in self.browse(cr, uid, ids):
+            self.write(cr, uid, o.id, {'state': 'done'}) 
         return True
     
       def loan_approve(self, cr, uid, ids, context=None):
@@ -285,7 +291,7 @@ class hr_employee_loan_reschedule(osv.osv):
                         ('draft', 'Draft'),
                         ('confirm','Confirm'),
                         ('cancel', 'Cancelled'),
-                        ('approve', 'Approve'),
+                        ('approve', 'Approved'),
                         ('done', 'Done'),
                         ],'State'), 
                   'amount' : fields.integer('Amount',required=True),

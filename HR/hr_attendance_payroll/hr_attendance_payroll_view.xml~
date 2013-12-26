@@ -12,7 +12,7 @@
                 	
                 	
                     
-                        
+                        <!--field name="name"/-->
                         <field name="name"/>
                         <field name="date_from"/>
                         <field name="date_to"/>
@@ -36,7 +36,7 @@
                 		
                 		</header>
                     
-                        
+                        <!--field name="name"/-->
                         <group>
                         <field name="name"/>
                         <field name="date_from"/>
@@ -61,7 +61,7 @@
                 	
                 	
                     
-                        
+                        <!--field name="name"/-->
                         <field name="employee_id"/>
                         <field name="date"/>
                         <field name="attendance"/>
@@ -212,7 +212,7 @@
             <field name="arch" type="xml">
                 <form string="Attendance Table" version="7.0">
                 	<header>
-                       <button string="ReCompute" name="recompute_attendance" type="object" icon="gtk-apply" invisible="1"/>
+                       <button string="ReCompute" name="recompute_attendance" type="object" icon="gtk-apply"/>
                        <button string="Generate Attendance" name="generate_attendance" type="object" icon="gtk-apply"/>
                     </header>
                 	
@@ -252,7 +252,16 @@
             <field name="department_name"/>
             </field>
             
-          
+            <!--field name="children" position="replace">
+            <field name="children" invisible="1"/>
+            </field-->
+           
+            
+            <!-- <xpath expr="/form/sheet/notebook/page[@string='Personal Information']" position="inside">
+            
+            <field name="children" invisible="1"/>
+            
+            </xpath> -->
             
             <xpath expr="/form/sheet/notebook/page[@string='Personal Information']/group" position="inside">
             <group col="2" colspan="2" string="Children Details">
@@ -260,14 +269,21 @@
                 <field name="no_of_children"/>
            		<field name="children_line" widget="one2many" colspan="2" col="2"/>
             </group>
-            
+            <!--button string="Add Leave" name="add_allocated_leave" type="object" icon="gtk-apply"/>
+            <button string="Apply Leave Cycle for December" name="leave_cycle" type="object" icon="gtk-apply"/>
+            <button string="Apply Leave Cycle for March" name="leave_cycle_for_march" type="object" icon="gtk-apply"/>
+            <button string="Send mail on completion of 1 year" name="one_year_completed" type="object" icon="gtk-apply"/-->
             </xpath>
             <xpath expr="/form/sheet/notebook/page[@string='HR Settings']/group" position="inside">
             
             <field name="carry_forwarded_leaves"/>
             
             </xpath>
-            
+            <!-- <group>
+            <field name="children" position="replace">
+            <field name="children" invisible="1"/>
+            </field>
+            </group> -->
             
             </field>
             </record>
@@ -350,12 +366,12 @@
             <field name="type">form</field>
 	    <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
             <field name="arch" type="xml">
-            
+            <!--xpath expr="/form/sheet/group" position="inside"-->
             <field name="credit_note" position="after">
             
             <field name="number_of_months_worked"/>
             </field>
-            
+            <!--/xpath-->
             </field>
             </record>
         
@@ -377,7 +393,8 @@
                     <field name="result_telephone_allowance"/>
                     <field name="irt"/>
                     <field name="advance"/>
-                    
+                    <!--field name="bonus_for_director"/>
+                    <field name="sales_bonus"/-->
                     <field name="leave_allowance_applicable"/>
                     <field name="performance_bonus_applicable"/>
                     <group col="2" colspan="2" string="Telephone Allowance">
@@ -401,7 +418,7 @@
 					<field name="month" string="With Effective From"/>
 					<field name="year"/>
 					<field name="updation_date"/>
-					
+					<!--field name="with_effective_from"/-->
 			        
                 </tree>
             </field>
@@ -436,7 +453,7 @@
             <field name="arch" type="xml">
                 <calendar string="Public Holidays" color="name" date_start="date_from" date_stop="date_from">
                     <field name="name"/>
-                    
+                    <!--field name="leave"/-->
                     <field name="date_from"/>
                     <field name="day"/>
                     <field name="description"/>
@@ -453,9 +470,9 @@
                 	
                     
                     <field name="name"/>
-                    
+                    <!--field name="leave"/-->
                     <field name="date_from"/>
-                    
+                    <!--field name="date_to"/-->
                     <field name="day"/>
                     <field name="description"/>
                     <field name="type"/>
@@ -474,9 +491,10 @@
                  <notebook position="inside">
                    <page string="Employees with 1 year completion" >
                      <group>
-                    
+                    <!-- <field name="loc_id"/> -->
                      <field name="notes"/>
-                     
+                     <!-- <field name="src_loc_id"/>
+                     <field name="location_ids"  colspan="4"/> -->
                      </group>
                    </page>
                    </notebook>  
@@ -496,9 +514,9 @@
                 	
                 <group>	
                     <field name="name"/>
-                    
+                    <!--field name="leave"/-->
                     <field name="date_from" on_change="onchange_date(date_from)"/>
-                    
+                    <!--field name="date_to"/-->
                     <field name="day"/>
                     <field name="description"/>
                     <field name="type"/>
@@ -564,7 +582,7 @@
             </field>
         </record>
         <record id="action_view_department_structure_tree" model="ir.actions.act_window">
-            <field name="name">Departments Hierarchy</field>
+            <field name="name">Departments Structure</field>
             <field name="res_model">hr.department</field>
             <field name="type">ir.actions.act_window</field>
             <field name="domain">[('parent_id','=',False)]</field>
@@ -589,8 +607,7 @@
             <field name="name">Daily Attendance Slips</field>
             <field name="res_model">hr.attendance.table.line</field>
             <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="view_id" ref="view_hr_payroll_attendance_tree"/>
+            <field name="view_id" ref="view_hr_payroll_attendance_form"/>
         </record>
         
         <record id="action_view_hr_payroll_irt_table" model="ir.actions.act_window">
@@ -626,53 +643,51 @@
         
 
 
-        
-        
-        <menuitem id="holidays_menu_in_hr" name="Holidays" parent="hr.menu_hr_configuration" sequence="37"/>
+        <menuitem id="menu_hr_attendance" name="Attendances" parent="hr.menu_hr_root" sequence="10"/>
 	
 	    <menuitem
             id="menu_hr_payroll_attendance_view123"
             action="action_view_hr_attendance_table_form"
-            parent="hr_attendance.menu_hr_attendance"
-            sequence="5"
+            parent="menu_hr_attendance"
+            sequence="2"
         />
 	    
         <menuitem
             id="menu_hr_payroll_attendance_view"
             action="action_view_hr_payroll_attendance_form"
-            parent="hr_attendance.menu_hr_attendance"
-            sequence="6"
+            parent="menu_hr_attendance"
+            sequence="3"
         />
         <menuitem
             id="menu_hr_batch_attendance_view"
             action="action_view_batch_attendance"
-            parent="hr_attendance.menu_hr_attendance"
-            sequence="7"
+            parent="menu_hr_attendance"
+            sequence="4"
         />
         <menuitem
             id="menu_hr_payroll_irt_table_view"
             action="action_view_hr_payroll_irt_table"
-            parent="hr_payroll.payroll_configure"
-            sequence="14"
+            parent="menu_hr_attendance"
+            sequence="5"
         />
         
         <menuitem
             id="menu_hr_leaves_calendar_view"
             action="action_view_leaves_calendar"
-            parent="holidays_menu_in_hr"
+            parent="menu_hr_attendance"
             sequence="6"
         />
         <menuitem
             id="menu_hr_holidays_calendar_view"
             action="action_view_holidays_calendar1"
-            parent="holidays_menu_in_hr"
+            parent="menu_hr_attendance"
             sequence="7"
         />
         <menuitem
             id="menu_hr_departments_hierarchy_tree_view"
             action="action_view_department_structure_tree"
-            parent="hr.menu_hr_configuration"
-            sequence="7"
+            parent="menu_hr_attendance"
+            sequence="8"
         />
         
 	</data>
