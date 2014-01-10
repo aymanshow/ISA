@@ -222,8 +222,12 @@
 			<field name="view_mode">tree,form</field>
 			<field name="view_id" ref="job_order_tree"/>
 		</record>
-<menuitem name="Helpdesk"
+<menuitem name="Call Center"
             id="base_menu_isa"/>
+            
+<menuitem name="Marketing"
+            id="base.menu_base_partner"
+            groups="base.group_sale_salesman,base.group_sale_manager"/>
 
 <menuitem name="Helpdesk"
             id="base_menu_isa_child" parent="base_menu_isa"/>

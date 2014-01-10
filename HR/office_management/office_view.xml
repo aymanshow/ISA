@@ -626,9 +626,30 @@
 		
 		
 		<!-- ___________________Menu Items_________________________________ -->
-
+			
+			<menuitem name="HR and Admin"
+            id="menu_base_hr"/>
+            
+            <menuitem name="Human Resources Management"
+            id="hr.menu_hr_root" parent="menu_base_hr" sequence="0" groups="base.group_hr_manager,base.group_hr_user,base.group_user"/>
+			
+			<menuitem name="Facility Management"
+            id="fleet.menu_root" parent="menu_base_hr" groups="fleet.group_fleet_user" sequence="1"/>
+			
             <menuitem name="Office Management"
-            id="mene_base_isa" sequence="0"/>
+            id="mene_base_isa" parent="menu_base_hr" sequence="2"/>
+            
+            <menuitem name="Dashboard"
+            id="base.menu_reporting"
+            groups="base.group_user"
+            sequence="170"/>
+            
+            <!--menuitem name="Accounting & Finances"
+            id="account.menu_finance"/-->
+            
+            
+            
+            
             
             <menuitem name="Certification" id="menu_certification" parent="mene_base_isa" sequence="1" />
     		<menuitem name="Vendor Certification" id="menu_certification_form_id" parent="menu_certification" action="isa_supplier.action_certification_form_tree"/>

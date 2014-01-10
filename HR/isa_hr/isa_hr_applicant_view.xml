@@ -548,11 +548,18 @@
 			<field name="view_id" ref="view_hr_evaluation_interview_tree1123"/>
 		</record>
 		
+		
+		<!--menuitem name="Tools" id="base.menu_tools" parent="base.menu_crm_case_job_req_main" sequence="5"/-->
+		
+		<menuitem name="Surveys" id="survey.menu_surveys" parent="hr.menu_hr_configuration" sequence="60" groups="base.group_tool_user,base.group_tool_manager,base.group_survey_user"/>
+		
 		<menuitem name="Test"
-            id="mene_base_test" sequence="0"/>
+            id="mene_base_test" parent="base.menu_crm_case_job_req_main" sequence="6"/>
             
-            <menuitem name="Online Test" id="sub_menu_online_test" parent="mene_base_test" sequence="0"/>
-			<menuitem id="menu_online_test" parent="sub_menu_online_test" name="Online Test" sequence="1" action="action_applicant_test_"/>
+        
+            
+            <!--menuitem name="Online Test" id="sub_menu_online_test" parent="mene_base_test" sequence="0"/-->
+			<menuitem id="menu_online_test" parent="mene_base_test" name="Online Test" sequence="1" action="action_applicant_test_"/>
 
 <!-- Honors/Award -->
 <record id="isa_honor_award_tree" model="ir.ui.view">

@@ -147,8 +147,13 @@
 	            <xpath expr="/form/sheet/div[@name='buttons']/button[@string='Tasks']" position='after'>
 	           	 	<button name="view_po" string="Purchase Order"
                             type="object"/>
-                     <button name="view_risk" string="Risk Management" type="object"/>
+                       <newline/>
+                       <newline/>
+                      <button name='view_budget' string="Budget" type='object'/>
+                     
                      <button name='change_request' string="Change Project" type='object'/>
+                     <button name="view_risk" string="Risk Management" type="object"/>
+                     
 	            </xpath>
 	            <xpath expr="/form/sheet/notebook/page[@string='Project Stages']" position="after">
 	            	<page string='Initiation' attrs="{'invisible':[('state','in',['draft'])]}">
@@ -509,38 +514,9 @@
 <!--            <field name="res_model">pnl.order</field>-->
 <!--        </record>-->
 	    
-	    <menuitem name="PMO"
-            id="menu_base_project"/>
-            
-        <menuitem name="Procurement"
-            id="menu_base_procurement"/>
 	    
-	    <menuitem name="Project Management"
-            id="base.menu_main_pm"
-            parent="menu_base_project"
-            groups="project.group_project_manager,project.group_project_user"
-            sequence="40"/>
-            
-        <menuitem name="Procurement"
-            id="menu_procurement"
-            parent="menu_base_procurement"
-            sequence="41"/>
-            
-        <menuitem name="Purchases"
-            id="base.menu_purchase_root"
-            parent="menu_procurement"
-            groups="purchase.group_purchase_manager,purchase.group_purchase_user"
-            sequence="60"/>
-            
-            
-        <menuitem name="Warehouse"
-            id="stock.menu_stock_root"
-            parent="menu_procurement"
-            groups="stock.group_stock_manager,stock.group_stock_user"
-            sequence="70"/>
-            
-            
-        
+	    
+	    
 	    
 	    
 	</data>
