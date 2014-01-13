@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+          
+
+        <record id="default_currency_usd" model="base.usd">
+            <field name="name">USD Rate</field>
+            <field name="amount">97</field>
+        </record>
+    </data>
+</openerp>
