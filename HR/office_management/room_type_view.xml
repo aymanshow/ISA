@@ -45,7 +45,7 @@
 							</header>
 		                	<sheet>
 				                <h1>
-			                        <label string="Vehicle Booking Id"/>
+			                        <label string="Vehicle Booking ID"/>
 			                    	<field name="request_id" class="oe_inline" readonly="1"/>
 			                    </h1>
 			                   <group colspan="4" col="4">

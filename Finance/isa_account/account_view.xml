@@ -1,7 +1,7 @@
 <openerp>
     <data>
     
-  	  <!--record id="account_invoice_inherit11" model="ir.ui.view">
+  	  <record id="account_invoice_inherit11" model="ir.ui.view">
             <field name="name">account.invoice.supplier</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_supplier_form"/>
@@ -10,7 +10,7 @@
             	<field name="rate_usd"/>
             </xpath>
             </field>
-        </record--> 
+        </record> 
         
         
         <record id="account_account_inherit11" model="ir.ui.view">
@@ -59,7 +59,7 @@
         
         
         
-		    <!--record id="account_invoice_customer_inherit11" model="ir.ui.view">
+		    <record id="account_invoice_customer_inherit11" model="ir.ui.view">
 		            <field name="name">account.invoice.customer.form</field>
 		            <field name="model">account.invoice</field>
 		            <field name="inherit_id" ref="account.invoice_form"/>
@@ -68,7 +68,7 @@
 		            	<field name="rate_usd"/>
 		            </xpath>
 		            </field>
-		        </record--> 
+		        </record> 
 		   	<record id="account_voucher_inherit111" model="ir.ui.view">
 		            <field name="name">account.voucher.customer.form</field>
 		            <field name="model">account.voucher</field>
@@ -218,7 +218,7 @@
             
         </record>
 		
-		<menuitem name="Accounting & Finances" id="account.menu_finance"/>
+		<menuitem name="Accounting &amp; Finances" id="account.menu_finance"/>
 		
 <!--		<menuitem id="menu_finance_configuration" name="Configuration" parent="menu_finance" sequence="15" groups="account.group_account_manager"/>-->
 		<menuitem id="menu_base_usd" name="Base USD" parent="account.menu_finance_configuration" sequence="1" action='action_config_base_rate'/>

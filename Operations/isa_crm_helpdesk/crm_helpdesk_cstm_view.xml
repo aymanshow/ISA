@@ -222,6 +222,13 @@
 			<field name="view_mode">tree,form</field>
 			<field name="view_id" ref="job_order_tree"/>
 		</record>
+		
+<menuitem name="Messaging"
+          id="mail.mail_feeds_main"
+          groups="base.group_user"
+          parent="base.menu_custom"
+          sequence="10"/>
+		
 <menuitem name="Call Center"
             id="base_menu_isa"/>
             

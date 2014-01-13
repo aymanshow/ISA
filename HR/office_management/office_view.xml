@@ -62,7 +62,7 @@
 						<group string="Visitor Information">
 		                	<group >
 									<field name="name" attrs="{'readonly':[('state','=','out')]}"/>
-									<field name="reason" string="Purpose For Visit" required="1" attrs="{'readonly':[('state','=','out')]}"/>
+									<field name="reason" string="Purpose of Visit" required="1" attrs="{'readonly':[('state','=','out')]}"/>
 									<field name="in_time"/>
 							</group>
 							<group>
@@ -71,7 +71,7 @@
 								<field name="out_time" attrs="{'readonly':[('state','=','out')]}"/>
 							</group>
 						</group>
-							<group  col="4" string="Employee Detail">
+							<group  col="4" string="Employee Details">
 								<field name="to_whom" required="1" on_change="onchange_department(to_whom)" attrs="{'readonly':[('state','=','out')]}"/>
 								<field name="department" required="1" attrs="{'readonly':[('state','=','out')]}"/>
 								
@@ -627,7 +627,7 @@
 		
 		<!-- ___________________Menu Items_________________________________ -->
 			
-			<menuitem name="HR and Admin"
+			<menuitem name="HR &amp; Admin"
             id="menu_base_hr"/>
             
             <menuitem name="Human Resources Management"
