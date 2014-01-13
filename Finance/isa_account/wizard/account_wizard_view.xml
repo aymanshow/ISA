@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+
+		<record id="recieving_currency_wizard_form" model="ir.ui.view">
+	            <field name="name">receive.wizard.form</field>
+	            <field name="model">receive.wizard</field>
+	            <field name="type">form</field>
+	            <field name="arch" type="xml">
+	                <form version="7.0" string="Receive Amount">
+                    	<group colspan="4" col="4" string='Description'>
+		                	<field name="department_id" />
+		                	<field name="journal_id"/>
+		                	<field name="amount"/>
+			            </group>
+			            <group string='Receiving Currency Description'>
+			            <field name='cashbox_line_ids' nolabel='1'>
+			            	<tree editable='top'>
+			            		<field name="receive_id" invisible='1'/>
+				            	<field name="pieces" />
+			                	<field name="number"/>
+			                	<field name='sub_total'/>
+			            	</tree>
+			            	<form >
+			            		<field name="receive_id" invisible='1'/>
+				            	<field name="pieces" />
+			                	<field name="number" />
+			                	<field name='sub_total'/>
+			            	</form>
+			            </field>
+			           
+			            </group>
+			            <group>
+			            <newline/>
+			            <field name='total'/>
+			            </group>
+                    <footer>
+                        <button name="receive" string="Receive" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+		
+		<record id="action_recieve_amount" model="ir.actions.act_window">
+            <field name="name">Receive Amount</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">receive.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="recieving_currency_wizard_form"/>
+            <field name="target">new</field>
+        </record>
+        
+    </data>
+ </openerp>
