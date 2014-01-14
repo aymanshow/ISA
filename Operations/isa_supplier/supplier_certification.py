@@ -16,7 +16,7 @@ class certification_form(osv.osv):
         'product_id':fields.many2one('product.product','Certification Product',required=True),
         'certification_date':fields.date('Certification Date',required=True),
         'expiration_date':fields.date('Expiration Date',required=True),
-        'employee_id':fields.many2one('hr.employee','User',readonly=True),
+        'employee_id':fields.many2one('hr.employee','Certificate Procured by',readonly=True),
         'user_ids':fields.many2many('res.users','certi_user_rel_id','certi_id','user_id','Notification to be sent to'),
         }
     _defaults = {

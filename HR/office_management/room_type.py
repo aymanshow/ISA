@@ -120,14 +120,31 @@ class vehicle_choice(osv.osv):
                         _('You cannot complete the vehicle booking application without filling odometer end value'))
         
     def on_change_driver(self, cr, uid, ids, vehi_choice_id, context=None):
+        
         if not vehi_choice_id:
+            
             return {}
-        obj = self.pool.get('fleet.vehicle').browse(cr, uid, vehi_choice_id, context=context)
-        res_obj=self.pool.get('res.partner').browse(cr,uid,obj.driver_id.id,context=context)
-        mobile=res_obj.mobile
-        return {
-            'value': {
-                'driver_name_id':obj.driver_id.id,
-                'contact_details':int(mobile)
-            }
-        }
+        else:
+            
+            obj = self.pool.get('fleet.vehicle').browse(cr, uid, vehi_choice_id)
+            
+            if obj:
+                driver=obj.driver_id.id
+                
+                res_obj=self.pool.get('res.partner').browse(cr, uid, obj.driver_id.id)
+                
+                if res_obj.id:
+                    
+                    mobile=res_obj.mobile
+                    
+                
+            if driver:
+                
+                return {
+                    'value': {
+                        'driver_name_id':obj.driver_id.id,
+                        'contact_details':int(mobile)
+                    }
+                }
+            else:
+                return {}

@@ -1,9 +1,12 @@
 <openerp>
     <data>
     
+<<<<<<< HEAD
+=======
 <!--    <menuitem name="Accounting & Finance" id="menu_finance"/>-->
     <menuitem id="account.menu_finance" name="Accounting and Finances"/>
     
+>>>>>>> 6aafef3ccc2b8d2f77863f8732944d76593ab514
   	  <record id="account_invoice_inherit11" model="ir.ui.view">
             <field name="name">account.invoice.supplier</field>
             <field name="model">account.invoice</field>
@@ -344,10 +347,14 @@
         </record>
 		
 		
+<<<<<<< HEAD
+		<menuitem name="Accounting &amp; Finances" id="account.menu_finance"/>
+=======
 		<menuitem id="menu_finance_payment_request_cash" name="Payment Request" parent="account.menu_finance" sequence="3"
             groups="account.group_account_user,account.group_account_manager"/>
 		<menuitem id="menu_finance_payment_request_cash_sub" name="Request" parent="menu_finance_payment_request_cash" sequence="0"
             groups="account.group_account_user,account.group_account_manager" action='action_payment_request_account'/>
+>>>>>>> 6aafef3ccc2b8d2f77863f8732944d76593ab514
 		
 <!--		<menuitem id="menu_finance_configuration" name="Configuration" parent="menu_finance" sequence="15" groups="account.group_account_manager"/>-->
 		<menuitem id="menu_base_usd" name="Base USD" parent="account.menu_finance_configuration" sequence="1" action='action_config_base_rate'/>
