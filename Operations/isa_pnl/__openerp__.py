@@ -11,7 +11,8 @@
              'sequence.xml',
              'wizard/pnl_wizard_view.xml',
              'pnl_view.xml',
-             'data.xml'
+             'handover_view.xml',
+             'data.xml',
              ],
     'demo': [
             'data.xml' 
