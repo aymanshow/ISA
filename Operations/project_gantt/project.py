@@ -107,6 +107,39 @@ class mail_compose_message(osv.TransientModel):
 class project_project(osv.osv):
     _inherit='project.project'
     
+    def view_budget(self,cr,uid,ids,context):
+       res={}
+       list=[]
+       obj=self.browse(cr,uid,ids[0])
+       if obj.budget_id:
+           list.append(obj.budget_id.id)
+           print " if============="
+           res = {
+                   'domain': ([('id', 'in', list)]),
+                   'view_type': 'form',
+                   'view_mode': 'form',
+                   'res_model': 'crossovered.budget',
+                   'target':'current',
+                   #'view_id': list[0],
+                   'nodestroy': True,
+                   'type': 'ir.actions.act_window',
+                   'name' : 'Budgets',
+                   'res_id': list[0]
+                   }
+       else:
+           res = {
+                   'domain': ([('id', 'in', list)]),
+                   'view_type': 'form',
+                   'view_mode': 'tree,form',
+                   'res_model': 'crossovered.budget',
+                   'target':'current',
+                   'nodestroy': True,
+                   'type': 'ir.actions.act_window',
+                   'name' : 'Budgets',
+                   'res_id': list
+                   }
+       return res
+    
     def _data_set_kick(self, cr, uid, id, name, value, arg, context=None):
         # We dont handle setting data to null
         if not value:
@@ -171,6 +204,12 @@ class project_project(osv.osv):
     
     _columns={
               'pnl':fields.many2one('pnl.order','Related Pnl'),
+              'weekly_report':fields.binary('Weekly Status Report'),
+              'weekly_line':fields.one2many('weekly.details','weekly_id'," ", size=124),
+              'certificate':fields.binary('Certificate to be sent to the customer'),
+              'final_presentation':fields.binary('Final Presentation'),
+              'administrative_closure':fields.binary('Administrative Closure'),
+              'technical_closure':fields.binary('Technical Closure'),
               'solution_review':fields.binary('Solution Review Comments'),
               'project':fields.binary('Project Charter'),
               'finance_document':fields.binary('Finance Documents'),
@@ -393,22 +432,22 @@ class project_project(osv.osv):
     
     def planning(self,cr,uid,ids,context):
         obj=self.browse(cr,uid,ids[0])
-        if not (obj.sr_upload and obj.ko_upload and obj.pc_upload and obj.fd_upload):
-            raise osv.except_osv(_("Warning!"), _("Upload All the Required Document First"))
-        else:
-            self.write(cr,uid,obj.id,{'state':'plan'})
+#         if not (obj.sr_upload and obj.ko_upload and obj.pc_upload and obj.fd_upload):
+#             raise osv.except_osv(_("Warning!"), _("Upload All the required documents First"))
+#         else:
+        self.write(cr,uid,obj.id,{'state':'plan'})
         return True
     
     def execute(self,cr,uid,ids,context):
         obj=self.browse(cr,uid,ids[0])
         if not (obj.training_plan and obj.technical_plan and obj.implementation_plan):
-            raise osv.except_osv(_("Warning!"), _("Upload All the Required Document First"))
+            raise osv.except_osv(_("Warning!"), _("Upload All the required documents First"))
         else:
             print "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
             self.write(cr,uid,ids[0],{'state':'execute'})
             for val in obj.tasks:
                 self.pool.get('project.task').write(cr,uid,val.id,{'state1':'execute'})
-            self.pool.get('crossovered.budget').write(cr,uid,obj.pnl.budget_id.id,{'state':'confirm'})
+            #self.pool.get('crossovered.budget').write(cr,uid,obj.pnl.budget_id.id,{'state':'confirm'})
         return True
     ############ Mail
     
@@ -640,10 +679,26 @@ class project_project(osv.osv):
         return True
     
 
+    def set_done(self,cr,uid,ids,context=None):
+        for x in self.browse(cr,uid,ids,context=context):
+            if not (x.weekly_report):
+                raise osv.except_osv(_("Warning!"), _("Upload All the required documents First"))
+            else:
+                self.write(cr,uid,x.id,{'state':'close'})
+        
     
-    
-    
-    
+class weekly_details(osv.osv):
+    _name = "weekly.details"
+    _description = "Weekly Status Reports"
+    _columns = {
+        'weekly_id': fields.many2one('project.project','Weekly Status Report No.', size=124),
+        'weekly_report':fields.binary('Weekly Status Report'),
+        'remarks':fields.text('Remarks'),
+        'date':fields.date('Date'),
+
+        }    
+
+
     
 class project_task(osv.osv):
     _inherit='project.task'
@@ -748,7 +803,7 @@ class change_request(osv.osv):
               'new_date_start':fields.date('New Start Date'),
               'new_date_end':fields.date('New End Date'),
               'state':fields.selection([('draft','New'),('pending','Pending'),('approve','Approved'),('change','Changed'),('cancel','Cancelled')],'Status'),
-              'pnl':fields.many2one('pnl.order','PNL'),
+              'pnl':fields.many2one('pnl.order','P&L'),
               }
     
     _defaults={

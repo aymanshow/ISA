@@ -41,7 +41,7 @@ class employee_training1(osv.osv):
 #               'certificate_name':fields.char('Certificate Name'),
               'description':fields.text('Certificate Description'),
               'training_state': fields.selection(AVAILABLE_STATES, 'States',help="The related status for the stage. The status of your document will automatically change according to the selected stage. Example, a stage is related to the status 'Close', when your document reach this stage, it will be automatically closed."),
-              'manager_comment':fields.text('Manager Comment'),
+              'manager_comment':fields.text("Manager's Comments"),
               'travel_mode_line':fields.one2many('travel.mode','travel_mide_id','Travel Information',required=True),
               'hotel_management_line':fields.one2many('hotel.management','hotel_management_id','Hotel Information',required=True),
                'visa_approval_line':fields.one2many('visa.approval','visa_approval_id','Hotel Information',required=True),

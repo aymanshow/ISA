@@ -203,8 +203,8 @@ class conference_booking(osv.osv):
                'emp_name':fields.many2one('hr.employee','Name',required=True),
                'department':fields.many2one('hr.department','Department',required=True),
                'designation': fields.many2one('hr.job','Designation',required=True),
-               'room':fields.many2one('conference.master','Room Choice',required=True),
-               'date':fields.datetime('Date Time',required=True),
+               'room':fields.many2one('conference.master','Room',required=True),
+               'date':fields.datetime('Start Date Time',required=True),
                'end_date':fields.datetime('End Date Time',required=True),
                'alternate_date':fields.datetime('Alternate Date'),
                'priority':fields.selection([('low', 'Low'), ('medium', 'Medium'), ('high', 'High')], 'Priority',),
@@ -349,7 +349,7 @@ class task_manager(osv.osv):
                'location':fields.many2one('task.master','Select Location'),
                'date':fields.datetime('Date'),
                'verify':fields.many2one('res.users','Verified By'),
-               'task_lines':fields.one2many('select.task','task_mgr_id','Tasks'),
+               'task_lines':fields.one2many('select.task','task_mgr_id'),
                'description':fields.text('Description/Remarks'),
                }
     def create(self, cr, uid, vals, context=None):

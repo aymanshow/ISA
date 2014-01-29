@@ -57,8 +57,8 @@ class vehicle_choice(osv.osv):
                'odometer_start':fields.float('Odometer at Start'),
                'odometer_end':fields.float('Odometer at End'),
                'driver_name_id':fields.many2one('res.partner','Driver Name'),
-               'contact_details':fields.integer('Contact Details'),
-               'manager_comment':fields.text('Manager Comment'),
+               'contact_details':fields.char('Contact Details'),
+               'manager_comment':fields.text("Manager's Comments"),
                
                'remark':fields.text('Remark'),
     }

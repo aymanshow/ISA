@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<openerp>
+	<data>
+		<record id="isa_partner_import" model="ir.ui.view">
+            <field name="name">isa_partner_import_wizard_form</field>
+            <field name="model">import.partner</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Import partner" version="7.0">
+                    <sheet>
+                        <group>
+                        	<group>
+                        		<field name='file' widget='binary'/>
+                        	</group>
+                        	<button name="import_partner_info" string="Validate" type="object" class="oe_highlight"/>
+                        </group>               
+                    </sheet>
+                </form>
+            </field>
+        </record>      
+        
+          <record id="action_partner_import_wizard" model="ir.actions.act_window">
+            <field name="name">Import partner</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">import.partner</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="isa_partner_import"/>
+            <field name="target">new</field>
+            <field name="multi">True</field>
+        </record>  
+
+		<menuitem id="import_partner_wiz" action="action_partner_import_wizard" name="Import Partner" parent="purchase.menu_purchase_config_purchase" sequence="5" />
+		<menuitem id="import_partner_menu" action="action_partner_import_wizard" name="Import Partner" parent="base.menu_base_config" sequence="5" />
+		
+	</data>
+</openerp>

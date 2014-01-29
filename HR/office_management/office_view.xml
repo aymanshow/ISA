@@ -358,7 +358,7 @@
 		            <field name="model">maintenace.master</field>
 		            <field name="type">form</field>
 		            <field name="arch" type="xml">
-	           		     <form string="Conference" version="7.0">
+	           		     <form string="Conference Room" version="7.0">
 			           		     <header>
                         			<button string="Done" name="%(action_done_wizard)d" type="action" attrs="{'invisible':[('state','=','done')]}"/>
 			           		     	<field name="state" widget="statusbar"/>
@@ -366,7 +366,7 @@
 			           		     </header>
 				         	<sheet>
 				                <h1>
-			                        <label string="Office Equipments"/>
+			                        <!--label string="Office Equipments"/-->
 			                    	<field name="loc_id" class="oe_inline" readonly="1" string="ID -"/>
 			                    </h1>
 			                    
@@ -375,7 +375,7 @@
 					                	
 <!--					                	<field name="location_id" on_change="onchange_location(location_id)" />-->
 					                <newline/>
-					                <group col="4">
+					                <group col="4" string="Office Equipments">
 					                <field name="task_lines" nolabel="1">
 					                	<tree editable="bottom" colspan="4">
 						                	<field name="main_id" invisible="1"/>
@@ -435,7 +435,7 @@
 					                	<field name="location_id" on_change="onchange_location(location_id)" />
 					                </group>
 					                <newline/>
-					                <group col="4">
+					                <group col="4" string="Housekeeping Tasks">
 					                <field name="task_lines" nolabel="1">
 					                	<tree editable="bottom">
 						                	<field name="task_id" invisible="1"/>
@@ -503,9 +503,10 @@
 					                	<field name="verify" readonly="1"/>
 					                </group>
 					                <newline/>
-					                <group col="4">
+					                <group col="4" string="Housekeeping Tasks">
 					                <field name="task_lines" nolabel="1">
-					                	<tree editable="bottom">
+					                	
+					                	<tree string="Housekeeping Tasks" editable="bottom">
 						                	<field name="task_mgr_id" invisible="1"/>
 						                	<field name="serial"/>
 						                	<field name="name" readonly="1"/>

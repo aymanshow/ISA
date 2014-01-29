@@ -1,5 +1,5 @@
 {
-    'name': 'Vehicle Accident Tracking',
+    'name': 'Vehicle Incident Tracking',
     'version': '1.0',
     'category': 'Certification',
     'description': """

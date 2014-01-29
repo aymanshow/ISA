@@ -91,7 +91,18 @@ class sale_order(osv.osv):
              raise osv.except_osv(_('Can not Confirm Order!'),
                                          _('Please Define Estimated Closing Date First.')) 
              return False
-        self.pool.get('sale.order').write(cr,uid,obj.id,{'state':'progress'})
+        if obj.pnl:
+            if obj.pnl.lead_id:
+                self.pool.get('crm.lead').case_close(cr,uid,[obj.pnl.lead_id.id])
+        dict={
+              'name':obj.pnl.name,
+              'order_id':obj.id,
+              'pnl':obj.pnl.id,
+              'partner_id':obj.partner_id.id,
+              'team_id':obj.section_id.id,
+              }
+        handover_id=self.pool.get('project.handover').create(cr,uid,dict)
+        #self.pool.get('sale.order').write(cr,uid,obj.id,{'state':'progress'})
         if obj.pnl:
             self.pool.get('pnl.order').write(cr,uid,obj.pnl.id,{'state':'done'})
         return True       
@@ -100,200 +111,201 @@ class sale_order(osv.osv):
         vals={}
         if isinstance(ids, (list, tuple)):
             ids=ids[0]
-        obj=self.browse(cr,uid,ids)
-        if not (obj.pnl and obj.partner_id):
-             raise osv.except_osv(_('Can not Complete Handover!'),
-                                         _('The sale order does not belong to any PNL'))
-        else: 
-            name=obj.pnl.name
-            
-            vals={
-                  'name':obj.pnl.name,
-                  'active': True,
-                  'type': 'contract',
-                  'use_tasks':True,
-                  'state': 'draft',
-                  'priority': 1,
-                  'pnl':obj.pnl.id,
-                  'sequence': 10,
-                  'alias_model': 'project.task',
-                  'privacy_visibility': 'employees',
-                  'alias_domain': False,
-                  'user_id':uid,
-                  'partner_id':obj.partner_id.id,
-                  }
-            project_id=self.pool.get('project.project').create(cr,uid,vals)
-            project_analytic_id=self.pool.get('project.project').browse(cr,uid,project_id).analytic_account_id.id
-            #self.generate_project(cr,uid,ids,context=None)
-            self.write(cr,uid,ids,{'state':'meeting'})
-            equip_dict = {'name': 'Products', 
-                              'active': True, 
-                              'type': 'normal', 
-                              'parent_id':project_analytic_id,}
-            products_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
-            equip_dict = {'name': 'Cost of Goods Sold', 
-                              'active': True, 
-                              'type': 'normal', 
-                              'parent_id':products_analytic_id,}
-            cogs_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
-            equip_dict = {'name': 'CIF', 
-                              'active': True, 
-                              'type': 'normal', 
-                              'parent_id':products_analytic_id,}
-            cif_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
-            equip_dict = {'name': 'Consulting', 
-                              'active': True, 
-                              'type': 'normal', 
-                              'parent_id':products_analytic_id,}
-            consult_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)    
-            equip_dict = {'name': 'Overheads', 
-                              'active': True, 
-                              'type': 'normal', 
-                              'parent_id':products_analytic_id,}
-            overheads_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
-    
-            equip_dict = {'name': 'Service', 
-                              'active': True, 
-                              'type': 'normal', 
-                              'parent_id':project_analytic_id,}
-            services_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
-            equip_dict = {'name': 'Cost of Services', 
-                              'active': True, 
-                              'type': 'normal', 
-                              'parent_id':services_analytic_id,}
-            cost_service_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
-            
-            """Creation of Budget"""
-            budget_dict = {'name':"Budget for: " + name ,
-                           'code':obj.name,
-                           'date_from':obj.date_order,
-                           'date_to':obj.close_date,
-                           }
-            budget_id = self.pool.get('crossovered.budget').create(cr, uid, budget_dict, context=context)
-            
-            """"Creation of analytic accounts and budget lines for Product section of the P&L.""" 
-            equip_dict = {
-                          'name': 'Revenue', 
-                          'active': True, 
-                          'type': 'normal', 
-                          'parent_id':products_analytic_id,
-                          }
-            analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
-            budget_line_dict ={
-                           'crossovered_budget_id': budget_id,
-                           'analytic_account_id': analy_id,
-                           'general_budget_id': 1,
-                           'date_from': obj.date_order, 
-                           'date_to':obj.close_date,
-                           'planned_amount': obj.pnl.cogs_rev,
-                           }
-            self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
-            
-            """P&L COGS, CIF and Consulting"""
-            for vals in obj.pnl.line_ids:
-                
-                equip_dict = {'name': vals.name, 
-                              'active': True, 
-                              'type': 'normal', 
-                              'parent_id':cogs_analytic_id,}
-                analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
-                budget_line_dict ={
-                                       'crossovered_budget_id': budget_id,
-                                       'analytic_account_id': analy_id,
-                                       'general_budget_id': 2,
-                                       'date_from': obj.date_order, 
-                                       'date_to':obj.close_date,
-                                       'planned_amount': -  vals.quote_amt,
-                                       }
-                self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
-                
-                if vals.cif_amt:
-                    equip_dict = {'name': vals.name + " CIF", 
-                                  'active': True, 
-                                  'type': 'normal', 
-                                  'parent_id':cif_analytic_id,}
-                    analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
-                    budget_line_dict ={
-                                           'crossovered_budget_id': budget_id,
-                                           'analytic_account_id': analy_id,
-                                           'general_budget_id': 2,
-                                           'date_from': obj.date_order, 
-                                           'date_to':obj.close_date,
-                                           'planned_amount': -vals.cif_amt,
-                                           }
-                    self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
-                if vals.consultancy_amt:
-                    equip_dict = {'name': vals.name + " Consulting", 
-                                  'active': True, 
-                                  'type': 'normal', 
-                                  'parent_id':consult_analytic_id,}
-                    analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
-                    budget_line_dict ={
-                                           'crossovered_budget_id': budget_id,
-                                           'analytic_account_id': analy_id,
-                                           'general_budget_id': 2,
-                                           'date_from': obj.date_order, 
-                                           'date_to':obj.close_date,
-                                           'planned_amount': -vals.consultancy_amt,
-                                           }
-                    self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
-             
-            for vals in obj.pnl.cogs_addl_costs:
-                budget_line_ids = {}
-                equip_dict = {'name': vals.name, 
-                              'active': True, 
-                              'type': 'normal', 
-                              'parent_id':overheads_analytic_id,}
-                analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
-                budget_line_dict ={
-                                       'crossovered_budget_id': budget_id,
-                                       'analytic_account_id': analy_id,
-                                       'general_budget_id': 2,
-                                       'date_from': obj.date_order, 
-                                       'date_to':obj.close_date,
-                                       'planned_amount': -vals.amount,
-                                       }
-                self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
-            
-            """"Creation of analytic accounts and budget lines for Services section of the P&L.""" 
-            equip_dict = {
-                          'name': 'Revenue', 
-                          'active': True, 
-                          'type': 'normal', 
-                          'parent_id':services_analytic_id,
-                          }
-            analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
-            budget_line_dict ={
-                           'crossovered_budget_id': budget_id,
-                           'analytic_account_id': analy_id,
-                           'general_budget_id': 1,
-                           'date_from': obj.date_order, 
-                           'date_to':obj.close_date,
-                           'planned_amount': obj.pnl.serv_rev,
-                           }
-            self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
-            
-            for vals in obj.pnl.serv_line:
-                budget_line_ids = {}
-                equip_dict = {'name': vals.product_id.name, 
-                              'active': True, 
-                              'type': 'normal', 
-                              'parent_id':cost_service_analytic_id,}
-                analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
-                budget_line_dict ={
-                                       'crossovered_budget_id': budget_id,
-                                       'analytic_account_id': analy_id,
-                                       'general_budget_id': 2,
-                                       'date_from': obj.date_order, 
-                                       'date_to':obj.close_date,
-                                       'planned_amount': -vals.subtotal,
-                                       }
-                self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
-                self.pool.get('pnl.order').write(cr,uid,obj.pnl.id,{'budget_id':budget_id})
-        
-        
-        
-        return True
+#         obj=self.browse(cr,uid,ids)
+#         if not (obj.pnl and obj.partner_id):
+#              raise osv.except_osv(_('Can not Complete Handover!'),
+#                                          _('The sale order does not belong to any PNL'))
+#         else: 
+#             name=obj.pnl.name
+#             
+#             vals={
+#                   'name':obj.pnl.name,
+#                   'active': True,
+#                   'type': 'contract',
+#                   'use_tasks':True,
+#                   'state': 'draft',
+#                   'priority': 1,
+#                   'pnl':obj.pnl.id,
+#                   'sequence': 10,
+#                   'alias_model': 'project.task',
+#                   'privacy_visibility': 'employees',
+#                   'alias_domain': False,
+#                   'user_id':uid,
+#                   'partner_id':obj.partner_id.id,
+#                   }
+#             project_id=self.pool.get('project.project').create(cr,uid,vals)
+#             project_analytic_id=self.pool.get('project.project').browse(cr,uid,project_id).analytic_account_id.id
+#             #self.generate_project(cr,uid,ids,context=None)
+#             self.write(cr,uid,ids,{'state':'meeting'})
+#             equip_dict = {'name': 'Products', 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':project_analytic_id,}
+#             products_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#             equip_dict = {'name': 'Cost of Goods Sold', 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':products_analytic_id,}
+#             cogs_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#             equip_dict = {'name': 'CIF', 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':products_analytic_id,}
+#             cif_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#             equip_dict = {'name': 'Consulting', 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':products_analytic_id,}
+#             consult_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)    
+#             equip_dict = {'name': 'Overheads', 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':products_analytic_id,}
+#             overheads_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#     
+#             equip_dict = {'name': 'Service', 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':project_analytic_id,}
+#             services_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#             equip_dict = {'name': 'Cost of Services', 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':services_analytic_id,}
+#             cost_service_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#             
+#             """Creation of Budget"""
+#             budget_dict = {'name':"Budget for: " + name ,
+#                            'code':obj.name,
+#                            'date_from':obj.date_order,
+#                            'date_to':obj.close_date,
+#                            }
+#             budget_id = self.pool.get('crossovered.budget').create(cr, uid, budget_dict, context=context)
+#             
+#             """"Creation of analytic accounts and budget lines for Product section of the P&L.""" 
+#             equip_dict = {
+#                           'name': 'Revenue', 
+#                           'active': True, 
+#                           'type': 'normal', 
+#                           'parent_id':products_analytic_id,
+#                           }
+#             analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#             budget_line_dict ={
+#                            'crossovered_budget_id': budget_id,
+#                            'analytic_account_id': analy_id,
+#                            'general_budget_id': 1,
+#                            'date_from': obj.date_order, 
+#                            'date_to':obj.close_date,
+#                            'planned_amount': obj.pnl.cogs_rev,
+#                            }
+#             self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
+#             
+#             """P&L COGS, CIF and Consulting"""
+#             for vals in obj.pnl.line_ids:
+#                 
+#                 equip_dict = {'name': vals.name, 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':cogs_analytic_id,}
+#                 analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#                 budget_line_dict ={
+#                                        'crossovered_budget_id': budget_id,
+#                                        'analytic_account_id': analy_id,
+#                                        'general_budget_id': 2,
+#                                        'date_from': obj.date_order, 
+#                                        'date_to':obj.close_date,
+#                                        'planned_amount': -  vals.quote_amt,
+#                                        }
+#                 self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
+#                 
+#                 if vals.cif_amt:
+#                     equip_dict = {'name': vals.name + " CIF", 
+#                                   'active': True, 
+#                                   'type': 'normal', 
+#                                   'parent_id':cif_analytic_id,}
+#                     analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#                     budget_line_dict ={
+#                                            'crossovered_budget_id': budget_id,
+#                                            'analytic_account_id': analy_id,
+#                                            'general_budget_id': 2,
+#                                            'date_from': obj.date_order, 
+#                                            'date_to':obj.close_date,
+#                                            'planned_amount': -vals.cif_amt,
+#                                            }
+#                     self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
+#                 if vals.consultancy_amt:
+#                     equip_dict = {'name': vals.name + " Consulting", 
+#                                   'active': True, 
+#                                   'type': 'normal', 
+#                                   'parent_id':consult_analytic_id,}
+#                     analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#                     budget_line_dict ={
+#                                            'crossovered_budget_id': budget_id,
+#                                            'analytic_account_id': analy_id,
+#                                            'general_budget_id': 2,
+#                                            'date_from': obj.date_order, 
+#                                            'date_to':obj.close_date,
+#                                            'planned_amount': -vals.consultancy_amt,
+#                                            }
+#                     self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
+#              
+#             for vals in obj.pnl.cogs_addl_costs:
+#                 budget_line_ids = {}
+#                 equip_dict = {'name': vals.name, 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':overheads_analytic_id,}
+#                 analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#                 budget_line_dict ={
+#                                        'crossovered_budget_id': budget_id,
+#                                        'analytic_account_id': analy_id,
+#                                        'general_budget_id': 2,
+#                                        'date_from': obj.date_order, 
+#                                        'date_to':obj.close_date,
+#                                        'planned_amount': -vals.amount,
+#                                        }
+#                 self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
+#             
+#             """"Creation of analytic accounts and budget lines for Services section of the P&L.""" 
+#             equip_dict = {
+#                           'name': 'Revenue', 
+#                           'active': True, 
+#                           'type': 'normal', 
+#                           'parent_id':services_analytic_id,
+#                           }
+#             analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#             budget_line_dict ={
+#                            'crossovered_budget_id': budget_id,
+#                            'analytic_account_id': analy_id,
+#                            'general_budget_id': 1,
+#                            'date_from': obj.date_order, 
+#                            'date_to':obj.close_date,
+#                            'planned_amount': obj.pnl.serv_rev,
+#                            }
+#             self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
+#             
+#             for vals in obj.pnl.serv_line:
+#                 budget_line_ids = {}
+#                 equip_dict = {'name': vals.product_id.name, 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':cost_service_analytic_id,}
+#                 analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#                 budget_line_dict ={
+#                                        'crossovered_budget_id': budget_id,
+#                                        'analytic_account_id': analy_id,
+#                                        'general_budget_id': 2,
+#                                        'date_from': obj.date_order, 
+#                                        'date_to':obj.close_date,
+#                                        'planned_amount': -vals.subtotal,
+#                                        }
+#                 self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
+#             self.pool.get('pnl.order').write(cr,uid,obj.pnl.id,{'budget_id':budget_id})
+#             self.pool.get('project.project').write(cr,uid,project_id,{'budget_id':budget_id})
+#         
+#         
+#         
+#         return True
 #HAVING ISSUES CREATING A PROJECT
 #         project_dict = {'name': obj.name, 
 #                         'state': 'open',
@@ -312,18 +324,22 @@ class pnl_order(osv.osv):
     
     def _amount_all(self, cr, uid, ids, field_name, arg, context=None):
         res = {}
-        
+        over_head=0.0
         for order in self.browse(cr, uid, ids, context=context):
+            total_overhead_amount = order.overhead_amount1
+            print total_overhead_amount, "***************************************************"
             res[order.id] = {
                 'cogs_total': 0.0,
                 'cif_total': 0.0,
                 'consul_total': 0.0,
                 'service_cost': 0.0,
                 'serv_rev':     0.0,
+                'tot_fin_cost_products': 0.0,
+                'tot_fin_cost_services':0.0,
             }
-            val = val1 = val2 =val3=val4=val5= 0.0
+            val = val1 = val2 =val3=val4=val5=val80= 0.0
             #cur = order.pricelist_id.currency_id
-            print "test"
+            print "test",order
             for line in order.line_ids:
                val += line.quote_amt
                val1 +=  line.cif_amt
@@ -331,7 +347,8 @@ class pnl_order(osv.osv):
             p =0   
             for line1 in order.cogs_addl_costs:
                 p += line1.perc
-                   
+            for overhead in order.cogs_addl_costs:
+                over_head+=overhead.amount      
             print "ttt",val,val1,val2,p
             val3 = val*(190-order.cogs_rev_perc)/100
             val4 = order.tax_perc*val3/100
@@ -343,29 +360,44 @@ class pnl_order(osv.osv):
             res[order.id]['cogs_rev'] = val3
             res[order.id]['tax_amt']  = val4
             res[order.id]['fund_amt']  = val5
-            res[order.id]['cogs_gross_margin']  = val3 - (val+val1+val2+val4+val5)
-            res[order.id]['cogs_total_costs'] =(val+val1+val2+val4+val5)+ (val3 - (val+val1+val2+val4+val5))*p/100
-            res[order.id]['cogs_profit'] = val3- res[order.id]['cogs_total_costs']
+            
+            #res[order.id]['cogs_gross_margin']  = val3 - (val+val1+val2+val4+val5) original formula 22/01/14
+            res[order.id]['cogs_gross_margin'] = val - (val1+val2+val4+val5)
+           # print "gross===================================",val,val1,val2,val3,val4,val5,
+            #print "total=========================",val - (val1+val2+val4+val5)
+           # res[order.id]['cogs_total_costs'] =(val+val1+val2+val4+val5)+ (val3 - (val+val1+val2+val4+val5))*p/100
+            #res[order.id]['cogs_total_costs'] =(val+val1+val2+val4+val5+order.overhead_amount1)
+            res[order.id]['cogs_total_costs'] = order.cogs_total + order.cif_total + order.consul_total + order.tax_amt + order.fund_amt + over_head
+            print order.cogs_total, order.cif_total, order.consul_total, order.tax_amt, order.fund_amt, over_head
+            res[order.id]['cogs_profit'] = val3- res[order.id]['tot_fin_cost_products']
             val6 =0
             for line in order.serv_line:
                val6 += line.subtotal
-               
+            #print "Implementation Services===========",val6  
             p1 =0   
             for line1 in order.serv_addl_costs:
                 p1 += line1.perc
-            val7 = val6*(170-order.serv_rev_perc)/100
+            #val7 = val6*(170-order.serv_rev_perc)/100 original code 22/01/14
+            val7 = val6/(0.73-(order.serv_rev_perc/100))
             val8 = val7*order.ser_tax_perc/100
             print "val1",val,val1
             res[order.id]['serv_rev']= val7
             res[order.id]['service_cost']= val6
             res[order.id]['serv_tax_amt']= val8
-            res[order.id]['serv_gross_margin']= val7 - val6 -val8
-            res[order.id]['serv_total_cost']=    val6+val8 + (val7 - val6 -val8)*p1/100
-            res[order.id]['serv_profit'] = val7 - (val6+val8 + (val7 - val6 -val8)*p1/100) 
-            res[order.id]['total_rev'] = res[order.id]['cogs_rev'] + res[order.id]['serv_rev']
-            res[order.id]['total_costs'] = res[order.id]['cogs_total_costs'] + res[order.id]['serv_total_cost']
-            res[order.id]['total_profit'] = res[order.id]['cogs_profit'] + res[order.id]['serv_profit']
-            
+           # res[order.id]['tot_fin_cost_services']= val8
+            #res[order.id]['serv_gross_margin']= val7 - val6 -val8 original code 22/01/14
+            res[order.id]['serv_gross_margin']= val7 - val6 
+            #res[order.id]['serv_total_cost']=    val6+val8 + (val7 - val6 -val8)*p1/100 original code edited 23/01/14
+            res[order.id]['serv_total_cost']=    val6+val8 + (val7 - val6 -val8)*p1/100   
+           # res[order.id]['serv_profit'] = val7 - (val6+val8 + (val7 - val6 -val8)*p1/100)
+            print order.serv_rev, val7, order.tot_fin_cost_services, "****************************************************"
+            res[order.id]['serv_profit'] = val7 - res[order.id]['tot_fin_cost_services']
+            res[order.id]['total_rev'] = res[order.id]['cogs_rev'] + res[order.id]['serv_rev']# original modified 23/01/14
+            #res[order.id]['total_rev'] = res[order.id]['cogs_rev'] + res[order.id]['serv_rev']
+            #res[order.id]['total_costs'] = res[order.id]['cogs_total_costs'] + res[order.id]['serv_total_cost']
+            res[order.id]['total_costs'] = res[order.id]['cogs_total'] +res[order.id]['cif_total']+ res[order.id]['service_cost']+res[order.id]['consul_total'] + order.finance_sum+order.overheads_sum
+            #res[order.id]['total_profit'] = res[order.id]['cogs_profit'] + res[order.id]['serv_profit']
+            res[order.id]['total_profit'] = res[order.id]['total_rev'] - res[order.id]['total_costs']
             
         return res
     
@@ -438,7 +470,153 @@ class pnl_order(osv.osv):
         print "result",result    
         return result.keys()
     
-   
+    def _get_summary(self, cr, uid, ids, field_name, arg, context=None):
+        res = {}
+        
+        for order in self.browse(cr, uid, ids, context=context):
+            val=val1=0.0
+            res[order.id] = {
+                'cogs_rev_sum': 0.0,
+                'serv_rev_sum': 0.0,
+                'consulting_sum': 0.0,
+                'cogs_sum': 0.0,
+                'service_cost_sum': 0.0,
+                'finance_sum': 0.0,
+                'overheads_sum': 0.0,
+                'cif_sum':0.0,
+            }
+            
+            res[order.id]['cogs_rev_sum']= order.cogs_rev
+            res[order.id]['serv_rev_sum']= order.serv_rev
+            res[order.id]['cogs_sum']= order.cogs_total
+            res[order.id]['cif_sum'] = order.cif_total
+            res[order.id]['consulting_sum'] = order.consul_total
+            res[order.id]['service_cost_sum'] = order.service_cost
+            res[order.id]['finance_sum']  = order.tax_amt+order.fund_amt+order.serv_tax_amt
+            for cost in order.serv_addl_costs:
+                val+=cost.amount
+            for cost in order.cogs_addl_costs:
+                val1+=cost.amount
+            res[order.id]['overheads_sum'] = val+val1
+            
+            
+            
+        return res
+    
+    def _overhead_total11 (self, cr, uid, ids,field_name,arg,context=None):
+        res = {}
+        print "over head======================="
+        for order in self.browse(cr, uid, ids, context=context):
+            val=0.0
+            for overhead in order.cogs_addl_costs:
+                val+=overhead.amount
+                print "overhead.amount===============",overhead.amount
+            res[order.id]=val
+            
+            print val, "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
+            
+        return res
+    
+    def _overhead_total12 (self, cr, uid, ids,field_name,arg,context=None):
+        res = {}
+        print "over head======================="
+        for index in self.browse(cr, uid, ids, context=context):
+            val=0.0
+            for overheads in index.serv_addl_costs:
+                val+=overheads.amount
+                print "overhead.amount===============",overheads.amount
+            res[index.id]=val
+            
+            print val, "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
+            
+        return res
+    
+    def _tot_fin_cost_products (self, cr, uid, ids,field_name,arg,context=None):
+        res = {}
+        print "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+        for order1 in self.browse(cr, uid, ids, context=context):
+            val1=order1.overhead_amount1
+            val2=order1.cogs_total
+            val3=order1.cif_total
+            val4=order1.consul_total
+            val5=order1.tax_amt
+            val6=order1.fund_amt
+            val7=val1 + val2 +val3 +val4 + val5 + val6
+            val8=order1.cogs_rev
+            val9=val8 - val7
+#             for overhead in order.cogs_addl_costs:
+#                 val+=overhead.amount
+#                 print "overhead.amount===============",overhead.amount
+            #res[order1.id]=val
+            
+            print val1,val2,val3,val4,val5,val6,val7,val8,val9, "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%5555555"
+            res[order1.id]=val7
+            #res[order1.id]['cogs_profit']  = val9
+        return res
+    
+    def _tot_fin_cost_services (self, cr, uid, ids,field_name,arg,context=None):
+        res = {}
+        print "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+        for order2 in self.browse(cr, uid, ids, context=context):
+            val1=order2.overhead_amount2
+            val2=order2.service_cost
+            val3=order2.serv_tax_amt
+#             val4=order1.consul_total
+#             val5=order1.tax_amt
+#             val6=order1.fund_amt
+            val7=val1 + val2 +val3
+#             for overhead in order.cogs_addl_costs:
+#                 val+=overhead.amount
+#                 print "overhead.amount===============",overhead.amount
+            #res[order1.id]=val
+            
+            print val1,val2,val3,val7, "mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm"
+            res[order2.id]=val7
+        return res
+    
+    def _cogs_profit (self, cr, uid, ids,field_name,arg,context=None):
+        res = {}
+        for order3 in self.browse(cr, uid, ids, context=context):
+            val1=order3.cogs_rev
+            val2=order3.tot_fin_cost_products
+            val3=val1 - val2
+            res[order3.id]=val3
+            print val1, val2, val3, "^^^^^^^^^^^^^^^^^^^ net income profit ^^^^^^^^^^^^^^^^^^^^^^^^^"
+        
+        return res
+    
+    def _serv_profit (self, cr, uid, ids,field_name,arg,context=None):
+        res = {}
+        for order4 in self.browse(cr, uid, ids, context=context):
+            val1=order4.serv_rev
+            val2=order4.tot_fin_cost_services
+            val3=val1 - val2
+            res[order4.id]=val3
+            print val1,val2,val3, "####################### net services profit ########################"
+        return res
+    
+    def _total_costs (self, cr, uid, ids,field_name,arg,context=None):
+        res = {}
+        for order5 in self.browse(cr, uid, ids, context=context):
+            val1=order5.cogs_sum
+            val2=order5.cif_sum
+            val3=order5.consulting_sum
+            val4=order5.service_cost_sum
+            val5=order5.finance_sum
+            val6=order5.overheads_sum
+            val7= val1 + val2 + val3 + val4 + val5 + val6
+            res[order5.id]=val7
+            print val7, "####################### Total Expenses ########################"
+        return res
+    
+    def _total_profit (self, cr, uid, ids,field_name,arg,context=None):
+        res = {}
+        for order6 in self.browse(cr, uid, ids, context=context):
+            val1=order6.total_rev
+            val2=order6.total_costs
+            val3=val1 - val2
+            res[order6.id]=val3
+        return res
     
     _columns = {
 	'name' : fields.char('Reference'),
@@ -447,18 +625,20 @@ class pnl_order(osv.osv):
 #     'order_id':fields.many2one('sale.order', ''),
     'comment': fields.text('Comment', size=64),
     'posted_date': fields.datetime('Created Date'),
-	'customer': fields.many2one('res.partner', 'Customer'),	
+	'customer': fields.many2one('res.partner', 'Customer', required=True),	
     
-	'cogs_rev_perc': fields.float('Markup factor'),
-	'tax_perc': fields.float('Tax Rate'),
+	##'cogs_rev_perc': fields.float('Markup factor'),  CMT1
+    'cogs_rev_perc': fields.float('Desired Revenue %'),
+	'tax_perc': fields.float('Products Tax Rate'),
 	'fund_perc': fields.float('% for Funding'),
     
 	'line_ids' : fields.one2many('pnl.cogs.line','pnl_id','Products to Purchase'),
 	'cogs_addl_costs' : fields.one2many('pnl.add.costs.goods', 'pnl_id','Additional Costs',
                                         domain=[('type','=','goods')], context={'default_type':'goods'},),
 	
-	'serv_rev_perc': fields.float('Revenue factor'),
-    'ser_tax_perc': fields.float('Service Tax Rate'),
+	## 'serv_rev_perc': fields.float('Revenue factor'), CMT1
+    'serv_rev_perc': fields.float('Desired Revenue %'),
+    'ser_tax_perc': fields.float('Services Tax Rate'),
 	'serv_addl_costs' : fields.one2many('pnl.add.costs', 'pnl_id','Additional Costs',
                                         domain=[('type','=','service')], context={'default_type':'service'},),
 	'serv_line' : fields.one2many('pnl.serv.line', 'pnl_id','Services'),
@@ -469,6 +649,11 @@ class pnl_order(osv.osv):
     
     'lead_id': fields.many2one('crm.lead','Opportunity'),
     
+    'overhead_amount1':fields.function(_overhead_total11, string='Total Overhead Expenses', type='float'),
+    'overhead_amount2':fields.function(_overhead_total12, string='Total Overhead Expenses', type='float'),
+    
+    'tot_fin_cost_products':fields.function(_tot_fin_cost_products, string='Total Product Costs', type='float'),
+    'tot_fin_cost_services':fields.function(_tot_fin_cost_services, string='Total Service Costs', type='float'),
    
     
     'total_rev': fields.function(_amount_all, string='Total Revenue', type='float',
@@ -478,36 +663,36 @@ class pnl_order(osv.osv):
                 'pnl.serv.line': (_get_serv_line, ['subtotal',], 10),
                 'pnl.add.costs': (_get_costs, ['perc'], 10),
             }, multi="sums", ),
-    'total_costs': fields.function(_amount_all, string='Total Costs', type='float',
-                               store={
-                 'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),
-                 'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),  
-                'pnl.serv.line': (_get_serv_line, ['subtotal',], 10),
-                'pnl.add.costs': (_get_costs, ['perc'], 10),
-            }, multi="sums", ),
-     'total_profit': fields.function(_amount_all, string='Total Profit', type='float',
-                               store={
-                 'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),
-                 'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),  
-                'pnl.serv.line': (_get_serv_line, ['subtotal',], 10),
-                'pnl.add.costs': (_get_costs, ['perc'], 10),
-            }, multi="sums", ),
+#     'total_costs': fields.function(_amount_all, string='Total Costs', type='float',
+#                                store={
+#                  'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),
+#                  'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),  
+#                 'pnl.serv.line': (_get_serv_line, ['subtotal',], 10),
+#                 'pnl.add.costs': (_get_costs, ['perc'], 10),
+#             }, multi="sums", ),
+#      'total_profit': fields.function(_amount_all, string='Total Profit', type='float',
+#                                store={
+#                  'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),
+#                  'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),  
+#                 'pnl.serv.line': (_get_serv_line, ['subtotal',], 10),
+#                 'pnl.add.costs': (_get_costs, ['perc'], 10),
+#             }, multi="sums", ),
                 
                                        
                 
                 
                 
     
-    'serv_profit': fields.function(_amount_all, string='Profit (Service)', type='float',
-                                store={
-                 'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),
-                 'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),  
-                'pnl.serv.line': (_get_serv_line, ['subtotal',], 10),
-                'pnl.add.costs': (_get_costs, ['perc'], 10),
-            }, multi="sums", ),
+#     'serv_profit': fields.function(_amount_all, string='Net Income (Services)', type='float',
+#                                 store={
+#                  'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),
+#                  'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),  
+#                 'pnl.serv.line': (_get_serv_line, ['subtotal',], 10),
+#                 'pnl.add.costs': (_get_costs, ['perc'], 10),
+#             }, multi="sums", ),
                 
                 
-    'serv_total_cost': fields.function(_amount_all, string='Total Service Cost', type='float',
+    'serv_total_cost': fields.function(_amount_all, string='Total Service Costs', type='float',
                                 store={
                  'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10), 
                  'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10), 
@@ -516,7 +701,7 @@ class pnl_order(osv.osv):
             }, multi="sums", ),
                 
     
-     'serv_gross_margin': fields.function(_amount_all, string='Service Gross Margin', type='float',
+     'serv_gross_margin': fields.function(_amount_all, string='Gross Margin for Services', type='float',
                                 store={
                  'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),
                  'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),  
@@ -524,7 +709,24 @@ class pnl_order(osv.osv):
                 'pnl.add.costs': (_get_costs, ['perc'], 10),
             }, multi="sums", ),
                 
-     'serv_tax_amt': fields.function(_amount_all, string='Service Tax Amount', type='float',
+     'serv_tax_amt': fields.function(_amount_all, string='Services Tax Amount', type='float',
+                                store={
+                 'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),
+                 'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),  
+                'pnl.serv.line': (_get_serv_line, ['subtotal'], 10),
+                'pnl.add.costs': (_get_costs, ['perc'], 10),
+            }, multi="sums", ),
+
+## Start of code CMT1                
+#     'serv_rev': fields.function(_amount_all, string='Revenue Quote', type='float',
+#                                 store={
+#                  'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),
+#                  'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),  
+#                 'pnl.serv.line': (_get_serv_line, ['subtotal'], 10),
+#                 'pnl.add.costs': (_get_costs, ['perc'], 10),
+#             }, multi="sums", ),
+## End of code CMT1
+    'serv_rev': fields.function(_amount_all, string='Total Revenue', type='float',
                                 store={
                  'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),
                  'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),  
@@ -532,16 +734,8 @@ class pnl_order(osv.osv):
                 'pnl.add.costs': (_get_costs, ['perc'], 10),
             }, multi="sums", ),
                 
-    'serv_rev': fields.function(_amount_all, string='Revenue Quote', type='float',
-                                store={
-                 'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),
-                 'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),  
-                'pnl.serv.line': (_get_serv_line, ['subtotal'], 10),
-                'pnl.add.costs': (_get_costs, ['perc'], 10),
-            }, multi="sums", ),
                 
-                
-    'service_cost': fields.function(_amount_all, string='Total Cost of Implementation Service', type='float',
+    'service_cost': fields.function(_amount_all, string='Total Cost of Implementation Services', type='float',
                                 store={
                 'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),
                 'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),  
@@ -550,15 +744,15 @@ class pnl_order(osv.osv):
             }, multi="sums",  ),
                 
     
-    'cogs_profit': fields.function(_amount_all, string='Profit', type='float',
-                                store={
-                 'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),  
-                'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),
-                'pnl.serv.line': (_get_serv_line, ['subtotal'], 10),
-                'pnl.add.costs': (_get_costs, ['perc'], 10),
-            }, multi="sums",  ),
+#     'cogs_profit': fields.function(_amount_all, string='Net Income (Products)', type='float',
+#                                 store={
+#                  'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),  
+#                 'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),
+#                 'pnl.serv.line': (_get_serv_line, ['subtotal'], 10),
+#                 'pnl.add.costs': (_get_costs, ['perc'], 10),
+#             }, multi="sums",  ),
                 
-    'cogs_total_costs': fields.function(_amount_all, string='Total Cost of Goods Sold', type='float',
+    'cogs_total_costs': fields.function(_amount_all, string='Total Product Costs', type='float',
                                 store={
                 'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),  
                 'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),
@@ -566,7 +760,7 @@ class pnl_order(osv.osv):
                 'pnl.add.costs': (_get_costs, ['perc'], 10),
             }, multi="sums",  ),
                 
-    'cogs_gross_margin': fields.function(_amount_all, string='Gross Margin', type='float',
+    'cogs_gross_margin': fields.function(_amount_all, string='Gross Margin for Products', type='float',
                                 store={
                  'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),  
                 'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),
@@ -582,22 +776,30 @@ class pnl_order(osv.osv):
                 'pnl.add.costs': (_get_costs, ['perc'], 10),
             }, multi="sums",  ),
                 
-    'tax_amt': fields.function(_amount_all, string='Tax Amount', type='float',
+    'tax_amt': fields.function(_amount_all, string='Products Tax Amount', type='float',
                                 store={
                  'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),  
                 'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),
                 'pnl.serv.line': (_get_serv_line, ['subtotal'], 10),
                 'pnl.add.costs': (_get_costs, ['perc'], 10),
             }, multi="sums",  ),
-                
-    'cogs_rev': fields.function(_amount_all, string='Revenue Quote', type='float',
+## Start of code CMT1                
+#     'cogs_rev': fields.function(_amount_all, string='Revenue Quote', type='float',
+#                                  store={
+#                  'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),  
+#                 'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),
+#                 'pnl.serv.line': (_get_serv_line, ['subtotal'], 10),
+#                 'pnl.add.costs': (_get_costs, ['perc'], 10),
+#             }, multi="sums",  ),
+## End of code CMT1
+     'cogs_rev': fields.function(_amount_all, string='Total Revenue', type='float',
                                  store={
                  'pnl.order': (lambda self, cr, uid, ids, c={}: ids, ['line_ids','cogs_rev_perc','fund_perc','tax_perc','cogs_addl_costs','serv_line','serv_rev_perc','ser_tax_perc','serv_addl_costs'], 10),  
                 'pnl.cogs.line': (_get_line, ['quote_amt','cif_amt','consultancy_amt'], 10),
                 'pnl.serv.line': (_get_serv_line, ['subtotal'], 10),
                 'pnl.add.costs': (_get_costs, ['perc'], 10),
             }, multi="sums",  ),
-                
+    
                 
                 
      'cogs_total': fields.function(_amount_all, digits_compute= dp.get_precision('Account'), string='Total Cost of Goods',
@@ -623,6 +825,23 @@ class pnl_order(osv.osv):
             }, multi="sums",),
     'state': fields.selection([('draft', 'New'),('progress', 'Progress'),('negotiation', 'Negotiation'),('done', 'Done'), ('cancel', 'Cancelled')], 'Status'),
     'budget_id':fields.many2one('crossovered.budget','Budget Id'),
+    
+    
+    'cogs_profit':fields.function(_cogs_profit, string='Net Income (Products)', type='float'),
+    'serv_profit':fields.function(_serv_profit, string='Net Income (Services)', type='float'),
+    'total_costs':fields.function(_total_costs, string='Total Expense', type='float'),
+    'total_profit':fields.function(_total_profit, string='Net Income', type='float'),
+    #new fields================
+    
+    'cogs_rev_sum':fields.function(_get_summary,digits_compute= dp.get_precision('Account'), string='Products',multi="sums"),
+    'serv_rev_sum':fields.function(_get_summary,digits_compute= dp.get_precision('Account'), string='Services',multi="sums"),
+    'cogs_sum':fields.function(_get_summary,digits_compute= dp.get_precision('Account'), string='COGS',multi="sums"),
+    'cif_sum':fields.function(_get_summary,digits_compute= dp.get_precision('Account'), string='CIF',multi="sums"),
+    'consulting_sum':fields.function(_get_summary,digits_compute= dp.get_precision('Account'), string='Consulting',multi="sums"),
+    'service_cost_sum':fields.function(_get_summary,digits_compute= dp.get_precision('Account'), string='Implementation',multi="sums"),
+    'finance_sum':fields.function(_get_summary,digits_compute= dp.get_precision('Account'), string='Financial',multi="sums"),
+    'overheads_sum':fields.function(_get_summary,digits_compute= dp.get_precision('Account'), string='Overheads',multi="sums"),
+   # 'consulting_sum':fields.function(_get_summary,digits_compute= dp.get_precision('Account'), string='Consulting',multi="sums"),
         }
     
     
@@ -641,6 +860,7 @@ class pnl_order(osv.osv):
 
                 {'name' : 'Shared Costs',
                  'perc' : 6,
+                
                  'type' : 'goods',
                  },
                 
@@ -662,7 +882,7 @@ class pnl_order(osv.osv):
                  },
                 
                 {'name' : 'Shared Costs',
-                 'perc' : 6,
+                 'perc' : 5,
                  'type' : 'service'
                  },
                 
@@ -753,7 +973,7 @@ class pnl_order(osv.osv):
                 self.pool.get('sale.order.line').create(cr,uid,val1)
                 self.pool.get('sale.order.line').create(cr,uid,val2)
                 self.pool.get('sale.order.line').create(cr,uid,val3)
-                self.pool.get('sale.order').write(cr,uid,order_id,{'state':'pnl'})
+                self.pool.get('sale.order').write(cr,uid,order_id,{'state':'draft'})
                 self.write(cr,uid,ids,{'state':'negotiation'})
                 value = {'domain': str([('id', 'in', order_id)]),
                         'view_type': 'form',
@@ -770,8 +990,8 @@ class pnl_order(osv.osv):
         sale_obj=self.pool.get('sale.order')
         sale_line=self.pool.get('sale.order.line')
         obj=self.browse(cr,uid,ids[0])
-        order_id=sale_obj.search(cr,uid,[('pnl','=',obj.id),('state','=','pnl')])
-        order_id1=sale_obj.search(cr,uid,[('pnl','=',obj.id),('state','!=','pnl')])
+        order_id=sale_obj.search(cr,uid,[('pnl','=',obj.id),('state','=','draft')])
+        order_id1=sale_obj.search(cr,uid,[('pnl','=',obj.id),('state','!=','draft')])
         
         if order_id:
             product_id2=self.pool.get('product.product').search(cr,uid,[('name','ilike','Ser'),('type','=','service')])
@@ -876,7 +1096,6 @@ class pnl_cogs_line(osv.osv):
     def _compute_total(self,cr, uid,ids, field_name,args,context=None):
         res = {}
         for pnl_line in self.browse(cr, uid, ids, context=context):
-            
             res[pnl_line.id] = pnl_line.cif_amt + pnl_line.consultancy_amt + pnl_line.quote_amt
         return res   
         
@@ -884,40 +1103,42 @@ class pnl_cogs_line(osv.osv):
         res={}
         amt=0.0
         for val in self.browse(cr,uid,ids):
+            amt=0.0
             if val.type=='rfq' and val.quotation_id:
                amt=val.quotation_id.amount_total
             elif val.type=='tender' and val.requisition_id:
                 for val1 in val.requisition_id.purchase_ids:
                     if val1.state == 'approved':
                         amt=val1.amount_total
-        
-        res[val.id]=amt
-        
+            res[val.id]=amt
         return res 
     def _get_cif_amt(self,cr,uid,ids,field_name,args,context):
         res={}
         amt=0.0
         for val in self.browse(cr,uid,ids):
-            if val.quotation_id:
+            if val.quotation_id or val.requisition_id:
                amt=val.quote_amt*val.perc_cif/100
-            
-        
-        res[val.id]=amt
+            res[val.id]=amt
         
         return res    
     
     _columns = {
-                'name' : fields.char('Equipment Name'),
-	           'pnl_id' : fields.many2one('pnl.order','P&L', ondelete='cascade'),
-               'type':fields.selection([('rfq','RFQs'),('tender','Tender')],'Type'),
-               'requisition_id':fields.many2one('purchase.requisition','Tender'),
-               'quotation_id' : fields.many2one('purchase.order','RFQs'),
-	           'quote_amt' : fields.function(_get_quote_amt,type='float',string='Amount'), #Need to set it to a function = the amount from the quotation
+                'name' : fields.char('Configuration'),
+	            'pnl_id' : fields.many2one('pnl.order','P&L', ondelete='cascade'),
+                'type':fields.selection([('rfq','RFQs'),('tender','Tender')],'Type'),
+                'requisition_id':fields.many2one('purchase.requisition','Tender'),
+                'quotation_id' : fields.many2one('purchase.order','RFQs'),
+	            'quote_amt' : fields.function(_get_quote_amt,type='float',string='Amount'), #Need to set it to a function = the amount from the quotation
                 'perc_cif' : fields.float('CIF %'),
                 'cif_amt' : fields.function(_get_cif_amt,type='float',string='CIF'),
                 'consultancy_amt' : fields.float('Consultancy'),
                 'amount': fields.function(_compute_total,string='Total'), #Function needs to be worked on and expanded
                 }
+    _defaults={
+               'quote_amt':0.0,
+               'cif_amt':0.0
+               }
+    
     def onchange_quotation(self, cr, uid, ids, quotation_id):
         print "quotation_id",quotation_id
         if not quotation_id:
@@ -1055,7 +1276,7 @@ class crm_lead(osv.osv):
     _columns={
               'seq_no':fields.char('Name',size=64),
               'pnl_id':fields.many2one('pnl.order','Pnl Order'),
-              'state1':fields.selection([('draft','Draft'),('pnl','PNL')]),
+              'state1':fields.selection([('draft','Draft'),('pnl','P&L')]),
               }
     _defaults={
               'state1':'draft'
@@ -1085,7 +1306,7 @@ class purchase_requisition(osv.osv):
     _inherit='purchase.requisition'
     _name='purchase.requisition'
     _columns={
-              'pnl_ok':fields.boolean('PNL'),
+              'pnl_ok':fields.boolean('P&L'),
               'exclusive': fields.selection([('exclusive','Purchase Requisition (exclusive)'),('multiple','Multiple Requisitions')],'Requisition Type', required=True,readonly=True, help="Purchase Requisition (exclusive):  On the confirmation of a purchase order, it cancels the remaining purchase order.\nPurchase Requisition(Multiple):  It allows to have multiple purchase orders.On confirmation of a purchase order it does not cancel the remaining orders"""),
               }
     _defaults={
@@ -1095,5 +1316,5 @@ class purchase_requisition(osv.osv):
 class purchase_order(osv.osv):
     _inherit='purchase.order'
     _columns={
-              'pnl_ok':fields.boolean('PNL'),
+              'pnl_ok':fields.boolean('P&L'),
               }

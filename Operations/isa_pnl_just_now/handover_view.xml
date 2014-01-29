@@ -1,0 +1,89 @@
+<?xml version ="1.0"?>
+<openerp>
+	<data>
+	
+		<record model="ir.ui.view" id="view_handover_tree">
+			<field name="name">Handover View</field>
+			<field name="model">project.handover</field>
+			<field name="arch" type="xml">
+				<tree string="Handover" version="7.0">
+					<field name="partner_id"/>
+					<field name="order_id"/>
+					<field name="pnl"/>
+					<field name="date"/>
+					<field name="state"/>
+				</tree>
+			</field>
+		</record>
+				
+	
+		<record model="ir.ui.view" id="view_handover_form">
+			<field name="name">Handover Form</field>
+			<field name="model">project.handover</field>
+			<field name="arch" type="xml">
+				<form string="PnL" version="7.0">
+					<header>
+					
+						<button name='start_handover' states="draft" string='Start Handover' type='object'/>
+						<button name='cancel' string='Reject Handover' states='draft,progress,accept' type='object'/>
+						<button name='accept' states='progress' string='Accept Handover' type='object' confirm='Are you Sure'/>
+						<field name="state" widget="statusbar"/>
+					</header>
+					
+					<sheet>
+		<div class="oe_edit_only">
+                    <label for="name" required='1' class="oe_inline"/>
+                    
+                </div>
+                <h1>
+                    <field name="name" class="oe_inline" readonly='1'/>
+		</h1>
+					<group>
+					<group>
+					<field name="partner_id" readonly='1'/>
+					<field name="order_id" readonly='1'/>
+					<field name="manger_id" />
+					<field name="team_id" readonly='1'/>
+					</group>
+					<group>
+					<field name="responsible" />
+					<field name="pnl" readonly='1'/>
+					<field name="date" readonly='1'/>
+					<field name="team_manager"/>
+					</group>
+					</group>
+					<notebook>
+                    	<page string="Attachments">
+						<group>
+							<field name="attachment_ids" nolabel='1'>
+							<tree editable='top' >
+			                       		     <field name="name"/>
+				                             <field name="description" />
+				                             <field name="datas" string="Documnet"/>
+							</tree>
+							</field>
+							</group>
+					</page>
+					</notebook>
+	
+					</sheet>
+					
+				</form>
+			</field>
+		</record>
+		<record model="ir.actions.act_window" id="action_view_handover_form123">
+			<field name="name">Project Handover</field>
+			<field name="res_model">project.handover</field>
+			<field name="view_type">form</field>
+            <field name="view_id" ref="view_handover_tree"/>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<menuitem 
+			id="menu_action_view_handover_form11" 
+			action="action_view_handover_form123" 
+			name="Project Handover" 
+			parent="base.menu_sales"
+        	sequence="5"/> 
+	</data>
+</openerp>

@@ -18,7 +18,14 @@
             <field name="categ_id">1</field>
             <field name="type">service</field>
         </record>
-
+		<record id="budget_post1" model="account.budget.post">
+            <field name="name">Sales</field>
+            <field name="code">SAL</field>
+        </record>
+        <record id="budget_post2" model="account.budget.post">
+            <field name="name">Purchases</field>
+            <field name="code">PUR</field>
+        </record>
 
     </data>
 </openerp>

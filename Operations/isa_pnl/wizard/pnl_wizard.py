@@ -128,7 +128,7 @@ class make_pnl_wiz(osv.osv_memory):
                 case_obj.write(cr, uid, [case.id], {'ref': 'sale.order,%s' % new_id,'pnl_id':new_id,'state1':'pnl',})
                 case_obj.write(cr, uid, [case.id], {'ref': 'sale.order,%s' % new_id,'pnl_id':new_id,})
                 new_ids.append(new_id)
-                message = _("Opportunity has been <b>converted</b> to the PnL <em>%s</em>.") % (pnl_order.name)
+                message = _("Opportunity has been <b>converted</b> to the P&L <em>%s</em>.") % (pnl_order.name)
                 case.message_post(body=message)
             if pnl.close:
                 case_obj.case_close(cr, uid, data)

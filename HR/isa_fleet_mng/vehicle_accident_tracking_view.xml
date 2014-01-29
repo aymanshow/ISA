@@ -71,7 +71,7 @@
 		</record>
 					
 		<record id="action_vehicle_accident_info" model="ir.actions.act_window">
-        <field name="name">Vehicle Accident</field>
+        <field name="name">Vehicle Incidents</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">vehicle.accident.info</field>
         <field name="view_type">form</field>

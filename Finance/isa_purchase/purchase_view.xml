@@ -1,6 +1,11 @@
 <?xml version ="1.0"?>
 <openerp>
 	<data>
+	
+
+
+		
+	
 		<record id="purchase_order_form_isa_inherit" model="ir.ui.view">
             <field name="name">purchase.order.form</field>
             <field name="model">purchase.order</field>
@@ -9,21 +14,21 @@
 	            
             	<xpath expr="//field[@name='partner_ref']" position="after">
 		            <field name='awb_no' />
-		            <field name="clearing_agent_id" domain="[('supplier','=',True)]"/>
 	            </xpath>
 				
 				<xpath expr="//page[@string='Incoming Shipments &amp; Invoices']" position="after">
 				<page string='Shipment Related Documents'>
 					
 					<div class='oe_right oe_button_box'>
-<!--						<button name="send_mail" string="Send Mail"  type="object" />-->
-<!--						<button name="approve_by_admin_sr" string="Approve" type="object" />-->
+						<button name="send_mail" string="Send Mail"  type="object" />
+						<button name="approve_by_admin_sr" string="Approve" type="object" attrs="{'invisible':[('state_for_sr','not in',['sent_for_approval'])]}"/>
 					</div>
 					<group>
 					<group>
-		            <field name='awb_attachment' readonly='1'/>
-		            <field name='du_attachment' readonly='1'/>
-		            <field name='approve' readonly="1"/>
+		            <field name='awb_attachment' attrs="{'required':[('state','=','approved')]}"/>
+		            <field name='du_attachment' attrs="{'required':[('state','=','approved')]}"/>
+		            <field name='user_id'/>
+		            <field name='approve' />
 		            </group>
 		            </group>
 		        </page>
@@ -32,121 +37,8 @@
 					            
 	        </field>
 	        </record>
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	
-	    	<record id="view_picking_in_form_inheris1" model="ir.ui.view">
-            <field name="name">stock.picking.in.form</field>
-            <field name="model">stock.picking.in</field>
-            <field name="inherit_id" ref="stock.view_picking_in_form"/>
-            <field name="arch" type="xml">
-	    			<xpath expr="//page[@string='Additional Info']" position="after">
-							<page string='Shipment Related Documents'>
-								<div class='oe_right oe_button_box'>
-									<button name="send_mail" string="Send Mail"  type="object" />
-									
-									<button name="approve_request" string="Approve" type="object" attrs="{'invisible':[('state1','!=','pending')]}"/>
-								</div>
-								<group>
-								<field name='state1' invisible='1'/>
-					            <field name='awb_attachment1' />
-					            <field name='du_attachment1' />
-					            <field name='user_id'/>
-					            <field name='approve' />
-					            </group>
-					        </page>
-	            	</xpath>
-	            	
-	            	<xpath expr="//field[@name='auto_picking']" position="after">
-					            <field name='comments' />
-	            	</xpath>
-	            	
-	            	
-		    	</field>
-		    </record>
-		    
-		    
-		    
-		    <record id="stock_partial_picking_form_isa_inherits" model="ir.ui.view">
-            <field name="name">stock.partial.picking.form</field>
-            <field name="model">stock.partial.picking</field>
-	            <field name="inherit_id" ref="stock.stock_partial_picking_form"/>
-	            <field name="arch" type="xml">
-	    			<xpath expr="//field[@name='move_ids']" position="after">
-					   <field name='comments' />
-	            	</xpath>
-		    	</field>
-		    </record>
-		    
-		    
-	    	
-	    	<record id="stock_partial_picking_form_isa_inherits_invoice" model="ir.ui.view">
-	            <field name="name">account.invoice.supplier.form</field>
-            	<field name="model">account.invoice</field>
-	            <field name="inherit_id" ref="account.invoice_supplier_form"/>
-	            <field name="arch" type="xml">
-	    			<xpath expr="//button[@name='invoice_open']" position="after">
-	    				<button name="payment_confirm" type='object' states="payment" string="Approve Payment" class="oe_highlight" groups="account.group_account_invoice"/>
-	            	</xpath>
-	            	<xpath expr="//button[@name='invoice_cancel']" position="replace">
-                        <button name="invoice_cancel" states="draft,proforma2,payment" string="Cancel Invoice" groups="account.group_account_invoice"/>
-	            	</xpath>
-	            	
-	            	
-	    	</field>
-	    	</record>
-	    		
-			<record id="view_vendor_receipt_dialog_form_inherit_isa" model="ir.ui.view">
-	            <field name="name">account.voucher.receipt.dialog.form</field>
-	            <field name="model">account.voucher</field>
-	            <field name="priority">30</field>
-	            <field name="inherit_id" ref="account_voucher.view_vendor_receipt_dialog_form"/>
-	            <field name="arch" type="xml">
-	    			<xpath expr="//field[@name='journal_id']" position="replace">
-					   <field name="journal_id"
-                                domain="[('type','in',['bank', 'cash'])]"
-                                invisible="context.get('line_type', False)"
-                                widget="selection"
-                                on_change="onchange_journal(journal_id, line_cr_ids, False, partner_id, date, amount, type, company_id, context)"
-                                string="Payment Method" attrs="{'required':[('state','=', 'payment')]}"/>
-	            	</xpath>
-					<xpath expr="//button[@name='button_proforma_voucher']" position="replace">
-                        <button name="make_request" string="Request Payment" class="oe_highlight" type="object" attrs="{'invisible':[('type','!=','payment')]}"/>
-                        <button name="button_proforma_voucher" string="Pay" class="oe_highlight" type="object" attrs="{'invisible':[('type','=','payment')]}"/>
-	            	</xpath>
-	            		
-
-		    	</field>
-		    </record>	    		
-		    
-		    
-		    
-		    
-		    <record id="view_vendor_payment_form_inherit_isa" model="ir.ui.view">
-	            <field name="name">account.voucher.receipt.dialog.form</field>
-	            <field name="model">account.voucher</field>
-	            <field name="priority">30</field>
-	            <field name="inherit_id" ref="account_voucher.view_vendor_payment_form"/>
-	            <field name="arch" type="xml">
-	    			<xpath expr="//button[@name='proforma_voucher']" position="after">
-                        <button name="button_proforma_voucher" string="Release Payment" states='payment' class="oe_highlight" type="object"/>
-	            	</xpath>
-	            	<xpath expr="//field[@name='journal_id']" position="replace">
-					   <field name="journal_id"
-                                domain="[('type','in',['bank', 'cash'])]"
-                                invisible="context.get('line_type', False)"
-                                widget="selection"
-                                on_change="onchange_journal(journal_id, line_cr_ids, False, partner_id, date, amount, type, company_id, context)"
-                                string="Payment Method" attrs="{'required':[('state','=', 'payment')]}"/>
-	            	</xpath>
-	            	
-	            	
-	            </field>
-	         </record>
-	    		
+	    
+	    
 	    
 	</data>
 </openerp>

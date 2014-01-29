@@ -147,6 +147,7 @@
 	            <xpath expr="/form/sheet/div[@name='buttons']/button[@string='Tasks']" position='after'>
 	           	 	<button name="view_po" string="Purchase Order"
                             type="object"/>
+                     <button name='view_budget' string="Budget" type='object'/>
                      <button name="view_risk" string="Risk Management" type="object"/>
                      <button name='change_request' string="Change Project" type='object'/>
 	            </xpath>
@@ -195,7 +196,7 @@
 		                   	   <group colspan="4" col="4">
 		                   	   <group>
 			                   	    <field name="ko_id"/>
-			                   	    <field name="ko_approve_id" on_change="onchange_ko_approve_id(ko_approve_id)"/>
+			                   	    <field name="ko_approve_id" on_change="onchange_ko_approve_id(ko_approve_id)" invisible="1"/>
 								 	<field name="state_for_ko"/>
 								 	<field name="comments_ko" class="oe_inline" placeholder="Place your comment..."/>
 							 	</group>
@@ -220,7 +221,7 @@
 		                   	<group colspan="4" col="4">
 		                   	  <group>
 			                    <field name="pc_id"/>
-			                    <field name="pc_approve_id" on_change="onchange_pc_approve_id(pc_approve_id)"/>
+			                    <field name="pc_approve_id" on_change="onchange_pc_approve_id(pc_approve_id)" invisible="1"/>
 								<field name="state_for_pc"/>
 								<field name="comments_pc" class="oe_inline" placeholder="Place your comment..."/>
 							  </group>
@@ -245,7 +246,7 @@
 		                   	<group colspan="4" col="4">
 		                   	  <group>
 			                    <field name="fd_id"/>
-			                    <field name="fd_approve_id" on_change="onchange_fd_approve_id(fd_approve_id)"/>
+			                    <field name="fd_approve_id" on_change="onchange_fd_approve_id(fd_approve_id)" invisible="1"/>
 								<field name="state_for_fd"/>
 								<field name="comments_fd" class="oe_inline" placeholder="Place your comment..."/>
 							  </group>
@@ -265,6 +266,26 @@
 		            		<field name='implementation_plan' attrs="{'readonly':[('state','=','execute')]}"/>
 		            	</group>
 	            	</page>
+	            	<page string='Execution' attrs="{'invisible':[('state','in',['draft','initiate','plan'])]}">
+		            	<group>
+		            		<field name='weekly_report' invisible="1"/>
+		            		<group col="2" colspan="2" string="Weekly Status Reports">
+					
+								<field name="weekly_line" widget="one2many" colspan="4"/>
+							</group>
+		            		
+		            	</group>
+	            	</page>
+	            	
+	            	<page string='Closure' attrs="{'invisible':[('state','in',['draft','initiate','plan','execute'])]}">
+		            	<group>
+		            		<field name='certificate'/>
+		            		<field name='final_presentation'/>
+		            		<field name='administrative_closure'/>
+		            		<field name='technical_closure'/>
+		            		
+		            	</group>
+	            	</page>
 	            	
 	            </xpath>
 	            
@@ -274,6 +295,34 @@
 	            
 	        </field>
 	    </record>
+	    
+	    <record id="view_weekly_tree" model="ir.ui.view">
+            <field name="name">weekly.details.tree</field>
+            <field name="model">weekly.details</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <tree string="Weekly Status Reports" editable="bottom">
+			<field name="weekly_id" invisible="1"/>
+			<field name="date"/>
+			<field name="weekly_report"/> 
+			<field name="remarks"/>        
+                </tree>
+            </field>
+        </record>
+
+	<record id="view_weekly_form" model="ir.ui.view">
+            <field name="name">weekly.details.form</field>
+            <field name="model">weekly.details</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form string="Weekly Status Reports">
+			<field name="weekly_id" invisible="1"/>
+			<field name="date"/>
+			<field name="weekly_report"/> 
+			<field name="remarks"/>        
+                </form>
+            </field>
+        </record>
 	    
 	    
 	    

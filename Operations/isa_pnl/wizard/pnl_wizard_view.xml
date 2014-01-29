@@ -10,13 +10,13 @@
 	            <field name="type">form</field>
 	            <field name="arch" type="xml">
 	                <form version="7.0" string="Reject Reason">
-                    	<group colspan="4" col="4" string="Create PnL">
+                    	<group colspan="4" col="4" string="Create P&amp;L">
 		                	<field name="partner_id" />
 		                	<field name="shop_id"/>
-		                	<field name="close"/>
+		                	<field name="close" invisible="1"/>
 			            </group>
                     <footer>
-                        <button name="makePnl" string="Create PnL" type="object" class="oe_highlight"/>
+                        <button name="makePnl" string="Create P&amp;L" type="object" class="oe_highlight"/>
                         <button string="Cancel" class="oe_link" special="cancel"/>
                     </footer>
                 </form>
@@ -24,7 +24,7 @@
         </record>
 		
 		<record id="action_pnl_wizard" model="ir.actions.act_window">
-            <field name="name">Make PnL</field>
+            <field name="name">Make P&amp;L</field>
             <field name="type">ir.actions.act_window</field>
             <field name="res_model">make.pnl.wiz</field>
             <field name="view_type">form</field>

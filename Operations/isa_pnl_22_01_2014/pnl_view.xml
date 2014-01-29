@@ -1,0 +1,335 @@
+<?xml version ="1.0"?>
+<openerp>
+	<data>
+	
+<!-- ===========================Sale Order Inherit=============================	-->
+	
+		<record id="crm_lead_view_inherit22" model="ir.ui.view">
+	            <field name="name">crm.lead.form2</field>
+	            <field name="model">crm.lead</field>
+	            <field name="inherit_id" ref="sale_crm.crm_case_form_view_oppor"/>
+	            <field name="arch" type="xml">
+	            
+<!--	            <xpath expr="//field[@name='name']" position="replace">-->
+<!--		            <field name='seq_no'/>-->
+<!--		            <field name='state1' invisible='1'/>-->
+<!--	            </xpath>-->
+	            <xpath expr="//button[@string='Convert to Quotation']" position="replace">
+	                <button name="%(action_pnl_wizard)d" string='Convert to P&amp;L' type='action' class="oe_highlight" attrs="{'invisible':['|',('state','not in',('draft','open')),('state1','in',('pnl',))]}"/>
+	                <button name="view_pnl" string='View P&amp;L' type='object' class="oe_highlight" attrs="{'invisible':[('state1','!=','pnl')]}"/>
+<!--	                <button states="draft,open" name="%(action_pnl_wizard)d" string='Convert to PnL' type='action' class="oe_highlight"/>-->
+<!--	                <button states="pending" name="view_pnl" string='View Pnl' type='object' class="oe_highlight"/>-->
+	           		<field name='state1' invisible='1'/>
+	            </xpath>
+	            <xpath expr="//field[@name='name']" position="replace">
+	            <field name='seq_no'/>
+	            <field name='state1' invisible='1'/>
+<!--	                <button states="draft,open" name="%(action_pnl_wizard)d" string='Convert to PnL' type='action' class="oe_highlight"/>-->
+<!--	                <button states="pending" name="view_pnl" string='View Pnl' type='object' class="oe_highlight"/>-->
+	            </xpath>
+	            
+	            
+	            
+	            
+	            <xpath expr="//button[@string='Create Quotation']" position="replace">
+	                <button states="done" string="Create P&amp;L" name="%(action_pnl_wizard)d" type="action" class="oe_highlight"/>
+	            </xpath>
+	            </field>
+	        </record>
+		
+		
+		        	
+		<record id="sale_view_order_form_inherit2" model="ir.ui.view">
+	            <field name="name">sale.order.form2</field>
+	            <field name="model">sale.order</field>
+	            <field name="inherit_id" ref="sale.view_order_form"/>
+	            <field name="arch" type="xml">
+	            <xpath expr="//button[@name='invoice_recreate']" position="before">
+	            	<button name="handover_project" string='Handover' type='object' states='progress' class="oe_highlight"/>
+	            	<button name="hand_over" string='Start Handover' type='object' states='meeting' class="oe_highlight"/>
+<!--	                <button name="generate_project" string='Test Gen_Project' type='object'/>-->
+	            </xpath>
+	            
+	            
+	            
+	            <xpath expr="//button[@name='action_button_confirm']" position="replace">
+	                <button name="action_button_confirm" states="draft,pnl" string="Confirm Sale" type="object" groups="base.group_user" class="oe_highlight"/>
+	            </xpath>
+	            <xpath expr="//button[@name='cancel']" class="oe_highlight" position="replace">
+	                <button name="cancel" states="draft,sent,pnl" string="Cancel Quotation" groups="base.group_user"/>
+	            </xpath>
+	            <xpath expr="//button[@name='action_quotation_send']" position="replace">
+	                <button name="action_quotation_send" string="Send by Email" type="object" states="draft,pnl" class="oe_highlight" groups="base.group_user"/>
+	            </xpath>
+	            <xpath expr="//button[@name='print_quotation']" position="replace">
+	                <button name="print_quotation" string="Print" type="object" states="draft,pnl" class="oe_highlight" groups="base.group_user"/>
+	            </xpath>
+	            
+	            <xpath expr="/form/sheet/notebook/page[@string='Other Information']/group/group/field[@name='fiscal_position']" position="after">
+	               <field name='close_date' required="1"/>
+	               <field name='pnl'/>
+	            </xpath>
+	            <xpath expr="/form/sheet/notebook/page[@string='Other Information']" position="after">
+	               <page string='Handover Meeting' attrs="{ 'invisible':[('state', '!=', 'meeting')]}">
+	               
+	               
+	               
+	               </page>
+	            </xpath>
+	            
+	            
+	            </field>
+	        </record>
+			<record id="sale.action_quotations" model="ir.actions.act_window">
+	            <field name="name">Quotations</field>
+	            <field name="type">ir.actions.act_window</field>
+	            <field name="res_model">sale.order</field>
+	            <field name="view_type">form</field>
+	            <field name="view_id" ref="sale.view_quotation_tree"/>
+	            <field name="view_mode">tree,form,calendar,graph</field>
+	            <field name="context">{}</field>
+	            <field name="domain">[('state','in',('draft','sent','cancel','pnl'))]</field>
+	            <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+	            <field name="help" type="html">
+	              <p class="oe_view_nocontent_create">
+	                Click to create a quotation, the first step of a new sale.
+	              </p><p>
+	                OpenERP will help you handle efficiently the complete sale flow:
+	                from the quotation to the sales order, the
+	                delivery, the invoicing and the payment collection.
+	              </p><p>
+	                The social feature helps you organize discussions on each sales
+	                order, and allow your customers to keep track of the evolution
+	                of the sales order.
+	              </p>
+	            </field>
+	        </record>
+	        
+	        <record id="sale.action_orders" model="ir.actions.act_window">
+	            <field name="name">Sales Orders</field>
+	            <field name="type">ir.actions.act_window</field>
+	            <field name="res_model">sale.order</field>
+	            <field name="view_type">form</field>
+	            <field name="view_mode">tree,form,calendar,graph</field>
+	            <field name="search_view_id" ref="sale.view_sales_order_filter"/>
+	            <field name="context">{}</field>
+	            <field name="domain">[('state','not in',('draft','sent','cancel','pnl'))]</field>
+	            <field name="help" type="html">
+	              <p class="oe_view_nocontent_create">
+	                Click to create a quotation that can be converted into a sales
+	                order.
+	              </p><p>
+	                OpenERP will help you efficiently handle the complete sales flow:
+	                quotation, sales order, delivery, invoicing and payment.
+	              </p>
+	            </field>
+	        </record>
+	        
+	        
+<!--	        ===================================PNL ORDER VIEW===========================	-->
+	
+		
+		<record model="ir.ui.view" id="view_pnl_tree">
+			<field name="name">P&amp;L Form View</field>
+			<field name="model">pnl.order</field>
+			<field name="arch" type="xml">
+				<tree string="P&amp;L" version="7.0">
+					<field name="name"/>
+					<field name="customer"/>
+					<field name="lead_id"/>
+					<field name="posted_date"/>
+					<field name="state"/>
+				</tree>
+			</field>
+		</record>
+				
+	
+		<!-- Form view of pnl model-->
+		<record model="ir.ui.view" id="view_pnl_form">
+			<field name="name">P&amp;L Form View</field>
+			<field name="model">pnl.order</field>
+			<field name="arch" type="xml">
+				<form string="P&amp;L" version="7.0">
+					<header>
+					
+						<button name='generate_quotation' states="draft,progress" string='Create Quotation' type='object'/>
+						<button name='cancel_quotation' string='Cancel Quotation' type='object'/>
+						<button name='update_quotation' states='progress,negotiation' string='View/Update Quotation' type='object'/>
+						<field name="state" widget="statusbar"/>
+					</header>
+					
+					<sheet>
+		<div class="oe_edit_only">
+                    <label for="name" required='1' class="oe_inline"/>
+                    <label for="origin" class="oe_inline"/>
+                </div>
+                <h1>
+                    <field name="name" class="oe_inline"/>
+		</h1>
+					<group>
+					<group>
+					<field name="customer"/>
+					<field name="lead_id"/>
+					</group>
+					<group>
+					<field name="user_id" string="Responsible"/>
+					<field name="posted_date" string="Created on"/>
+					</group>
+					</group>
+					<notebook>
+                    				<page string="Products">
+			                       	<separator string="Revenue"/>
+						<group>
+                                <group> <field name="cogs_rev_perc"/> </group>
+                                <group class="oe_subtotal_footer oe_right">
+                                 <field name="cogs_rev"/>
+                            </group> </group>
+						<separator string="Cost of Goods Sold"/>
+							<field name="line_ids">
+							<tree string="RFQs">
+			                       		     <field name="name"/>
+				                             <field name="quotation_id" />
+				                             <field name="quote_amt" sum="FOB Total"/>
+				                             <field name="perc_cif"/>
+				                             <field name="cif_amt" sum="CIF Total"/>
+				                             <field name="consultancy_amt" sum="Consul Total"/>
+				                             <field name="amount" sum="Total amount"/>
+							</tree>
+										<form string="RFQs">
+			                       		     <field name="name"/>
+			                       		     <field name="type" required="1"/>
+				                             <field name="quotation_id" domain="[('pnl_ok','=',True)]" attrs="{'invisible':[('type','!=','rfq')],'required':[('type','=','rfq')]}"/>
+				                             <field name="requisition_id" domain="[('pnl_ok','=',True)]" attrs="{'invisible':[('type','!=','tender')],'required':[('type','=','tender')]}"/>
+				                             <field name="quote_amt"  sum="Total amount"/>
+				                             <field name="perc_cif" />
+				                             <field name="cif_amt" sum="Total amount"/>
+				                             <field name="consultancy_amt" sum="Total amount"/>
+										</form>
+							</field>
+						<group>
+							<group>
+			                       			    <!-- <field name="cogs_rev_perc"/> -->
+			                       			     <field name="tax_perc"/>
+			                       			     <field name="fund_perc"/>
+							</group>
+							<group class="oe_subtotal_footer oe_right">
+			                       			     <field name="cogs_total"/>
+			                       			     <field name="cif_total"/>
+			                       			     <field name="consul_total"/>
+			                       			     <field name="tax_amt"/>
+			                       			     <field name="fund_amt"/>
+								<div class="oe_subtotal_footer_separator oe_inline">
+                                  				  <label for="cogs_gross_margin"/>
+                                    				<button name="button_dummy"
+                                        string="(update)" type="object" class="oe_edit_only oe_link"/>
+                               					 </div>
+                                				<field name="cogs_gross_margin" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+							</group>
+						</group>
+						<separator string="Financial and Overheads"/>
+						<field name="cogs_addl_costs" domain="[('type','=','goods')]">
+							<tree string="Additional Costs" editable="bottom">
+			                       		     <field name="name"/>
+			                       		     <field name="type"/>
+				                             <field name="perc"/>
+				                             <field name="pnl_id" invisible="1"/>
+				                             
+				                             <field name="amount" readonly="1" sum="Total amount"/>
+							</tree>
+						</field>
+							<group class="oe_subtotal_footer oe_right">
+							<field name="cogs_total_costs"/>
+								<div class="oe_subtotal_footer_separator oe_inline">
+								                
+                                  				 <label for="cogs_profit"/>
+                                    				<button name="button_dummy"
+                                        string="(update)" type="object" class="oe_edit_only oe_link"/>
+                               					 </div>
+                                				<field name="cogs_profit" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+							</group>
+<separator/>
+					 </page>
+					<page string="Services">
+			                       	<separator string="Revenue"/>
+			            
+					<separator string="Services"/>
+						<field name="serv_line">
+							<tree string="Additional Costs" editable="bottom">
+							                  
+			                       		     <field name="product_id" on_change="onchange_product(product_id, unit_price, product_qty)"/>
+				                             <field name="product_uom"/>
+				                             <field name="pnl_id" invisible="1"/>
+				                             <field name="unit_price" on_change="onchange_product(product_id, unit_price, product_qty)"/>
+				                             <field name="product_qty" on_change="onchange_product(product_id, unit_price, product_qty)" sum="Total Qty" />
+				                             
+							                  <field name="subtotal" sum="Total amount"/>
+							</tree>
+							
+						</field>
+                             <group>
+			                      <group>          	
+						               <field name="serv_rev_perc"/>
+						               <field name="ser_tax_perc"/>
+						               
+						          </group>
+						          <group class="oe_subtotal_footer oe_right">
+						            <field name="serv_rev" />
+						            <field name="service_cost"/>
+						            <field name="serv_tax_amt"/>
+						            <field name="serv_gross_margin"/>
+						      </group>
+						      </group>
+						
+					<separator string="Financial and Overheads"/>
+						<field name="serv_addl_costs">
+							<tree string="Additional Costs" editable="bottom">
+			                       		     <field name="name"/>
+			                       		     <field name="type"/>
+				                             <field name="perc"/>
+				                             <field name="pnl_id" invisible="1"/>
+				                             <field name="amount" sum="Total amount"/>
+
+							</tree>
+						</field>
+						<group class="oe_subtotal_footer oe_right">
+							<field name="serv_total_cost"/>
+							<field name="serv_profit"/>
+					    </group>
+					</page>
+					<!--<page string="Training">
+					</page> -->
+					<page string="Summary">
+<separator string="P and L Summary"/>
+							<group class="oe_subtotal_footer oe_right">
+							       <field name="total_rev" />
+							       <field name="total_costs" />
+		                           <field name="total_profit" />
+		                               
+		              
+							</group>
+<separator/>
+					</page>
+					</notebook>
+	
+					</sheet>
+					
+				</form>
+			</field>
+		</record>
+		<!-- Action to open the form view of pnl model-->
+		<record model="ir.actions.act_window" id="action_view_pnl_form">
+			<field name="name">P&amp;L</field>
+			<field name="res_model">pnl.order</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+		
+		<!--Menu to execute the above action in order to open the form view of pnl model-->
+		<menuitem 
+			id="menu_action_view_pnl_form" 
+			action="action_view_pnl_form" 
+			name="P&amp;L" 
+			parent="base.menu_sales"
+        	sequence="3"/> 
+	</data>
+</openerp>

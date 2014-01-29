@@ -6,7 +6,7 @@
 		            <field name="model">vehicle.choice</field>
 		            <field name="type">tree</field>
 		            <field name="arch" type="xml">
-	           		 <tree string="Conference">
+	           		 <tree string="Conference Room">
 		              		<field name="request_id"/>
 		              		<field name="emp_name"/>
 		              		<field name="date"/>

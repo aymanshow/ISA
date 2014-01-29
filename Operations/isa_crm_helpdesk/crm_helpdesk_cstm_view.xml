@@ -10,6 +10,29 @@
             <field name="contracts_partner"/>
             </field>
             </record> -->
+            
+        <record id="view_crm_helpdesk_filter" model="ir.ui.view">
+            <field name="name">crm.helpdesk.filter</field>
+            <field name="model">crm.helpdesk</field>
+            <field name="arch" type="xml">
+                <search string="Search Helpdesk">
+                    <field name="name"/>
+                    
+                    <filter string="Open Tickets" icon="terp-personal" name="open_tickets" domain="[('state','=','open')]" help="Opened Tickets"/>
+
+					<filter string="Pending Tickets" icon="terp-personal" name="pending_tickets" domain="[('state','=','pending')]" help="Pending Tickets"/>
+					
+					<filter string="Closed Tickets" icon="terp-personal" name="closed_tickets" domain="[('state','=','done')]" help="Closed Tickets"/>                    
+                
+                	<group expand="0" string="Group By...">
+                        <filter name="group_status" string="Tickets by Customer" domain="[]" context="{'group_by':'contracts_partner'}"/>
+                        
+                    </group>
+                	
+                </search>
+            </field>
+        </record>
+        
            
 
  		<record model="ir.ui.view" id="cstm_crm_case_form_view_helpdesk">
@@ -223,6 +246,94 @@
 			<field name="view_id" ref="job_order_tree"/>
 		</record>
 		
+		<record model="ir.actions.act_window" id="crm_case_helpdesk_act112">
+            <field name="name">Helpdesk Requests</field>
+            <field name="res_model">crm.helpdesk</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="crm_helpdesk.crm_case_tree_view_helpdesk"/>
+            <field name="search_view_id" ref="view_crm_helpdesk_filter"/>
+            <field name="context">{"search_default_open_tickets":1}</field>
+            <field name="help" type="html">
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="crm_case_helpdesk_act113">
+            <field name="name">Helpdesk Requests</field>
+            <field name="res_model">crm.helpdesk</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="crm_helpdesk.crm_case_tree_view_helpdesk"/>
+            <field name="search_view_id" ref="view_crm_helpdesk_filter"/>
+            <field name="context">{"search_default_pending_tickets":1}</field>
+            <field name="help" type="html">
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="crm_case_helpdesk_act114">
+            <field name="name">Helpdesk Requests</field>
+            <field name="res_model">crm.helpdesk</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="crm_helpdesk.crm_case_tree_view_helpdesk"/>
+            <field name="help" type="html">
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="crm_case_helpdesk_act115">
+            <field name="name">Helpdesk Requests</field>
+            <field name="res_model">crm.helpdesk</field>
+            <field name="view_mode">tree,form,graph</field>
+            <field name="view_id" ref="crm_helpdesk.crm_case_tree_view_helpdesk"/>
+            <field name="search_view_id" ref="view_crm_helpdesk_filter"/>
+            <field name="context">{"search_default_closed_tickets":1}</field>
+            <field name="help" type="html">
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="crm_case_helpdesk_act116">
+            <field name="name">Helpdesk Requests</field>
+            <field name="res_model">crm.helpdesk</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="crm_helpdesk.crm_case_form_view_helpdesk"/>
+            <field name="help" type="html">
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_helpdesk_simple">
+            <field name="name">crm.helpdesk.tree</field>
+            <field name="model">crm.helpdesk</field>
+            <!--field name="priority">20</field-->
+            <field name="arch" type="xml">
+                <tree string="Tickets by Status" editable="bottom">
+                    <field name="contracts_partner" readonly="1"/>
+                    <field name="ticket_no" readonly="1"/>
+                    <field name="state" readonly="1"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record model="ir.ui.view" id="view_tickets_graph">
+           <field name="name">crm.helpdesk.graph</field>
+           <field name="model">crm.helpdesk</field>
+           <field name="arch" type="xml">
+                <graph string="Tickets">
+                    
+                    
+                    <field name="state" group="True"/>
+                    <field name="state"/>
+                </graph>
+            </field>
+        </record>
+        
+        <record model="ir.actions.act_window" id="crm_reports_by_status">
+            <field name="name">Tickets by Customer</field>
+            <field name="res_model">crm.helpdesk</field>
+            <!--field name="view_type">form</field-->
+            <field name="view_mode">tree</field>
+            <field name="view_id" eval="view_helpdesk_simple"/>
+            <field name="context">{'search_default_group_status': 1}</field>
+            <!--field name="domain">[('holiday_type','=','employee')]</field-->
+            <field name="search_view_id" ref="view_crm_helpdesk_filter"/>
+        </record>
+		
 <menuitem name="Messaging"
           id="mail.mail_feeds_main"
           groups="base.group_user"
@@ -235,22 +346,52 @@
 <menuitem name="Marketing"
             id="base.menu_base_partner"
             groups="base.group_sale_salesman,base.group_sale_manager"/>
+            
+<menuitem name="Service Desk"
+            id="base_menu_isa_parent" parent="base_menu_isa" sequence="0"/>
 
-<menuitem name="Helpdesk"
-            id="base_menu_isa_child" parent="base_menu_isa"/>
+<menuitem name="Reports"
+            id="base_menu_isa_reports" parent="base_menu_isa" sequence="1"/>
+
+<menuitem name="Tickets by Customer"
+            id="base_menu_isa_status" parent="base_menu_isa_reports" action="crm_reports_by_status"/>
+            
+<menuitem name="Field Support"
+            id="base_menu_isa_child" parent="base_menu_isa_parent"/>
             
 <menuitem name="Configuration"
-            id="base_menu_isa_config_child" parent="base_menu_isa"/>
+            id="base_menu_isa_config_child" parent="base_menu_isa" sequence="2"/>
             
 <menuitem id="crm_helpdesk.menu_config_helpdesk" name="Helpdesk"
         parent="base_menu_isa_config_child"/>
+        
+<menuitem name="All Tickets"
+            id="menu_help_support_main1" parent="base_menu_isa_child" action="crm_case_helpdesk_act114" sequence="0"/>
 
 
-<menuitem name="Tickets"
-            id="crm_helpdesk.menu_help_support_main" parent="base_menu_isa_child" action="crm_helpdesk.crm_case_helpdesk_act111" sequence="0"/>
+<menuitem name="All Open Tickets"
+            id="menu_help_support_main2" parent="base_menu_isa_child" action="crm_case_helpdesk_act112" sequence="1"/>
+
+<menuitem name="All Pending Tickets"
+            id="menu_help_support_main3" parent="base_menu_isa_child" action="crm_case_helpdesk_act113" sequence="2"/>
+
+<menuitem name="My Tickets"
+            id="crm_helpdesk.menu_help_support_main" parent="base_menu_isa_child" action="crm_helpdesk.crm_case_helpdesk_act111" sequence="3"/>
+
+<menuitem name="New Ticket"
+            id="menu_help_support_main5" parent="base_menu_isa_child" action="crm_case_helpdesk_act116" sequence="4"/>
+
+
+<menuitem name="All Closed Tickets"
+            id="menu_help_support_main4" parent="base_menu_isa_child" action="crm_case_helpdesk_act115" sequence="5"/>
+
+
+<!--menuitem name="My Tickets"
+            id="menu_help_support_main4" parent="base_menu_isa_child" action="crm_case_helpdesk_act114" sequence="3"/-->
+
 
 <menuitem name="Job Orders"
-            id="base_menu_isa_job_orders" parent="base_menu_isa_child" action="action_job_order_id" sequence="1"/>
+            id="base_menu_isa_job_orders" parent="base_menu_isa_child" action="action_job_order_id" sequence="6"/>
 
 <menuitem action="crm_helpdesk.crm_helpdesk_categ_action" name="Categories"
             id="crm_helpdesk.menu_crm_case_helpdesk-act" parent="crm_helpdesk.menu_config_helpdesk" sequence="2"/>

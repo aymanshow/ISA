@@ -14,9 +14,18 @@
 <!--		            <field name='seq_no'/>-->
 <!--		            <field name='state1' invisible='1'/>-->
 <!--	            </xpath>-->
+				<xpath expr="//button[@name='case_mark_won']" position="replace">
+					<button name="case_mark_won" string="Mark Won" type="object"
+                                states="draft,open,pending" invisible='1'/>
+                 </xpath>
+                 <xpath expr="//button[@name='case_mark_lost']" position="replace">
+                        <button name="case_mark_lost" string="Mark Lost" type="object"
+                                states="draft,open" invisible='1'/>
+                 </xpath>
+					
 	            <xpath expr="//button[@string='Convert to Quotation']" position="replace">
-	                <button name="%(action_pnl_wizard)d" string='Convert to PnL' type='action' class="oe_highlight" attrs="{'invisible':['|',('state','not in',('draft','open')),('state1','in',('pnl',))]}"/>
-	                <button name="view_pnl" string='View Pnl' type='object' class="oe_highlight" attrs="{'invisible':[('state1','!=','pnl')]}"/>
+	                <button name="%(action_pnl_wizard)d" string='Create P&amp;L' type='action' class="oe_highlight" attrs="{'invisible':['|',('state','not in',('draft','open')),('state1','in',('pnl',))]}"/>
+	                <button name="view_pnl" string='View P&amp;L' type='object' class="oe_highlight" attrs="{'invisible':[('state1','!=','pnl')]}"/>
 <!--	                <button states="draft,open" name="%(action_pnl_wizard)d" string='Convert to PnL' type='action' class="oe_highlight"/>-->
 <!--	                <button states="pending" name="view_pnl" string='View Pnl' type='object' class="oe_highlight"/>-->
 	           		<field name='state1' invisible='1'/>
@@ -32,7 +41,7 @@
 	            
 	            
 	            <xpath expr="//button[@string='Create Quotation']" position="replace">
-	                <button states="done" string="Create Pnl" name="%(action_pnl_wizard)d" type="action" class="oe_highlight"/>
+	                <button states="done" string="Create P&amp;L" name="%(action_pnl_wizard)d" type="action" class="oe_highlight"/>
 	            </xpath>
 	            </field>
 	        </record>
@@ -46,7 +55,7 @@
 	            <field name="arch" type="xml">
 	            <xpath expr="//button[@name='invoice_recreate']" position="before">
 	            	<button name="handover_project" string='Handover' type='object' states='progress' class="oe_highlight"/>
-	            	<button name="hand_over" string='Start Handover' type='object' states='meeting' class="oe_highlight"/>
+<!--	            	<button name="hand_over" string='Start Handover' type='object' states='meeting' class="oe_highlight"/>-->
 <!--	                <button name="generate_project" string='Test Gen_Project' type='object'/>-->
 	            </xpath>
 	            
@@ -130,10 +139,10 @@
 	
 		
 		<record model="ir.ui.view" id="view_pnl_tree">
-			<field name="name">PnL Form View</field>
+			<field name="name">P&amp;L Form View</field>
 			<field name="model">pnl.order</field>
 			<field name="arch" type="xml">
-				<tree string="PnL" version="7.0">
+				<tree string="P&amp;L" version="7.0">
 					<field name="name"/>
 					<field name="customer"/>
 					<field name="lead_id"/>
@@ -146,15 +155,15 @@
 	
 		<!-- Form view of pnl model-->
 		<record model="ir.ui.view" id="view_pnl_form">
-			<field name="name">PnL Form View</field>
+			<field name="name">P&amp;L Form View</field>
 			<field name="model">pnl.order</field>
 			<field name="arch" type="xml">
-				<form string="PnL" version="7.0">
+				<form string="P&amp;L" version="7.0">
 					<header>
 					
-						<button name='generate_quotation' states="draft,progress" string='Create Quotation' type='object'/>
-						<button name='cancel_quotation' string='Cancel Quotation' type='object'/>
-						<button name='update_quotation' states='progress,negotiation' string='View/Update Quotation' type='object'/>
+						<button name='generate_quotation' states="draft,progress" string='Create Sales Quotation' type='object' class="oe_highlight" color="red"/>
+						<button name='cancel_quotation' string='Cancel P&amp;L' type='object' attrs="{'invisible':[('state','in',('draft','cancel'))]}"/>
+						<button name='update_quotation' states='negotiation' string='View/Update Quotation' type='object'/>
 						<field name="state" widget="statusbar"/>
 					</header>
 					
@@ -198,18 +207,20 @@
 										<form string="RFQs">
 			                       		     <field name="name"/>
 			                       		     <field name="type" required="1"/>
-				                             <field name="quotation_id" domain="[('pnl_ok','=',True)]" attrs="{'invisible':[('type','!=','rfq')],'required':[('type','=','rfq')]}"/>
-				                             <field name="requisition_id" domain="[('pnl_ok','=',True)]" attrs="{'invisible':[('type','!=','tender')],'required':[('type','=','tender')]}"/>
-				                             <field name="quote_amt"  sum="Total amount"/>
-				                             <field name="perc_cif" />
+				                             <field name="quotation_id" attrs="{'invisible':[('type','!=','rfq')],'required':[('type','=','rfq')]}"/>
+				                             <field name="requisition_id" attrs="{'invisible':[('type','!=','tender')],'required':[('type','=','tender')]}"/>
+				                             
 				                             <field name="cif_amt" sum="Total amount"/>
+				                             <field name="perc_cif" />
+				                             <field name="quote_amt"  sum="Total amount"/>
 				                             <field name="consultancy_amt" sum="Total amount"/>
 										</form>
 							</field>
-						<group>
-							<group>
-			                       			    <!-- <field name="cogs_rev_perc"/> -->
-			                       			     <field name="tax_perc"/>
+						
+						<!-- Start of code CMT1 -->
+							<!--group>
+			                       			    <field name="cogs_rev_perc"/> -->
+			                       			     <!--field name="tax_perc"/>
 			                       			     <field name="fund_perc"/>
 							</group>
 							<group class="oe_subtotal_footer oe_right">
@@ -224,9 +235,104 @@
                                         string="(update)" type="object" class="oe_edit_only oe_link"/>
                                					 </div>
                                 				<field name="cogs_gross_margin" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+							</group-->
+						<!-- End of code CMT1 -->
+						
+						
+			                       			    
+			                       			     <!--field name="tax_perc"/>
+			                       			     <field name="fund_perc"/>
+			                       			     <field name="tax_amt"/>
+			                       			     <field name="fund_amt"/-->
+							
+							<group>
+							<group class="oe_subtotal_footer oe_right">
+			                       			     <field name="cogs_total"/>
+			                       			     <field name="cif_total"/>
+			                       			     <field name="consul_total"/>
+			                </group>
+			                </group>
+			                <newline/>
+			                
+			                <!--separator string="Financial Costs"/-->
+			                
+			                <group string="Financial Costs">
+			                
+			                <!--group>
+                                <group> <field name="cogs_rev_perc"/> </group>
+                                <group class="oe_subtotal_footer oe_right">
+                                 <field name="cogs_rev"/>
+                            </group> </group-->
+                            
+			                       			    
+			                       			    <group>
+			                       			     <field name="tax_perc"/>
+			                       			     </group>
+			                       			     <group class="oe_subtotal_footer oe_right">
+			                       			     <field name="tax_amt"/>
+			                       			     </group>
+			                       			     
+			                       			     
+			                       			    <group>
+			                       			     <field name="fund_perc"/>
+			                       			     </group>
+			                       			     <group class="oe_subtotal_footer oe_right">
+			                       			     <field name="fund_amt"/>
+			                       			     </group>
+			                 </group>      			     
+			                       			     
+			                       			     <group class="oe_subtotal_footer oe_right">		     
+								<div class="oe_subtotal_footer_separator oe_inline">
+                                  				  <label for="cogs_gross_margin"/>
+                                    				<button name="button_dummy"
+                                        string="(update)" type="object" class="oe_edit_only oe_link"/>
+                               					 </div>
+                                				<field name="cogs_gross_margin" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+							
 							</group>
-						</group>
-						<separator string="Financial and Overheads"/>
+			                       			     
+			                       			     
+			                       			     
+			                       			     
+			                       			     
+			                       			     
+			                       			     
+			                       			     
+			                       			     
+			                       			     
+			                       			     <!--field name="fund_perc"/>
+			                       			     </group>
+			                       			     <group>
+			                       			     
+			                       			     <group class="oe_subtotal_footer oe_right">
+			                       			     <field name="fund_amt"/>
+			                       			     </group>
+			                       			     </group-->
+							
+							
+			                
+			                
+			                <!--group class="oe_subtotal_footer oe_right">		     
+								<div class="oe_subtotal_footer_separator oe_inline">
+                                  				  <label for="cogs_gross_margin"/>
+                                    				<button name="button_dummy"
+                                        string="(update)" type="object" class="oe_edit_only oe_link"/>
+                               					 </div>
+                                				<field name="cogs_gross_margin" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+							</group-->
+							
+						
+						
+						
+						
+						
+						
+						
+						
+						
+							
+						
+						<separator string="Overhead Expenses"/>
 						<field name="cogs_addl_costs" domain="[('type','=','goods')]">
 							<tree string="Additional Costs" editable="bottom">
 			                       		     <field name="name"/>
@@ -235,10 +341,13 @@
 				                             <field name="pnl_id" invisible="1"/>
 				                             
 				                             <field name="amount" readonly="1" sum="Total amount"/>
+				                             
 							</tree>
 						</field>
 							<group class="oe_subtotal_footer oe_right">
-							<field name="cogs_total_costs"/>
+							<field name="overhead_amount1"/>
+							<field name="cogs_total_costs" invisible="1"/>
+							<field name="tot_fin_cost_products"/>
 								<div class="oe_subtotal_footer_separator oe_inline">
 								                
                                   				 <label for="cogs_profit"/>
@@ -251,12 +360,17 @@
 					 </page>
 					<page string="Services">
 			                       	<separator string="Revenue"/>
+			                       	<group>
+                                <group> <field name="serv_rev_perc"/> </group>
+                                <group class="oe_subtotal_footer oe_right">
+                                 <field name="serv_rev"/>
+                            </group> </group>
 			            
 					<separator string="Services"/>
 						<field name="serv_line">
 							<tree string="Additional Costs" editable="bottom">
 							                  
-			                       		     <field name="product_id" on_change="onchange_product(product_id, unit_price, product_qty)"/>
+			                       		     <field name="product_id" on_change="onchange_product(product_id, unit_price, product_qty)" domain="[('type','=','service')]"/>
 				                             <field name="product_uom"/>
 				                             <field name="pnl_id" invisible="1"/>
 				                             <field name="unit_price" on_change="onchange_product(product_id, unit_price, product_qty)"/>
@@ -266,21 +380,77 @@
 							</tree>
 							
 						</field>
+						<group>
+							<group class="oe_subtotal_footer oe_right">
+			                       			     <field name="service_cost"/>
+			                       			     <!--field name="serv_tax_amt"/-->
+			                       			     <!--field name="consul_total"/-->
+			                </group>
+			                </group>
+			                <newline/>
+			                
+			                <group string="Financial Costs">
+			          
+                            
+			                       			    
+			                       			    <group>
+			                       			     <field name="ser_tax_perc"/>
+			                       			     </group>
+			                       			     <group class="oe_subtotal_footer oe_right">
+			                       			     <field name="serv_tax_amt"/>
+			                       			     <!--field name="tot_fin_cost_services"/-->
+			                       			     </group>
+			                       			     
+			                       			     
+			                       			    <!--group>
+			                       			     <field name="fund_perc"/>
+			                       			     </group>
+			                       			     <group class="oe_subtotal_footer oe_right">
+			                       			     <field name="fund_amt"/>
+			                       			     </group-->
+			                </group>       			     
+			                       			     
+			                       			     <group class="oe_subtotal_footer oe_right">		     
+								<div class="oe_subtotal_footer_separator oe_inline">
+                                  				  <label for="serv_gross_margin"/>
+                                    				<button name="button_dummy"
+                                        string="(update)" type="object" class="oe_edit_only oe_link"/>
+                               					 </div>
+                                				<field name="serv_gross_margin" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+							                    </group>
+							
+			                
+			                
+			                
+			                
+			                
+			                
+			                
+			                
+			                
+			                
+			                
+			                
+			                
+			                
+			                
                              <group>
 			                      <group>          	
-						               <field name="serv_rev_perc"/>
-						               <field name="ser_tax_perc"/>
+						               <!--field name="serv_rev_perc"/-->
+						               <!--field name="ser_tax_perc"/-->
 						               
 						          </group>
-						          <group class="oe_subtotal_footer oe_right">
+						          <!-- Start of code CMT1 -->
+						          <!--group class="oe_subtotal_footer oe_right">
 						            <field name="serv_rev" />
 						            <field name="service_cost"/>
 						            <field name="serv_tax_amt"/>
 						            <field name="serv_gross_margin"/>
-						      </group>
+						      </group-->
+						      <!-- End of code CMT1 -->
 						      </group>
 						
-					<separator string="Financial and Overheads"/>
+					<separator string="Overhead Expenses"/>
 						<field name="serv_addl_costs">
 							<tree string="Additional Costs" editable="bottom">
 			                       		     <field name="name"/>
@@ -292,21 +462,61 @@
 							</tree>
 						</field>
 						<group class="oe_subtotal_footer oe_right">
+							<field name="overhead_amount2"/>
+							<field name="serv_total_cost" invisible="1"/>
+							<field name="tot_fin_cost_services"/>
+							<!--field name="serv_profit"/-->
+							<div class="oe_subtotal_footer_separator oe_inline">
+								                
+                                  				 <label for="serv_profit"/>
+                                    				<button name="button_dummy"
+                                        string="(update)" type="object" class="oe_edit_only oe_link"/>
+                               					 </div>
+                                				<field name="serv_profit" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+							</group>
+							<!-- field name="cogs_total_costs"/>
+								<div class="oe_subtotal_footer_separator oe_inline">
+								                
+                                  				 <label for="cogs_profit"/>
+                                    				<button name="button_dummy"
+                                        string="(update)" type="object" class="oe_edit_only oe_link"/>
+                               					 </div>
+                                				<field name="cogs_profit" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+							</group-->
+							<!-- Start of Code CMT1 -->
+						<!--group class="oe_subtotal_footer oe_right">
 							<field name="serv_total_cost"/>
 							<field name="serv_profit"/>
-					    </group>
+					    </group-->
+					    <!-- End of Code CMT1 -->
+					    <separator/>
 					</page>
 					<!--<page string="Training">
 					</page> -->
 					<page string="Summary">
-<separator string="P and L Summary"/>
-							<group class="oe_subtotal_footer oe_right">
-							       <field name="total_rev" />
-							       <field name="total_costs" />
-		                           <field name="total_profit" />
-		                               
-		              
+							<separator string="P&amp;L Summary"/>
+							<separator string="Income"/>
+							<group class="oe_inline">
+								<field name='cogs_rev_sum' string='Products'/>
+								<field name='serv_rev_sum' string='Services'/>
 							</group>
+							<group class="oe_subtotal_footer oe_right">
+							       <field name="total_rev" string='Total Income'/>
+							 </group>
+							<separator string="Expenses"/>
+							<group class="oe_inline">
+								<field name='cogs_sum'/>
+								<field name='cif_sum'/>
+								<field name='consulting_sum'/>
+								<field name='service_cost_sum'/>
+								<field name='finance_sum'/>
+								<field name='overheads_sum'/>
+							</group>
+							
+						<group class="oe_subtotal_footer oe_right">
+						       <field name="total_costs" string='Total Expense'/>
+                               <field name="total_profit" class="oe_subtotal_footer_separator" string='Net Income' />
+                        </group>
 <separator/>
 					</page>
 					</notebook>
@@ -318,7 +528,7 @@
 		</record>
 		<!-- Action to open the form view of pnl model-->
 		<record model="ir.actions.act_window" id="action_view_pnl_form">
-			<field name="name">PnL</field>
+			<field name="name">P&amp;L</field>
 			<field name="res_model">pnl.order</field>
 			<field name="view_type">form</field>
 			<field name="view_mode">tree,form</field>

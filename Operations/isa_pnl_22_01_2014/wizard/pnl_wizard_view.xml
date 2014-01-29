@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+
+		<record id="view_pnl_wizard_form" model="ir.ui.view">
+	            <field name="name">make.pnl.wiz.form</field>
+	            <field name="model">make.pnl.wiz</field>
+	            <field name="type">form</field>
+	            <field name="arch" type="xml">
+	                <form version="7.0" string="Reject Reason">
+                    	<group colspan="4" col="4" string="Create PnL">
+		                	<field name="partner_id" />
+		                	<field name="shop_id"/>
+		                	<field name="close"/>
+			            </group>
+                    <footer>
+                        <button name="makePnl" string="Create PnL" type="object" class="oe_highlight"/>
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+		
+		<record id="action_pnl_wizard" model="ir.actions.act_window">
+            <field name="name">Make PnL</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">make.pnl.wiz</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="view_pnl_wizard_form"/>
+            <field name="target">new</field>
+        </record>
+        
+    </data>
+ </openerp>
