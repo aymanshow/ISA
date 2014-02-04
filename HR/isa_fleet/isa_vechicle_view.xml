@@ -1,7 +1,7 @@
 <?xml version ='1.0'?>
 <openerp>
 	<data>
-		<!-- Form view of pnl model-->
+		
 		
 		<record id="isa_maintenance_tree" model="ir.ui.view">
 			<field name="name">Vehicle Maintenance Tree</field>

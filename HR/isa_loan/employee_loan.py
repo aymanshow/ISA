@@ -32,7 +32,7 @@ class hr_employee_loan(osv.osv):
                   'loan_type':fields.selection([('loan','Loan'),('advance', 'Salary Advance'),],'Loan Type',required=True),
                   
                   'approval_date' : fields.date('Approval Date'),
-                 # 'location_id': fields.many2one('stock.location', 'Destination', required=True, domain=[('usage','<>','view')], states={'confirmed':[('readonly',True)], 'approved':[('readonly',True)],'done':[('readonly',True)]} ),
+                 
                   'loan_date' : fields.date('Loan/Advance Issue Date',states={'approved':[('required',True)]}),
                   'request_loan_amount' : fields.integer('Request Amount',required=True,readonly=True ,states={'draft':[('readonly',False)]}),
                   'approve_loan_amount' : fields.integer('Approved Amount',required = True ,states={'draft':[('required',False)],'cancel':[('required',False)]}),
@@ -46,13 +46,6 @@ class hr_employee_loan(osv.osv):
                   'last_emi_date': fields.date('EMI Last Date',readonly=True),
                   'note':fields.char('Note',size=128,readonly=True),
                   'reason': fields.text('Reason For Loan',required=True),
-#                   'emi_start_month' : fields.selection([('1', 'January'), ('2', 'February'), 
-#                                              ('3', 'March'), ('4', 'April'), 
-#                                             ('5', 'May'), ('6', 'June'),
-#                                              ('7', 'July'), ('8', 'August'),
-#                                              ('9', 'September'), ('10', 'October'),
-#                                              ('11', 'November'), ('12', 'December'),], 'EMI Start Month'),
-#                   
                   }
       
       _defaults = { 
@@ -79,7 +72,7 @@ class hr_employee_loan(osv.osv):
                 current_date=max(c_date)
                 contract_id=self.pool.get('hr.contract').search(cr,uid,[('employee_id','=',o.employee_id.id),('date_start','=',current_date)])
                 payslip_ids=self.pool.get('hr.payslip').search(cr,uid,[('employee_id','=',o.employee_id.id),('contract_id','in',contract_id),('paid','=',True),('date_from','>=',current_date)])
-                print 'contract_id',contract_id[0],current_date
+                
                 if payslip_ids:
                     categ_id=self.pool.get('hr.salary.rule.category').search(cr,uid,[('name','ilike','Net')])
                     sal_line_ids = self.pool.get('hr.payslip.line').search(cr,uid,[('slip_id','in',payslip_ids),('category_id','in',categ_id),('employee_id','=',o.employee_id.id),('contract_id','in',contract_id)])
@@ -118,8 +111,8 @@ class hr_employee_loan(osv.osv):
       def loan_approve(self, cr, uid, ids, context=None):
           context = context or {}
           for o in self.browse(cr, uid, ids):
-                print o.no_of_month,o.approve_loan_amount,
-                P = float(o.approve_loan_amount)  # Principle
+                
+                P = float(o.approve_loan_amount)  # Principal
                 R = float(o.interest)/12/100 #Interest Rate
                 N = o.no_of_month  # No. of Monthly Installments
                 if o.loan_type=='advance':
@@ -137,23 +130,11 @@ class hr_employee_loan(osv.osv):
             for o in self.browse(cr, uid, ids):
                 dict={}
                 
-#                 dict={
-#                       
-#                       
-#                       
-#                       }
-#                 
-#                 
-#                 
-#                 self.write(cr, uid, o.id, {'state': 'progress','approx_emi':o.approve_loan_amount,
-#                                        
-#                                        })
-#             else: 
                 
                  
-                print o.no_of_month,o.approve_loan_amount,
+                
                 paid_amount = 0
-                P = float(o.approve_loan_amount)  # Principle
+                P = float(o.approve_loan_amount)  # Principal
                 R = float(o.interest)/12/100 #Interest Rate
                 N = o.no_of_month  # No. of Monthly Installments
                 if o.loan_type=='advance':
@@ -171,7 +152,7 @@ class hr_employee_loan(osv.osv):
                            'interest_amount' :round(interest1,2),
                            'monthly_principle_paid' : -round(interest1,2),
                            'emi_amount' : 0.00,
-                          # 'month': 
+                           
                            
                            }
                      P += round(interest1,2)
@@ -187,7 +168,7 @@ class hr_employee_loan(osv.osv):
                            'interest_amount' :round(interest,2),
                            'monthly_principle_paid' : -round(interest,2),
                            'emi_amount' : 0.00,
-                          # 'month': 
+                           
                            
                            } 
                      P += round(interest,2)
@@ -198,7 +179,7 @@ class hr_employee_loan(osv.osv):
                    EMI = (P * R) * math.pow((1+R),N) /  (math.pow((1+R),N)-1)
                 else:
                      EMI = P/N
-                print "EMI",EMI
+                
                      
                 amount_per_month = EMI
                 
@@ -214,10 +195,10 @@ class hr_employee_loan(osv.osv):
                                'monthly_principle_paid' : round((amount_per_month-interest),2),
                                'emi_amount' : round(amount_per_month,2),
                                'advance' : 0.00,
-                              # 'month': 
+                               
                                
                                }
-                        print dic['emi_amount'], "EMI AMOUNT FOR LOAN"
+                        
                     else:
                         dic = {
                                'emi_date' : emi_date + relativedelta( months = +(i) ) -relativedelta( days = +(1) ),
@@ -227,10 +208,10 @@ class hr_employee_loan(osv.osv):
                                'monthly_principle_paid' : round((amount_per_month-interest),2),
                                'emi_amount' : 0.00,
                                'advance' : round(amount_per_month,2),
-                              # 'month': 
+                               
                                
                                }
-                        print dic['advance'], "EMI Advance"
+                        
                     if i ==0 and   (date1 <= date2 or (date1.month == date2.month and date1.year == date2.year) ):
                         dic['interest_amount'] = round(interest1,2)
                         dic['emi_amount'] = round(amount_per_month,2) - round(interest,2) + round(interest1,2)

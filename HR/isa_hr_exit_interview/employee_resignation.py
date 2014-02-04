@@ -75,30 +75,6 @@ class resign_information(osv.osv):
     def emp_close(self,cr,uid,ids,context=None):
          self.write(cr, uid, ids, {'state': 'close'})
          return True
-#    def emp_releived(self,cr,uid,ids,context=None):
-#        self.write(cr, uid, ids, {'state':'successfully_relieved'})
-#        return True
-    
-#    def create_data(self,cr,uid,rec,context=None):
-#        dic = {'sr_no':rec.serial_number,
-#                     'questions':rec.question,
-#                     'resign_com_asset_ids': rec.id,
-#                           }
-#        return dic
-#        
-#    def admin_approve_resign(self,cr,uid,ids,context=None):
-#         qus_id=self.pool.get('exit.interview.ques').search(cr,uid,[])
-#         ques_obj=self.pool.get('exit.interview.ques').browse(cr,uid,qus_id[0])
-#         obj=self.browse(cr,uid,ids[0])
-#         list=[]
-#         list1=[]
-#         dic={}  
-#         for val in ques_obj.company_property_id:
-#              list.append(self.create_data(cr,uid,val))
-#              print"--------------->>>",list
-#         self.create(cr,uid,{'company_asset_id':list})              
-#         self.write(cr, uid, ids[0], {'state': 'approve'})
-#         return True 
 
     def admin_approve_resign(self,cr,uid,ids,context=None):
          qus_id=self.pool.get('exit.interview.ques').search(cr,uid,[])

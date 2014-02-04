@@ -614,7 +614,7 @@ class survey_answer(osv.osv):
     _name = 'survey.answer'
     _description = 'Survey Answer'
     _rec_name = 'answer'
-#    _order = 'sequence'
+
 
     def _calc_response_avg(self, cr, uid, ids, field_name, arg, context=None):
         val = {}
@@ -626,7 +626,7 @@ class survey_answer(osv.osv):
                 where question_id = %d and state = 'done'"\
                      % (rec.id, rec.question_id.id))
             res = cr.fetchone()
-            print "res---------------------------------------------",res
+            
             if res[0]:
                 avg = float(res[1]) * 100 / res[0]
             else:
@@ -662,7 +662,7 @@ class survey_answer(osv.osv):
         'in_visible_answer_type': fields.boolean('Is Answer Type Invisible??')
     }
     _defaults = {
-#         'sequence' : lambda * a: 1,
+
          'type' : lambda * a: 'char',
          'in_visible_answer_type':_get_in_visible_answer_type,
     }
@@ -783,7 +783,7 @@ class survey_request(osv.osv):
     }
     _defaults = {
         'state': lambda * a: 'draft',
-#        'date_deadline': lambda * a :  (datetime.now() + relativedelta(months=+1)).strftime("%Y-%m-%d %H:%M:%S")
+
     }
     def survey_req_waiting_answer(self, cr, uid, ids, arg):
         self.write(cr, uid, ids, { 'state' : 'waiting_answer'})

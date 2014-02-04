@@ -174,7 +174,7 @@ class hr_job(osv.osv):
                       'requirements':info
                       } 
             return {'value': res}
-#THis method is used for the mail send 
+#This method is used for the sending mails 
         def action_quotation_send(self, cr, uid, ids, context=None):
             test=[]
             email_template_obj = self.pool.get('email.template')

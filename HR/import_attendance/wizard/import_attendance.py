@@ -170,7 +170,7 @@ class attendance_import(osv.osv_memory):
                         search_for_even_saturday = self.pool.get('leaves.calendar').search(cr, uid, [('holiday_id','=',contract_obj.holidays_id.id),('date_from','=',date_dict[d]),('type','=','even_sat')])
                         
                         search_for_holiday=self.pool.get('leaves.calendar').search(cr, uid, [('holiday_id','=',contract_obj.holidays_id.id),('date_from','=',date_dict[d])])
-                        print search_for_holiday, "SEARCH FOR HOLIDAY"
+                        
                         
                         search_for_leave=self.pool.get('hr.holidays').search(cr, uid, [('employee_id','=',employee_id),('state','=','validate'),('type','=','remove'),('date_from','<=',date_dict[d].strftime('%Y-%m-%d')),('date_to','>=',date_dict[d].strftime('%Y-%m-%d'))])
                         

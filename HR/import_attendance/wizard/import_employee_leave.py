@@ -50,10 +50,6 @@ class attendance_import(osv.osv_memory):
             print attendance_id, "ATTENDANCE_ID"
             d =1
             holiday_list = []
-#             attendance_id = self.pool.get('hr.attendance.table').search(cr,uid,
-#                                                                         [('employee_id','=', employee_id),
-#                                                                          ('date_from','=', date_from),
-#                                                                          ('date_to','=',date_to )])
             
             for j in sheet.row_values(i,3,monthrange(year, month)[1]+3):
                 

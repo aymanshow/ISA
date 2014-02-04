@@ -10,7 +10,7 @@
                     <sheet>
                         <group>
                         	<group>
-                        		<field name='file' widget='binary'/>
+                        		<field name='file' widget='binary' required='1'/>
                         	</group>
                         	<button name="import_account_info" string="Validate" type="object" class="oe_highlight"/>
                         </group>               

@@ -2,7 +2,7 @@
 <openerp>
     <data >
         
-        <!-- Sequences for sale.order -->
+        
         <record id="seq_type_drishti_hr" model="ir.sequence.type">
             <field name="name">Unique Id</field>
             <field name="code">drishti.hr</field>
@@ -15,7 +15,7 @@
             <field name="padding">4</field>
         </record>
         
-        <!--sequencec for job description-->
+        <!--sequence for job description-->
         <record id="seq_type_drishti_hr_description" forcecreate="1" model="ir.sequence.type">
             <field name="name">Unique Id1</field>
             <field name="code">job.description</field>
@@ -28,7 +28,7 @@
             
         </record>
         
-         <!--sequencec for unique id description-->
+         <!--sequence for unique id description-->
         
         <record id="seq_type_drishti_hr_unique_description" forcecreate="1" model="ir.sequence.type">
             <field name="name">Unique Id</field>
@@ -44,12 +44,12 @@
         </record>
         
         <record id="seq_hr_employee_form" model="ir.sequence.type">
-            <field name="name">Indentification No</field>
+            <field name="name">Identification No</field>
             <field name="code">hr.employee</field>
         </record>
         
         <record id="seq_hr_employee_form_id" model="ir.sequence">
-            <field name="name">Indentification No</field>
+            <field name="name">Identification No</field>
             <field name="code">hr.employee</field>
             <field name="prefix"></field>
             <field name="padding">3</field>

@@ -62,7 +62,7 @@ class certification_form(osv.osv):
             body += '<br/>'
             body += 'Thank you,</b><br/>This is a system generated email do not reply.' 
             mail_ids = []
-            print"---",body
+            
             for res in rec.user_ids:
                 mail_ids.append(mail_mail.create(cr, uid, {
                                 'email_from': "dhawalsharma786@gmail.com",

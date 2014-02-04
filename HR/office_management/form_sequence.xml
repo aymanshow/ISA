@@ -2,7 +2,7 @@
 <openerp>
     <data noupdate="1">
         
-        <!-- Sequences for sale.order -->
+        
         <record id="seq_visitor_form" model="ir.sequence.type">
             <field name="name">Visitors Sequence</field>
             <field name="code">office.visitor</field>

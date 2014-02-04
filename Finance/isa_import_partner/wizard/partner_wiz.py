@@ -40,8 +40,6 @@ class import_partner(osv.osv_memory):
                 supplier=True
             if str(custo)=='True':
                 customer=True
-#                 if isinstance (acc_parent_id(list,tuple)):
-#                     acc_parent_id=acc_parent_id[0]
             if acc_id:
                 partner_id=self.pool.get('res.partner').search(cr,uid,[('name','=',name)])
                 if not partner_id:
@@ -50,9 +48,4 @@ class import_partner(osv.osv_memory):
                 elif partner_id:
                     self.pool.get('res.partner').write(cr,uid,partner_id[0],{'name' : name,'notification_email_send' : 'none','supplier':supplier,
                                                             'customer':customer,'property_account_payable':acc_id[0],'property_account_receivable':acc_id[0]})
-#             
-#else:
-#                 raise osv.except_osv(
-#                     _('Warning!'),
-#                     _('No Account Created For '))
         return True

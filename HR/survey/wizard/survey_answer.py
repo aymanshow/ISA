@@ -164,7 +164,7 @@ class survey_question_wiz(osv.osv_memory):
                         etree.SubElement(xml_group3, 'button', {'string' :'Delete Page','icon': "gtk-delete", 'type' :'object','name':"action_delete_page", 'context' : tools.ustr(context)})
                         etree.SubElement(xml_group3, 'button', {'string' :'Add Question','icon': "gtk-new", 'type' :'object','name':"action_new_question", 'context' : tools.ustr(context)})
 
-                    # FP Note
+                   
                     xml_group = xml_form
 
                     if context.has_key('response_id') and context.get('response_id', False) \
@@ -443,16 +443,16 @@ class survey_question_wiz(osv.osv_memory):
                                                                 for a_name, a_content in attachments.items()]
                             self.pool.get('mail.mail').create(cr, uid, vals, context=context)
                     fields = {}
-                    print "context================11==========================",context
+                    
                     survey_id = context.get('survey_id', False)
                     marks=str(self.pool.get('survey').browse(cr,uid,survey_id).marks)
                     if context['active_model']== 'survey.test.line':
                         
                         test_id=context['active_ids']
-                        print '=============================',test_id
+                        
                         if test_id:
                             self.pool.get('survey.test.line').write(cr,uid,test_id[0],{'marks':marks})
-                    print "ma000-------------------------------",
+                    
                     
                     
                     marks=str(self.pool.get('survey').browse(cr,uid,survey_id).marks)
@@ -462,9 +462,6 @@ class survey_question_wiz(osv.osv_memory):
                     etree.SubElement(xml_form, 'separator', {'string': 'Survey Completed', 'colspan': "4"})
                     etree.SubElement(xml_form, 'label', {'string': 'Thanks for your Answer'})
                     etree.SubElement(xml_form, 'label', {'string': 'You have Scored '+marks+' Marks'})
-#                     etree.SubElement(xml_form, 'field', {'readonly': str(readonly), 'width':"300",'colspan': '1','name': "marks"})
-#                     fields["marks"] = {'type':'integer', 'string':"Your Score is"}
-#                     etree.SubElement(xml_form, 'field', {'name': 'marks'})
                     etree.SubElement(xml_form, 'newline')
                     etree.SubElement(xml_footer, 'button', {'special':"cancel",'string':"OK",'colspan':"2",'class':'oe_highlight'})
                     root = xml_form.getroottree()
@@ -488,7 +485,7 @@ class survey_question_wiz(osv.osv_memory):
             fp.write(result);
             fp.close();
             
-            # hr.applicant: if survey answered directly in system: attach report to applicant
+            
             if context.get('active_model') == 'hr.applicant':
                 self.pool.get('hr.applicant').write(cr,uid,[context.get('active_ids')[0]],{'response':context.get('response_id')})
                 result = base64.b64encode(result)
@@ -618,7 +615,7 @@ class survey_question_wiz(osv.osv_memory):
             response_id = surv_all_resp_obj.create(cr, uid, {'response_type':'link', 'user_id':uid, 'date_create':datetime.datetime.now(), 'survey_id' : context.get('survey_id',False)})
             surv_name_wiz.write(cr, uid, [context.get('sur_name_id',False)], {'response' : tools.ustr(response_id)})
 
-        #click first time on next button then increemnet on total start suvey
+        
         if not safe_eval(sur_name_read['store_ans']):
             his_id = self.pool.get('survey.history').create(cr, uid, {'user_id': uid, \
                                               'date': strftime('%Y-%m-%d %H:%M:%S'), 'survey_id': sur_name_read['survey_id'][0]})

@@ -58,8 +58,7 @@ class project_handover(osv.osv):
                   }
             project_id=self.pool.get('project.project').create(cr,uid,vals)
             project_analytic_id=self.pool.get('project.project').browse(cr,uid,project_id).analytic_account_id.id
-            #self.generate_project(cr,uid,ids,context=None)
-            #self.write(cr,uid,ids,{'state':'meeting'})
+            
             equip_dict = {'name': 'Products', 
                               'active': True, 
                               'type': 'normal', 

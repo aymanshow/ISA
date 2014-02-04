@@ -10,10 +10,6 @@
 	            <field name="inherit_id" ref="sale_crm.crm_case_form_view_oppor"/>
 	            <field name="arch" type="xml">
 	            
-<!--	            <xpath expr="//field[@name='name']" position="replace">-->
-<!--		            <field name='seq_no'/>-->
-<!--		            <field name='state1' invisible='1'/>-->
-<!--	            </xpath>-->
 				<xpath expr="//button[@name='case_mark_won']" position="replace">
 					<button name="case_mark_won" string="Mark Won" type="object"
                                 states="draft,open,pending" invisible='1'/>
@@ -26,15 +22,11 @@
 	            <xpath expr="//button[@string='Convert to Quotation']" position="replace">
 	                <button name="%(action_pnl_wizard)d" string='Create P&amp;L' type='action' class="oe_highlight" attrs="{'invisible':['|',('state','not in',('draft','open')),('state1','in',('pnl',))]}"/>
 	                <button name="view_pnl" string='View P&amp;L' type='object' class="oe_highlight" attrs="{'invisible':[('state1','!=','pnl')]}"/>
-<!--	                <button states="draft,open" name="%(action_pnl_wizard)d" string='Convert to PnL' type='action' class="oe_highlight"/>-->
-<!--	                <button states="pending" name="view_pnl" string='View Pnl' type='object' class="oe_highlight"/>-->
 	           		<field name='state1' invisible='1'/>
 	            </xpath>
 	            <xpath expr="//field[@name='name']" position="replace">
 	            <field name='seq_no'/>
 	            <field name='state1' invisible='1'/>
-<!--	                <button states="draft,open" name="%(action_pnl_wizard)d" string='Convert to PnL' type='action' class="oe_highlight"/>-->
-<!--	                <button states="pending" name="view_pnl" string='View Pnl' type='object' class="oe_highlight"/>-->
 	            </xpath>
 	            
 	            
@@ -55,8 +47,6 @@
 	            <field name="arch" type="xml">
 	            <xpath expr="//button[@name='invoice_recreate']" position="before">
 	            	<button name="handover_project" string='Handover' type='object' states='progress' class="oe_highlight"/>
-<!--	            	<button name="hand_over" string='Start Handover' type='object' states='meeting' class="oe_highlight"/>-->
-<!--	                <button name="generate_project" string='Test Gen_Project' type='object'/>-->
 	            </xpath>
 	            
 	            
@@ -240,10 +230,7 @@
 						
 						
 			                       			    
-			                       			     <!--field name="tax_perc"/>
-			                       			     <field name="fund_perc"/>
-			                       			     <field name="tax_amt"/>
-			                       			     <field name="fund_amt"/-->
+			                       			     
 							
 							<group>
 							<group class="oe_subtotal_footer oe_right">
@@ -254,15 +241,11 @@
 			                </group>
 			                <newline/>
 			                
-			                <!--separator string="Financial Costs"/-->
+			                
 			                
 			                <group string="Financial Costs">
 			                
-			                <!--group>
-                                <group> <field name="cogs_rev_perc"/> </group>
-                                <group class="oe_subtotal_footer oe_right">
-                                 <field name="cogs_rev"/>
-                            </group> </group-->
+			                
                             
 			                       			    
 			                       			    <group>
@@ -300,26 +283,7 @@
 			                       			     
 			                       			     
 			                       			     
-			                       			     <!--field name="fund_perc"/>
-			                       			     </group>
-			                       			     <group>
 			                       			     
-			                       			     <group class="oe_subtotal_footer oe_right">
-			                       			     <field name="fund_amt"/>
-			                       			     </group>
-			                       			     </group-->
-							
-							
-			                
-			                
-			                <!--group class="oe_subtotal_footer oe_right">		     
-								<div class="oe_subtotal_footer_separator oe_inline">
-                                  				  <label for="cogs_gross_margin"/>
-                                    				<button name="button_dummy"
-                                        string="(update)" type="object" class="oe_edit_only oe_link"/>
-                               					 </div>
-                                				<field name="cogs_gross_margin" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-							</group-->
 							
 						
 						
@@ -383,8 +347,7 @@
 						<group>
 							<group class="oe_subtotal_footer oe_right">
 			                       			     <field name="service_cost"/>
-			                       			     <!--field name="serv_tax_amt"/-->
-			                       			     <!--field name="consul_total"/-->
+			                       			     
 			                </group>
 			                </group>
 			                <newline/>
@@ -398,16 +361,11 @@
 			                       			     </group>
 			                       			     <group class="oe_subtotal_footer oe_right">
 			                       			     <field name="serv_tax_amt"/>
-			                       			     <!--field name="tot_fin_cost_services"/-->
+			                       			     
 			                       			     </group>
 			                       			     
 			                       			     
-			                       			    <!--group>
-			                       			     <field name="fund_perc"/>
-			                       			     </group>
-			                       			     <group class="oe_subtotal_footer oe_right">
-			                       			     <field name="fund_amt"/>
-			                       			     </group-->
+			                       			    
 			                </group>       			     
 			                       			     
 			                       			     <group class="oe_subtotal_footer oe_right">		     
@@ -436,8 +394,7 @@
 			                
                              <group>
 			                      <group>          	
-						               <!--field name="serv_rev_perc"/-->
-						               <!--field name="ser_tax_perc"/-->
+						               
 						               
 						          </group>
 						          <!-- Start of code CMT1 -->
@@ -465,7 +422,7 @@
 							<field name="overhead_amount2"/>
 							<field name="serv_total_cost" invisible="1"/>
 							<field name="tot_fin_cost_services"/>
-							<!--field name="serv_profit"/-->
+							
 							<div class="oe_subtotal_footer_separator oe_inline">
 								                
                                   				 <label for="serv_profit"/>
@@ -474,15 +431,7 @@
                                					 </div>
                                 				<field name="serv_profit" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
 							</group>
-							<!-- field name="cogs_total_costs"/>
-								<div class="oe_subtotal_footer_separator oe_inline">
-								                
-                                  				 <label for="cogs_profit"/>
-                                    				<button name="button_dummy"
-                                        string="(update)" type="object" class="oe_edit_only oe_link"/>
-                               					 </div>
-                                				<field name="cogs_profit" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
-							</group-->
+							
 							<!-- Start of Code CMT1 -->
 						<!--group class="oe_subtotal_footer oe_right">
 							<field name="serv_total_cost"/>
@@ -491,8 +440,7 @@
 					    <!-- End of Code CMT1 -->
 					    <separator/>
 					</page>
-					<!--<page string="Training">
-					</page> -->
+					
 					<page string="Summary">
 							<separator string="P&amp;L Summary"/>
 							<separator string="Income"/>
@@ -526,7 +474,7 @@
 				</form>
 			</field>
 		</record>
-		<!-- Action to open the form view of pnl model-->
+		
 		<record model="ir.actions.act_window" id="action_view_pnl_form">
 			<field name="name">P&amp;L</field>
 			<field name="res_model">pnl.order</field>
@@ -534,7 +482,7 @@
 			<field name="view_mode">tree,form</field>
 		</record>
 		
-		<!--Menu to execute the above action in order to open the form view of pnl model-->
+		
 		<menuitem 
 			id="menu_action_view_pnl_form" 
 			action="action_view_pnl_form" 

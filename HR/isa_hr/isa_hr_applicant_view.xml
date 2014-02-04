@@ -389,7 +389,7 @@
 		</form>
 		</field>
     </record>
-    <!--Interview scheduled by hr whose person are teaking the interview -->
+    
     
     <record id="interview_manager_tree" model="ir.ui.view">
 			<field name="name">Hr Applicant</field>
@@ -439,7 +439,7 @@
 		</record>
 	
                   
- <!-- -information regarding to the applicant in stage test -->
+ 
   		<record id="drishti_hr_state_test_tree1" model="ir.ui.view">
 			<field name="name">test.stage.tree</field>
 			<field name="model">test.stage.form</field>
@@ -549,7 +549,7 @@
 		</record>
 		
 		
-		<!--menuitem name="Tools" id="base.menu_tools" parent="base.menu_crm_case_job_req_main" sequence="5"/-->
+		
 		
 		<menuitem name="Surveys" id="survey.menu_surveys" parent="hr.menu_hr_configuration" sequence="60" groups="base.group_tool_user,base.group_tool_manager,base.group_survey_user"/>
 		
@@ -558,10 +558,10 @@
             
         
             
-            <!--menuitem name="Online Test" id="sub_menu_online_test" parent="mene_base_test" sequence="0"/-->
+            
 			<menuitem id="menu_online_test" parent="mene_base_test" name="Online Test" sequence="1" action="action_applicant_test_"/>
 
-<!-- Honors/Award -->
+<!-- Honors/Awards -->
 <record id="isa_honor_award_tree" model="ir.ui.view">
 			<field name="name">Honors/Award</field>
 			<field name="model">honour.award</field>
@@ -581,13 +581,13 @@
 			<field name="view_mode">tree</field>
 			<field name="view_id" ref="isa_honor_award_tree"/>
 		</record>
-<!-- Work Experiance -->
+<!-- Work Experience -->
 <record id="isa_work_experiance_tree" model="ir.ui.view">
-			<field name="name">Work Experiance</field>
+			<field name="name">Work Experience</field>
 			<field name="model">work.experiance</field>
 			<field name="type">tree</field>
 			<field name="arch" type="xml">
-				<tree string=" Work Experiance">
+				<tree string=" Work Experience">
 					<field name="name"/>
 					<field name="cargo_exercised"/>
 					<field name="responsibility"/>
@@ -597,13 +597,13 @@
 			</field>
 		</record>
 		<record id="action_work_experiance_id" model="ir.actions.act_window">
-			<field name="name">Work Experiance</field>
+			<field name="name">Work Experience</field>
 			<field name="res_model">work.experiance</field>
 			<field name="view_type">tree</field>
 			<field name="view_mode">tree</field>
 			<field name="view_id" ref="isa_work_experiance_tree"/>
 		</record>
-<!-- Education Inform -->
+<!-- Educational Information -->
 
 <record id="isa_education_inform_tree" model="ir.ui.view">
 			<field name="name">Education Information</field>
@@ -646,7 +646,7 @@
 			<field name="view_mode">tree</field>
 			<field name="view_id" ref="isa_professional_qualification_tree"/>
 		</record>
-		<!-- Language Spoken -->
+		<!-- Languages Spoken -->
 <record id="isa_language_spoken_tree" model="ir.ui.view">
 			<field name="name">Language Spoken</field>
 			<field name="model">language.spoken</field>
@@ -709,7 +709,7 @@
 			<field name="view_mode">tree</field>
 			<field name="view_id" ref="isa_test_stage_tree"/>
 		</record>
-<!-- Reference CHeck -->
+<!-- Reference Check -->
 <record id="isa_reference_check_stage_tree" model="ir.ui.view">
 			<field name="name">Reference Check</field>
 			<field name="model">reference.check</field>
@@ -734,7 +734,7 @@
 			<field name="view_mode">tree</field>
 			<field name="view_id" ref="isa_reference_check_stage_tree"/>
 		</record>
-<!-- Other Certificate-->
+<!-- Other Certificates-->
 <record id="isa_other_certificate_tree" model="ir.ui.view">
 			<field name="name">Other Certificate</field>
 			<field name="model">other.certificate</field>
@@ -868,7 +868,7 @@
 			<field name="view_id" ref="recruitment_interview_calendar"/>
 		</record>
 		
-		<!-- action of hr.applicant  -->
+		
 		 <record model="ir.actions.act_window" id="hr_recruitment.crm_case_categ0_act_job">
             <field name="name">Applications</field>
             <field name="res_model">hr.applicant</field>

@@ -97,34 +97,19 @@ class make_pnl_wiz(osv.osv_memory):
             for case in case_obj.browse(cr, uid, data, context=context):
                 if not partner and case.partner_id:
                     partner = case.partner_id
-#                     fpos = partner.property_account_position and partner.property_account_position.id or False
-#                     payment_term = partner.property_payment_term and partner.property_payment_term.id or False
-#                     partner_addr = partner_obj.address_get(cr, uid, [partner.id],
-#                             ['default', 'invoice', 'delivery', 'contact'])
-#                     pricelist = partner.property_product_pricelist.id
-#                 if False in partner_addr.values():
-#                     raise osv.except_osv(_('Insufficient Data!'), _('No address(es) defined for this customer.'))
 
                 vals = {
-#                     'origin': _('Opportunity: %s') % str(case.id),
-#                     'section_id': case.section_id and case.section_id.id or False,
                     'lead_id': case.id,
                     'customer': partner.id,
-#                     'pricelist_id': pricelist,
-#                     'partner_invoice_id': partner_addr['invoice'],
-#                     'partner_shipping_id': partner_addr['delivery'],
-#                     'date_order': fields.date.context_today(self,cr,uid,context=context),
-#                     'fiscal_position': fpos,
-#                     'payment_term':payment_term,
                     'name':case.seq_no
                 }
                 if partner.id:
                     vals['user_id'] = partner.user_id and partner.user_id.id or uid
                 new_id = pnl_obj.create(cr, uid, vals, context=context)
                 pnl_order = pnl_obj.browse(cr, uid, new_id, context=context)
-                print "9800=============================",case.stage_id
+                
                 stage_id=self.pool.get('crm.case.stage').search(cr,uid,[('name','ilike','Profit'),('type','=','opportunity'),('state','=','open')])
-                print "stage_id=========================",stage_id
+                
                 case_obj.write(cr, uid, [case.id], {'ref': 'sale.order,%s' % new_id,'pnl_id':new_id,'state1':'pnl',})
                 case_obj.write(cr, uid, [case.id], {'ref': 'sale.order,%s' % new_id,'pnl_id':new_id,})
                 new_ids.append(new_id)

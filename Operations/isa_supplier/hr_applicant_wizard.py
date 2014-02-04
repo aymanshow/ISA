@@ -51,24 +51,21 @@ class rejected_form(osv.osv):
         return res
     
     def create_record(self, cr, uid, ids, context=None):
-        print'=========ids===========',ids
+        
         res={} 
         student_ids = context.get('active_ids')  
         value1 = self.pool.get('hr.recruitment.stage')
         hr_appli_obj=self.pool.get('hr.applicant')
         mod_obj = self.pool.get('ir.model.data')
         record_id11=value1.search(cr ,uid ,[('state','=','cancel')],context=context)
-        print'=========record_id11id======',record_id11
+        
         obj=hr_appli_obj.browse(cr,uid,record_id11[0])
-        print'============obj========',obj
+        
         record= value1.browse(cr,uid,record_id11,context=context)
-        print'========record11========',record
+        
         hr_appli_obj.write(cr, uid, student_ids[0],{'stage_id':obj.id})
         wiz_obj=self.pool.get('hr.applicant').browse(cr,uid,student_ids[0])
-        print'=======================subject==========',wiz_obj.name
-        print'=====================state================',wiz_obj.state
-        print "kkhwjhj>>>>>>>>>>>>candidate_id>>>>>>>>>>>>>>>>>>>>.",wiz_obj.candidate_id
-        print '>>>>>>>>>>>>>>>>>partner_name>>>>>>>>>>',wiz_obj.partner_name 
+         
         self.write(cr, uid, ids,{'name_id':wiz_obj.name,
                                  'requestion_id1':wiz_obj.candidate_id,
                                  'partner_name':wiz_obj.partner_name,

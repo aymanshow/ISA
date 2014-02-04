@@ -13,5 +13,5 @@ class account_account(osv.osv):
     _name='account.account'
     _inherit='account.account'
     _columns={
-              'portuguese_name':fields.char('Portuguese',required=True),
+              'portuguese_name':fields.char('Portuguese',),
               }

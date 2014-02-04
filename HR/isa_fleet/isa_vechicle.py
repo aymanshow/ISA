@@ -20,7 +20,7 @@ class isa_vechicle_maintenance(osv.osv):
             'category':fields.selection([('asset','Asset'),('vehicle','Vehicle')],'Category'),
             'vehicle_id':fields.many2one('fleet.vehicle','Vehicle'),
              'asset_id': fields.many2one('account.asset.asset', string='Asset'),
-#             'asset_id':fields.many2one('product.product','Asset'),
+
             'type':fields.selection([('s','Scheduled'),('b','Break Down'),('r','Regular'),('p','Preventive')],'Type'),
             'date_id':fields.datetime('Date & Time'),
             'spare_parts':fields.char('Spare Parts Used'),
@@ -35,11 +35,6 @@ class isa_vechicle_maintenance(osv.osv):
         self.write(cr, uid, ids,{'maintenance_state':'done'})
         return True
     
-#     def case_cancel(self, cr, uid, ids, context=None):
-#         """ Overrides case_cancel from base_stage to set probability """
-#         res = super(crm_lead, self).case_cancel(cr, uid, ids, context=context)
-#         self.write(cr, uid, ids, {'probability' : 0.0}, context=context)
-#         return res
     
    
 isa_vechicle_maintenance() 

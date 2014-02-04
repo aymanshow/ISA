@@ -1,7 +1,7 @@
 <?xml version ='1.0'?>
 <openerp>
 	<data>
-		<!-- Form view of pnl model-->
+		
 		
 		 <record id="employee_training_tree1" model="ir.ui.view">
 			<field name="name">Employee Training Tree</field>

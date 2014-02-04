@@ -2,17 +2,6 @@
 <openerp>
     <data>
     
-<!--    <record model="ir.ui.view" id="approve_email_compose_message_wizard_inherit_form123">-->
-<!--            <field name="name">mail.compose.message.form</field>-->
-<!--            <field name="model">mail.compose.message</field>-->
-<!--            <field name="inherit_id" ref="mail.email_compose_message_wizard_form"/>-->
-<!--            <field name="arch" type="xml">-->
-<!--            	<field name="subject" position="after">-->
-<!--            		<field name="receiver_email"/>-->
-<!--            	</field>-->
-<!--            </field>-->
-<!--            -->
-<!--    </record>-->
     
      <record id="intiation_tab_edit_project" model="ir.ui.view">
             <field name="name">project.project.form</field>
@@ -70,14 +59,6 @@
 					    </group>
 					  </group>
 				    </page>
-<!--					  <page string="Finance Document">-->
-<!--					  <group>-->
-<!--					 	 <field name="datas_finance_document" filename="datas_finance_document_fname"/>-->
-<!--					 	 <field name="approve_finance_document_id" widget="selection"/>-->
-<!--					 	 <field name="datas_finance_document_fname" invisible="1"/>-->
-<!--					  </group>-->
-<!--					  <field name="comment_finance" class="oe_inline" placeholder="Place your comment..."/>-->
-<!--					    </page>-->
 					</notebook>
 				   </page>
 				</notebook>

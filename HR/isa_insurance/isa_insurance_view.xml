@@ -1,7 +1,7 @@
 <?xml version ='1.0'?>
 <openerp>
 	<data>
-		<!-- Form view of pnl model-->
+		
 		
 		<record id="isa_insurance_tree" model="ir.ui.view">
 			<field name="name">insurance.policy tree</field>
@@ -77,7 +77,7 @@
 		
 		
 		
-		<!-- Hr Inherit view -->
+		
 		
 		
 		 <record id="isa_employee_insurance_tree" model="ir.ui.view">

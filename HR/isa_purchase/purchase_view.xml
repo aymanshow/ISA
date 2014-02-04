@@ -1,11 +1,6 @@
 <?xml version ="1.0"?>
 <openerp>
 	<data>
-	
-
-
-		
-	
 		<record id="purchase_order_form_isa_inherit" model="ir.ui.view">
             <field name="name">purchase.order.form</field>
             <field name="model">purchase.order</field>
@@ -14,6 +9,7 @@
 	            
             	<xpath expr="//field[@name='partner_ref']" position="after">
 		            <field name='awb_no' />
+		            <field name="clearing_agent_id" domain="[('supplier','=',True)]"/>
 	            </xpath>
 				
 				<xpath expr="//page[@string='Incoming Shipments &amp; Invoices']" position="after">
@@ -49,16 +45,17 @@
             <field name="arch" type="xml">
 	    			<xpath expr="//page[@string='Additional Info']" position="after">
 							<page string='Shipment Related Documents'>
-								<div class='oe_right oe_button_box'>
-									<button name="send_mail" string="Send Mail"  type="object" />
+								<group colspan="2" col="2">
+									<button name="send_mail" string="Send Mail"  type="object" attrs="{'invisible':[('state1','in',('pending','approve'))]}"/>
 									
-									<button name="approve_request" string="Approve" type="object" />
-								</div>
+									<button name="approve_request" string="Approve" type="object" attrs="{'invisible':[('state1','!=','pending')]}"/>
+								</group>
 								<group>
-								<field name='state1'/>
+								<field name='state1' invisible='1'/>
 					            <field name='awb_attachment1' />
 					            <field name='du_attachment1' />
 					            <field name='user_id'/>
+					            <field name='stores_user_id'/>
 					            <field name='approve' />
 					            </group>
 					        </page>
@@ -118,7 +115,8 @@
                                 string="Payment Method" attrs="{'required':[('state','=', 'payment')]}"/>
 	            	</xpath>
 					<xpath expr="//button[@name='button_proforma_voucher']" position="replace">
-                        <button name="make_request" string="Request Payment" class="oe_highlight" type="object"/>
+                        <button name="make_request" string="Request Payment" class="oe_highlight" type="object" attrs="{'invisible':[('type','!=','payment')]}"/>
+                        <button name="button_proforma_voucher" string="Pay" class="oe_highlight" type="object" attrs="{'invisible':[('type','=','payment')]}"/>
 	            	</xpath>
 	            		
 

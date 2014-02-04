@@ -1,7 +1,7 @@
 <?xml version ='1.0'?>
 <openerp>
 	<data>
-		<!-- Form view of pnl model-->
+		
 		
 		<record id="drishti_hr_tree" model="ir.ui.view">
 			<field name="name">drishti.hr.tree</field>

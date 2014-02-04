@@ -13,9 +13,7 @@ import openerp.addons.decimal_precision as dp
 class mail_compose_message(osv.TransientModel):
     _inherit = "mail.compose.message"
     _name = "mail.compose.message"
-    _columns={
-#        'receiver_email':fields.char('Email',size=124),
-         }
+    
     
     def generate_email_for_composer(self, cr, uid, template_id, res_id, context=None):
         """ Call email_template.generate_email(), get fields relevant for
@@ -25,14 +23,14 @@ class mail_compose_message(osv.TransientModel):
         fields = ['body_html', 'subject', 'email_to', 'email_recipients', 'email_cc', 'attachment_ids', 'attachments']
         
         values = dict((field, template_values[field]) for field in fields if template_values.get(field))
-#        attachment=self.pool.get('project.project').browse(cr,uid,res_id).datas
+
         values['body'] = values.pop('body_html', '')
         # transform email_to, email_cc into partner_ids
         partner_ids = set()
         mails = tools.email_split(values.pop('email_to', '') + ' ' + values.pop('email_cc', ''))
         ctx = dict((k, v) for k, v in (context or {}).items() if not k.startswith('default_'))
         for mail in mails:
-#            partner_id = self.pool.get('res.')
+
             partner_id = self.pool.get('res.partner').find_or_create(cr, uid, mail, context=ctx)
             partner_ids.add(partner_id)
         email_recipients = values.pop('email_recipients', '')
@@ -56,7 +54,7 @@ class mail_compose_message(osv.TransientModel):
             context = {}
         ir_attachment_obj = self.pool.get('ir.attachment')
         active_ids = context.get('active_ids')
-        print"====1111111111111111111=",active_ids
+        
         is_log = context.get('mail_compose_log', False)
         for wizard in self.browse(cr, uid, ids, context=context):
             mass_mail_mode = wizard.composition_mode == 'mass_mail'
@@ -66,7 +64,7 @@ class mail_compose_message(osv.TransientModel):
             
             res_ids = active_ids if mass_mail_mode and wizard.model and active_ids else [wizard.res_id]
             for res_id in res_ids:
-                print"222222222222222",res_id
+                
                 # mail.message values, according to the wizard options
                 post_values = {
                     'subject': wizard.subject,
@@ -74,17 +72,17 @@ class mail_compose_message(osv.TransientModel):
                     'parent_id': wizard.parent_id and wizard.parent_id.id,
                     'partner_ids': [partner.id for partner in wizard.partner_ids],
                     
-#                    'receiver_email': wizard.receiver_email,
+
                     
                     'attachment_ids': [attach.id for attach in wizard.attachment_ids],
                 }
-                # mass mailing: render and override default values
+                
                 if mass_mail_mode and wizard.model:
                     email_dict = self.render_message(cr, uid, wizard, res_id, context=context)
                     post_values['partner_ids'] += email_dict.pop('partner_ids', [])
                     post_values['attachments'] = email_dict.pop('attachments', [])
                     
-#                    post_values['receiver_email'] = email_dict.pop('receiver_email', [])
+
                     
                     attachment_ids = []
                     for attach_id in post_values.pop('attachment_ids'):
@@ -92,7 +90,7 @@ class mail_compose_message(osv.TransientModel):
                         attachment_ids.append(new_attach_id)
                     post_values['attachment_ids'] = attachment_ids
                     post_values.update(email_dict)
-                # post the message
+                
                 subtype = 'mail.mt_comment'
                 if is_log:  # log a note: subtype is False
                     subtype = False
@@ -104,8 +102,6 @@ class mail_compose_message(osv.TransientModel):
                 if mass_mail_mode and post_values['partner_ids']:
                     self.pool.get('mail.notification')._notify(cr, uid, msg_id, post_values['partner_ids'], context=context)
                 self.pool.get('project.project').write(cr,uid,active_ids,{'state_for_appr': 'sent_for_approval'})
-#                elif mass_mail_mode and post_values['receiver_email']:
-#                    self.pool.get('mail.notification')._notify(cr, uid, msg_id, post_values['receiver_email'], context=context)
         return {'type': 'ir.actions.act_window_close'}
 
     
@@ -188,20 +184,14 @@ class project_project(osv.osv):
                 except ValueError:
                     compose_form_id = False
                 
-#                if not email_obj.approve_id.id:
-#                    raise osv.except_osv(
-#                                _('Error!'),
-#                                _('Please fill the applicant '))
                 values['res_id'] = False
                 mail_mail_obj = self.pool.get('mail.mail')
                 msg_id = mail_mail_obj.create(cr, uid, values, context=context)
                 if msg_id:
                     mail_mail_obj.send(cr, uid, [msg_id], context=context)
                 ctx = dict(context)
-#                user_partner_ids=self.pool.get('res.partner').search(cr,uid,[('email','=',email_obj.approve_id.email)])
+
                 ctx['default_template_id'] = template_ids[0]
-#                ctx['default_receiver_email'] = email_obj.approve_id.email
-#                ctx['default_partner_ids'] = user_partner_ids
                 return {
                         'type': 'ir.actions.act_window',
                         'view_type': 'form',
@@ -213,42 +203,6 @@ class project_project(osv.osv):
                         'context': ctx,
                         }
 
-#
-    
-#    def send_mail_approve(self,cr,uid, ids,context=None):
-#        for certi_obj1 in self.browse(cr,uid, ids,context=None):
-#            if not certi_obj1.datas and not certi_obj1.approve_id.id:
-#                    raise osv.except_osv(
-#                        _('Error!'),
-#                        _('You cannot send mail until select Approver and Upload Presentation'))
-#            elif not certi_obj1.approve_id.id:
-#                raise osv.except_osv(
-#                    _('Error!'),
-#                    _('You cannot send mail until select Approver'))
-#            elif not certi_obj1.datas:
-#                raise osv.except_osv(
-#                    _('Error!'),
-#                    _('You cannot send mail until select Upload Presentation'))
-#            if certi_obj1.approve_id.id and certi_obj1.datas:
-#                test_email=self.pool.get('res.users').browse(cr,uid,certi_obj1.approve_id.id).email
-#                mail_mail = self.pool.get('mail.mail')
-#                asunto = 'Kick-off Validation'
-#                body = '' 
-#                body += '<br/>'
-#                body = 'Hello sir' 
-#                body += '<br/>' 
-#                body += 'Need to approve your validation' 
-#                body += '<br/>' 
-#                body += 'Thank you'
-#                mail_ids = []
-#                mail_ids.append(mail_mail.create(cr, uid, {
-#                                'email_from': "dhawalsharma786@gmail.com",
-#                                'email_to': test_email,
-#                                'subject': asunto,
-#                                'body_html': '<pre>%s</pre>' % body}, context=context))
-#                mail_mail.send(cr, uid, mail_ids, context=context)
-#            self.write(cr, uid, ids, {'state_for_appr': 'sent_for_approval'})
-#        return True
     
     def approve_by_admin(self,cr,uid,ids,context=None):
         if not ids:

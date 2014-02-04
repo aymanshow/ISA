@@ -8,29 +8,6 @@
             <field name="name">IRT Table 1</field>
         </record>
 
-<!--         <record id="hr_working_schedule2" model="resource.calendar"> -->
-<!--             <field name="name">Working Schedule 2</field> -->
-<!--         </record> -->
-
-<!--         <record id="hr_working_schedule3" model="resource.calendar"> -->
-<!--             <field name="name">Working Schedule 3</field> -->
-<!--         </record> -->
-
-<!--         <record id="hr_working_schedule4" model="resource.calendar"> -->
-<!--             <field name="name">Working Schedule 4</field> -->
-<!--         </record> -->
-
-<!-- 		<record id="hr_working_schedule5" model="resource.calendar"> -->
-<!--             <field name="name">Working Schedule 5</field> -->
-<!--         </record> -->
-		
-<!-- 		<record id="hr_working_schedule6" model="resource.calendar"> -->
-<!--             <field name="name">Working Schedule 6</field> -->
-<!--         </record> -->
-		
-<!-- 		<record id="hr_working_schedule7" model="resource.calendar"> -->
-<!--             <field name="name">Working Schedule 7</field> -->
-<!--         </record> -->
         
         
 
@@ -40,7 +17,7 @@
             <field name="b_value">0</field>
             <field name="c_value">0.00</field>
             <field name="d_value">0.00</field>
-<!--             <field name="irt_id" ref="irt_table1"/> -->
+
         </record>
         
         <record id="irt_2" model="irt.table.line">
@@ -49,7 +26,7 @@
             <field name="b_value">25000</field>
             <field name="c_value">0.05</field>
             <field name="d_value">0.00</field>
-<!--             <field name="irt_id" ref="irt_table1"/> -->
+
         </record>
         
         <record id="irt_3" model="irt.table.line">
@@ -58,7 +35,7 @@
             <field name="b_value">30000</field>
             <field name="c_value">0.06</field>
             <field name="d_value">250.00</field>
-<!--             <field name="irt_id" ref="irt_table1"/> -->
+
         </record>        
         
         <record id="irt_4" model="irt.table.line">
@@ -67,7 +44,7 @@
             <field name="b_value">35000</field>
             <field name="c_value">0.07</field>
             <field name="d_value">550.00</field>
-<!--             <field name="irt_id" ref="irt_table1"/> -->
+
         </record>
         
         <record id="irt_5" model="irt.table.line">
@@ -76,7 +53,7 @@
             <field name="b_value">40000</field>
             <field name="c_value">0.08</field>
             <field name="d_value">900.00</field>
-<!--             <field name="irt_id" ref="irt_table1"/> -->
+
         </record>
         
         <record id="irt_6" model="irt.table.line">
@@ -85,7 +62,7 @@
             <field name="b_value">45000</field>
             <field name="c_value">0.09</field>
             <field name="d_value">1300.00</field>
-<!--             <field name="irt_id" ref="irt_table1"/> -->
+
         </record>
         
         <record id="irt_7" model="irt.table.line">
@@ -94,7 +71,7 @@
             <field name="b_value">50000</field>
             <field name="c_value">0.1</field>
             <field name="d_value">1750.00</field>
-<!--             <field name="irt_id" ref="irt_table1"/> -->
+
         </record>
         
         <record id="irt_8" model="irt.table.line">
@@ -103,7 +80,7 @@
             <field name="b_value">70000</field>
             <field name="c_value">0.11</field>
             <field name="d_value">3750.00</field>
-<!--             <field name="irt_id" ref="irt_table1"/> -->
+
         </record>
         
         <record id="irt_9" model="irt.table.line">
@@ -112,7 +89,7 @@
             <field name="b_value">90000</field>
             <field name="c_value">0.12</field>
             <field name="d_value">5950.00</field>
-<!--             <field name="irt_id" ref="irt_table1"/> -->
+
         </record>
         
         <record id="irt_10" model="irt.table.line">
@@ -121,7 +98,7 @@
             <field name="b_value">110000</field>
             <field name="c_value">0.13</field>
             <field name="d_value">8350.00</field>
-<!--             <field name="irt_id" ref="irt_table1"/> -->
+
         </record>
         
         <record id="irt_11" model="irt.table.line">
@@ -130,7 +107,7 @@
             <field name="b_value">140000</field>
             <field name="c_value">0.14</field>
             <field name="d_value">12250.00</field>
-<!--             <field name="irt_id" ref="irt_table1"/> -->
+
         </record>
         
         <record id="irt_12" model="irt.table.line">
@@ -139,7 +116,7 @@
             <field name="b_value">170000</field>
             <field name="c_value">0.15</field>
             <field name="d_value">16450.00</field>
-<!--             <field name="irt_id" ref="irt_table1"/> -->
+
         </record>
         
         <record id="irt_13" model="irt.table.line">
@@ -148,7 +125,7 @@
             <field name="b_value">200000</field>
             <field name="c_value">0.16</field>
             <field name="d_value">20950.00</field>
-<!--             <field name="irt_id" ref="irt_table1"/> -->
+
         </record>
         
         <record id="irt_14" model="irt.table.line">
@@ -157,7 +134,7 @@
             <field name="b_value">230000</field>
             <field name="c_value">0.17</field>
             <field name="d_value">25750.00</field>
-<!--             <field name="irt_id" ref="irt_table1"/> -->
+
         </record>
         
         </data>

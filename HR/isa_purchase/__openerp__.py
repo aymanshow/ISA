@@ -11,6 +11,7 @@
 #              'sequence.xml',
 #              'wizard/pnl_wizard_view.xml',
              'purchase_view.xml',
+             'data/clearing_agent_template.xml',
              ],
     'installable': True,
     'auto_install': False,

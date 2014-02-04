@@ -55,10 +55,6 @@
                         <button string="Schedule Appointment" name="%(action_appointment_wizard)d" type="action"/>
                     </div>
                     
-<!--                    	<group colspan="4" col="4">-->
-<!--								<field name="appointment" required="1"/>-->
-<!--								<field name="apt_no" attrs="{'invisible':[('appointment','!=','yes')],'required':[('appointment','=','yes')]}" />-->
-<!--						</group>-->
 						<group string="Visitor Information">
 		                	<group >
 									<field name="name" attrs="{'readonly':[('state','=','out')]}"/>
@@ -366,14 +362,14 @@
 			           		     </header>
 				         	<sheet>
 				                <h1>
-			                        <!--label string="Office Equipments"/-->
+			                        
 			                    	<field name="loc_id" class="oe_inline" readonly="1" string="ID -"/>
 			                    </h1>
 			                    
 			                    <group>
 					                	<field name="name" invisible="1"/>
 					                	
-<!--					                	<field name="location_id" on_change="onchange_location(location_id)" />-->
+
 					                <newline/>
 					                <group col="4" string="Office Equipments">
 					                <field name="task_lines" nolabel="1">
@@ -645,8 +641,7 @@
             groups="base.group_user"
             sequence="170"/>
             
-            <!--menuitem name="Accounting & Finances"
-            id="account.menu_finance"/-->
+            
             
             
             
@@ -677,24 +672,6 @@
             
             
             
-            <!--menuitem name="Vehicle" id="menu_vehicle" parent="menu_reception" sequence="0" action="view_enrollment_form_id"/>
-            <menuitem name="Appointments" id="menu_appointments" parent="menu_reception" sequence="1" action="action_meeting_manage_isa"/>
-            <menuitem name="Appointments Calendar" id="menu_appointment_calendar" parent="menu_reception" sequence="2" action="action_meeting_isa"/-->
             
-            <!--menuitem id="sub_menu_base_isa" parent="mene_base_isa" name="Reception" sequence="1" /-->
-            <!--menuitem id="menu_isa_visitor" parent="sub_menu_base_isa" name="Visitor Management" sequence="1" action="view_enrollment_form_id"/>	
-        	<menuitem id="menu_isa_meeting_sub" parent="sub_menu_base_isa" name="Appointment" sequence="1"/>
-        	<menuitem id="menu_isa_view" parent="menu_isa_meeting_sub" name="Appointments" sequence="1" action="action_meeting_manage_isa"/>
-        	<menuitem id="menu_isa_schedule" parent="menu_isa_meeting_sub" name="Appointment Schedule" sequence="2" action="action_meeting_isa"/>	
-    		
-    		<menuitem id="menu_conference_main" parent="sub_menu_base_isa" name="Conference" sequence="2"/>
-        	<menuitem id="menu_conference_master_schedule" parent="menu_conference_main" name="Room" sequence="1" action="action_conference_master"/>
-        	<menuitem id="menu_conference_booking" parent="menu_conference_main" name="Booking" sequence="2" action="action_conference_master_booking"/>
-    		
-    		<menuitem id="menu_maintenance_main" parent="sub_menu_base_isa" name="Maintenance" sequence="3"/-->
-<!--    		<menuitem id="menu_location_master" parent="menu_maintenance_main" name="Location Master" sequence="1" action="action_location_booking"/>-->
-        	<!--menuitem id="menu_maintenance_schedule" parent="menu_maintenance_main" name="Housekeeping" sequence="2" action="action_maintenance_booking"/>
-        	<menuitem id="menu_maintenance_master" parent="menu_maintenance_main" name="Maintenance" sequence="2" action="action_maintenance_master"/>
-        	<menuitem id="menu_task_manager" parent="menu_maintenance_main" name="Housekeeping Task" sequence="3" action="action_maintenance_task_manager"/-->
     </data>
 </openerp>

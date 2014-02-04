@@ -1,6 +1,6 @@
  
 {
-    'name':'ISA Account',
+    'name':'ISA Account Import',
     'version':'1.0',
     'category':'',
     'description':'ISA Import Account',

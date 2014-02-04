@@ -2,14 +2,6 @@
 <openerp>
     <data>
     
-    	<!-- <record model="ir.ui.view" id="cstm_crm_case_tree_view_helpdesk">
-            <field name="name">CRM - Helpdesk Support Tree</field>
-            <field name="model">crm.helpdesk</field>
-            <field name="inherit_id" ref="crm_helpdesk.crm_case_tree_view_helpdesk"/>
-            <field name="arch" type="xml">
-            <field name="contracts_partner"/>
-            </field>
-            </record> -->
             
         <record id="view_crm_helpdesk_filter" model="ir.ui.view">
             <field name="name">crm.helpdesk.filter</field>
@@ -44,7 +36,7 @@
             <xpath expr="/form[@string='Helpdesk Support']/sheet[@string='Helpdesk Support']/group" position="before">
 					<group string="Ticket Form">
 					   <field name="ticket_no" readonly="1"/>
-					   <!--<field name="form_ticket_no" readonly="1" invisible="1"/> -->
+					  
 					   <field name="job_order_line" readonly="1"/>
 					</group>
 				</xpath>
@@ -78,7 +70,7 @@
 	            </field>
 	            
 	            <xpath expr="/form[@string='Helpdesk Support']/header/button[@string='Pending']" position="replace">
-	            <!--button name="case_pending" string="Pending" type="object" states="draft" invisible="1"/-->
+	            
                 <button name="case_pending" string="Pending" type="object" 
                             states="open" invisible="1"/>
                 <button name="case_pending" string="Pending" type="object"
@@ -87,17 +79,13 @@
 	            </xpath>
 	            
 	            <xpath expr="/form[@string='Helpdesk Support']/header/button[@string='Escalate']" position="replace">
-	            <!--button name="case_pending" string="Pending" type="object" states="draft" invisible="1"/-->
+	            
                 <button name="case_escalate" string="Escalate" type="object" 
                             states="open,draft,pending" invisible="1"/>
 	            </xpath>
 	            
 				<button name="case_open" position="replace">
-					<!--<button name="case_pending" string="Pending" type="object" invisible="1"/> -->
-					<!-- <button name="case_pending" string="Pending" type="object"
-                            states="draft" invisible="1"/>
-                    <button name="case_pending" string="Pending" type="object" 
-                            states="open" invisible="1"/> -->
+					
                     <button name="case_reset" string="Reassign" type="object"
                             states="pending"/>
                     <button name="case_escalate" string="Escalate" type="object" 
@@ -128,9 +116,7 @@
                 <tree string="Job Order Numbers">
 			<field name="job_number" invisible="1"/>
 			<field name="name"/>
-			<!-- <field name="date"/>
-			<field name="offence_description"/> 
-			<field name="punishment"/> -->        
+			        
                 </tree>
             </field>
         </record>
@@ -143,9 +129,7 @@
                 <form string="Job Order Numbers">
 			<field name="job_number" invisible="1"/>
 			<field name="name"/>
-			<!-- <field name="date"/>
-			<field name="offence_description"/> 
-			<field name="punishment"/> -->        
+			        
                 </form>
             </field>
         </record>
@@ -300,7 +284,7 @@
         <record model="ir.ui.view" id="view_helpdesk_simple">
             <field name="name">crm.helpdesk.tree</field>
             <field name="model">crm.helpdesk</field>
-            <!--field name="priority">20</field-->
+            
             <field name="arch" type="xml">
                 <tree string="Tickets by Status" editable="bottom">
                     <field name="contracts_partner" readonly="1"/>
@@ -326,11 +310,11 @@
         <record model="ir.actions.act_window" id="crm_reports_by_status">
             <field name="name">Tickets by Customer</field>
             <field name="res_model">crm.helpdesk</field>
-            <!--field name="view_type">form</field-->
+            
             <field name="view_mode">tree</field>
             <field name="view_id" eval="view_helpdesk_simple"/>
             <field name="context">{'search_default_group_status': 1}</field>
-            <!--field name="domain">[('holiday_type','=','employee')]</field-->
+            
             <field name="search_view_id" ref="view_crm_helpdesk_filter"/>
         </record>
 		
@@ -386,8 +370,6 @@
             id="menu_help_support_main4" parent="base_menu_isa_child" action="crm_case_helpdesk_act115" sequence="5"/>
 
 
-<!--menuitem name="My Tickets"
-            id="menu_help_support_main4" parent="base_menu_isa_child" action="crm_case_helpdesk_act114" sequence="3"/-->
 
 
 <menuitem name="Job Orders"
@@ -396,7 +378,7 @@
 <menuitem action="crm_helpdesk.crm_helpdesk_categ_action" name="Categories"
             id="crm_helpdesk.menu_crm_case_helpdesk-act" parent="crm_helpdesk.menu_config_helpdesk" sequence="2"/>
 
-<!--menuitem action="action_job_order_id" name="Job Order" id="menu_crm_case_job_order" parent="crm_helpdesk.menu_config_helpdesk"/-->
+
 	
     </data>
 </openerp>

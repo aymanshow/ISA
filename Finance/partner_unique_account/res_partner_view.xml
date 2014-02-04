@@ -1,8 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-
- 
+			
+			
+			
+		<record id="invoice_supplier_form_partner_inherit" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.form</field>
+            <field name="model">account.invoice</field>
+	            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+	            <field name="arch" type="xml">
+	 				<xpath expr="/form/sheet[@string='Supplier Invoice']/group" position="after">
+	 				<newline/>
+	 				<newline/>
+				            <div class='oe_right oe_button_box'>
+								<button name="%(action_create_wizard)d" string="Create Account"  type="action" states='draft'/>
+							</div>
+			        </xpath>
+			        <xpath expr="//field[@name='account_id']" position="replace">
+			       			 <field domain="[('company_id', '=', company_id),]"
+                            	    name="account_id" required='0' groups="account.group_account_user"/>
+                   </xpath>
+			        
+ 		
+	 		</field>
+ 		</record>
+ 		
+ 		
+ 		
+ 		
+ 		<record id="invoice_form_isa_partner_inherit" model="ir.ui.view">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+	            <field name="inherit_id" ref="account.invoice_form"/>
+	            <field name="arch" type="xml">
+	 				<xpath expr="/form/sheet[@string='Invoice']/group" position="after">
+	 				<newline/>
+	 				<newline/>
+				            <div class='oe_right oe_button_box'>
+								<button name="%(action_create_wizard)d" string="Create Account" states='draft' type="action" />
+							</div>
+			        </xpath>
+			        <xpath expr="//field[@name='account_id']" position="replace">
+			       			 <field domain="[('company_id', '=', company_id),]"
+                            	    name="account_id" required='0' groups="account.group_account_user"/>
+                   </xpath>
+			        
+ 		
+	 		</field>
+ 		</record>
+ 		
+ 		
+ 		
+ 		
+ 		
+ 		
+ 		
+ 		
+ 		
+ 		
+ 		
+ 		
+ 		
  			<record id="view_partner_property_form_inherit_isa" model="ir.ui.view">
 	            <field name="name">res.partner.property.form.inherit</field>
 	            <field name="model">res.partner</field>

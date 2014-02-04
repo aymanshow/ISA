@@ -9,7 +9,7 @@ from openerp.tools.translate import _
 
 class mail_compose_message(osv.TransientModel):
     _inherit='mail.compose.message'
-    
+      
     def send_mail(self, cr, uid, ids, context=None):
         """ Process the wizard content and proceed with sending the related
             email(s), rendering any template patterns on the fly if needed. """
@@ -20,12 +20,12 @@ class mail_compose_message(osv.TransientModel):
         ir_attachment_obj = self.pool.get('ir.attachment')
         active_ids = context.get('active_ids')
         is_log = context.get('mail_compose_log', False)
-
+ 
         for wizard in self.browse(cr, uid, ids, context=context):
             mass_mail_mode = wizard.composition_mode == 'mass_mail'
             active_model_pool_name = wizard.model if wizard.model else 'mail.thread'
             active_model_pool = self.pool.get(active_model_pool_name)
-
+ 
             # wizard works in batch mode: [res_id] or active_ids
             res_ids = active_ids if mass_mail_mode and wizard.model and active_ids else [wizard.res_id]
             for res_id in res_ids:
@@ -59,39 +59,39 @@ class mail_compose_message(osv.TransientModel):
                 # mass_mailing: notify specific partners, because subtype was False, and no-one was notified
                 if mass_mail_mode and post_values['partner_ids']:
                     self.pool.get('mail.notification')._notify(cr, uid, msg_id, post_values['partner_ids'], context=context)
-                
+                 
                 search_project_form = self.pool.get('project.project').search(cr, uid, [('id', '=', main_form_id)])
-                
+                 
                 for k in self.pool.get('project.project').browse(cr,uid,search_project_form):
                     sr_upload_doc = k.sr_upload
                     sr_approver = k.sr_id
                     sr_state = k.state_for_sr
-                    
+                     
                     ko_upload_doc = k.ko_upload
                     ko_approver = k.ko_id
                     ko_state = k.state_for_ko
-                    
+                     
                     pc_upload_doc = k.pc_upload
                     pc_approver = k.pc_id
                     pc_state = k.state_for_pc
-                    
+                     
                     fd_upload_doc = k.fd_upload
                     fd_approver = k.fd_id
                     fd_state = k.state_for_fd
-                    
+                     
                     if sr_approver and sr_upload_doc:
                         self.pool.get('project.project').write(cr,uid,k.id,{'state_for_sr':'sent_for_approval'})
-                        
+                         
                     if ko_approver and ko_upload_doc:
                         self.pool.get('project.project').write(cr,uid,k.id,{'state_for_ko':'sent_for_approval'})
-                        
+                         
                     if pc_approver and pc_upload_doc:
                         self.pool.get('project.project').write(cr,uid,k.id,{'state_for_pc':'sent_for_approval'})
-                        
+                         
                     if fd_approver and fd_upload_doc:
                         self.pool.get('project.project').write(cr,uid,k.id,{'state_for_fd':'sent_for_approval'})
+                 
                 
-                #self.write(cr, uid, ids, {'state_for_sr': 'sent_for_approval'})
         return {'type': 'ir.actions.act_window_close'}
 
 
@@ -113,14 +113,13 @@ class project_project(osv.osv):
        obj=self.browse(cr,uid,ids[0])
        if obj.budget_id:
            list.append(obj.budget_id.id)
-           print " if============="
+           
            res = {
                    'domain': ([('id', 'in', list)]),
                    'view_type': 'form',
                    'view_mode': 'form',
                    'res_model': 'crossovered.budget',
                    'target':'current',
-                   #'view_id': list[0],
                    'nodestroy': True,
                    'type': 'ir.actions.act_window',
                    'name' : 'Budgets',
@@ -221,8 +220,8 @@ class project_project(osv.osv):
               'state': fields.selection([
                         ('draft','New'),('initiate','Initiate'),
                         ('plan','Planning'),('execute','Execution'),
-                        ('close','Closed'),
-                         ('cancelled', 'Cancelled'),
+                        ('close','Closure'),('sign_off','Signed off'),
+                         ('canceled', 'Canceled'),
                          ], 'Status', required=True,track_visibility='onchange'),
               'risk_id':fields.many2one('risk.management','Risk Management'),
               'request_id':fields.many2one('change.request','Change Request'),
@@ -245,6 +244,8 @@ class project_project(osv.osv):
               'ko_upload': fields.binary('Upload File2'),
               'pc_upload': fields.binary('Upload File3'),
               'fd_upload': fields.binary('Upload File4'),
+              
+              'sr_partner':fields.many2one('res.partner', 'Partner'),
               
               'state_for_sr': fields.selection([ 
                                        ('new','New'),
@@ -305,7 +306,6 @@ class project_project(osv.osv):
                         'view_mode': 'tree,form',
                         'res_model': 'purchase.order',
                         'target':'current',
-                        #'view_id': list,
                         'nodestroy': True,
                         'type': 'ir.actions.act_window',
                         'name' : 'Purchase Order',
@@ -318,7 +318,6 @@ class project_project(osv.osv):
                 'view_mode': 'tree,form',
                 'res_model': 'purchase.order',
                 'target':'current',
-                #'view_id': list,
                 'nodestroy': True,
                 'type': 'ir.actions.act_window',
                 'name' : 'Purchase Order',
@@ -337,7 +336,6 @@ class project_project(osv.osv):
                     'view_mode': 'form',
                     'res_model': 'risk.management',
                     'target':'current',
-#                    'view_id': list[0],
                     'nodestroy': True,
                     'type': 'ir.actions.act_window',
                     'name' : 'Risk Management',
@@ -345,7 +343,7 @@ class project_project(osv.osv):
                     }
         else:
             res = {
-                    #'domain': ([('id', 'in', list)]),
+                    
                     'view_type': 'form',
                     'view_mode': 'form',
                     'res_model': 'risk.management',
@@ -354,7 +352,7 @@ class project_project(osv.osv):
                     'nodestroy': True,
                     'type': 'ir.actions.act_window',
                     'name' : 'Risk Management',
-                    #'res_id': list
+                   
                     }
         return res
     def change_request(self,cr,uid,ids,context):
@@ -369,7 +367,6 @@ class project_project(osv.osv):
                     'view_mode': 'form',
                     'res_model': 'change.request',
                     'target':'current',
-#                    'view_id': list[0],
                     'nodestroy': True,
                     'type': 'ir.actions.act_window',
                     'name' : 'Change Request',
@@ -377,16 +374,15 @@ class project_project(osv.osv):
                     }
         else:
             res = {
-                    #'domain': ([('id', 'in', list)]),
+                    
                     'view_type': 'form',
                     'view_mode': 'form',
                     'res_model': 'change.request',
                     'target':'current',
-                    #'view_id': 0,
                     'nodestroy': True,
                     'type': 'ir.actions.act_window',
                     'name' : 'Change Request',
-                    #'res_id': list
+                    
                     }
         return res
     def onchange_sr_approve_id(self, cr, uid, ids, sr_approve_id):
@@ -394,8 +390,8 @@ class project_project(osv.osv):
             if sr_approve_id:
                partner1=self.pool.get('hr.employee').browse(cr, uid, sr_approve_id)
                v['sr_id']=partner1.user_id.id
-               #v['department_id']=partner1.id
-            print v
+               
+            
             return {'value':v}
         
     def onchange_ko_approve_id(self, cr, uid, ids, ko_approve_id):
@@ -403,8 +399,8 @@ class project_project(osv.osv):
             if ko_approve_id:
                partner2=self.pool.get('hr.employee').browse(cr, uid, ko_approve_id)
                v['ko_id']=partner2.user_id.id
-               #v['department_id']=partner1.id
-            print v
+               
+            
             return {'value':v}
         
     def onchange_pc_approve_id(self, cr, uid, ids, pc_approve_id):
@@ -412,7 +408,7 @@ class project_project(osv.osv):
             if pc_approve_id:
                partner3=self.pool.get('hr.employee').browse(cr, uid, pc_approve_id)
                v['pc_id']=partner3.user_id.id
-               #v['department_id']=partner1.id
+               
             return {'value':v}
         
     def onchange_fd_approve_id(self, cr, uid, ids, fd_approve_id):
@@ -420,7 +416,7 @@ class project_project(osv.osv):
             if fd_approve_id:
                partner4=self.pool.get('hr.employee').browse(cr, uid, fd_approve_id)
                v['fd_id']=partner4.user_id.id
-               #v['department_id']=partner1.id
+               
             return {'value':v}
     
     def set_open(self, cr, uid, ids, context=None):
@@ -432,10 +428,10 @@ class project_project(osv.osv):
     
     def planning(self,cr,uid,ids,context):
         obj=self.browse(cr,uid,ids[0])
-#         if not (obj.sr_upload and obj.ko_upload and obj.pc_upload and obj.fd_upload):
-#             raise osv.except_osv(_("Warning!"), _("Upload All the required documents First"))
-#         else:
-        self.write(cr,uid,obj.id,{'state':'plan'})
+        if not (obj.sr_upload and obj.ko_upload and obj.pc_upload and obj.fd_upload):
+            raise osv.except_osv(_("Warning!"), _("Upload All the required documents First"))
+        else:
+            self.write(cr,uid,obj.id,{'state':'plan'})
         return True
     
     def execute(self,cr,uid,ids,context):
@@ -443,13 +439,13 @@ class project_project(osv.osv):
         if not (obj.training_plan and obj.technical_plan and obj.implementation_plan):
             raise osv.except_osv(_("Warning!"), _("Upload All the required documents First"))
         else:
-            print "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
+            
             self.write(cr,uid,ids[0],{'state':'execute'})
             for val in obj.tasks:
                 self.pool.get('project.task').write(cr,uid,val.id,{'state1':'execute'})
-            #self.pool.get('crossovered.budget').write(cr,uid,obj.pnl.budget_id.id,{'state':'confirm'})
+            
         return True
-    ############ Mail
+    
     
     def send_mail_sr(self, cr, uid, ids, context=None):
         '''
@@ -461,7 +457,8 @@ class project_project(osv.osv):
         if upload_attachment and approver_name:
             ir_model_data = self.pool.get('ir.model.data')
             email_template_obj = self.pool.get('email.template')
-            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project')], context=context)
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project'),('model_object_field.name', '=','sr_id')], context=context)
+            
             try:
                 template_id = ir_model_data.get_object_reference(cr, uid, 'project_gantt', 'email_template_edi_purchase')[1]
             except ValueError:
@@ -471,14 +468,16 @@ class project_project(osv.osv):
             except ValueError:
                 compose_form_id = False
                 
+                
             create_att_id = self.pool.get('ir.attachment').create(cr, uid, {'name':'Attachment', 'type':'binary', 'datas':upload_attachment})
             email_template_obj = self.pool.get('email.template')
                                                      
-            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project')], context=context)
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project'),('model_object_field.name', '=','sr_id')], context=context)
             
             email_att_id = self.pool.get('email.template').write(cr, uid, template_ids,{'attachment_ids':[[6,0,[create_att_id]]]})
             
             ctx = dict(context)
+            
             ctx['default_template_id'] = template_ids[0]
             ctx.update({
                 'default_model': 'project.project',
@@ -487,6 +486,7 @@ class project_project(osv.osv):
                 'default_template_id': template_ids[0],
                 'default_composition_mode': 'comment',
             })
+            
             return {
                 'type': 'ir.actions.act_window',
                 'view_type': 'form',
@@ -515,7 +515,8 @@ class project_project(osv.osv):
         if upload_attachment and approver_name:
             ir_model_data = self.pool.get('ir.model.data')
             email_template_obj = self.pool.get('email.template')
-            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project')], context=context)
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project'),('model_object_field.name', '=','ko_id')], context=context)
+            
             try:
                 template_id = ir_model_data.get_object_reference(cr, uid, 'project_gantt', 'email_template_edi_purchase')[1]
             except ValueError:
@@ -528,7 +529,7 @@ class project_project(osv.osv):
             create_att_id = self.pool.get('ir.attachment').create(cr, uid, {'name':'Attachment', 'type':'binary', 'datas':upload_attachment})
             email_template_obj = self.pool.get('email.template')
                                                      
-            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project')], context=context)
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project'),('model_object_field.name', '=','ko_id')], context=context)
             email_att_id = self.pool.get('email.template').write(cr, uid, template_ids,{'attachment_ids':[[6,0,[create_att_id]]]})
             ctx = dict(context)
             ctx['default_template_id'] = template_ids[0]
@@ -566,7 +567,7 @@ class project_project(osv.osv):
         if upload_attachment and approver_name:
             ir_model_data = self.pool.get('ir.model.data')
             email_template_obj = self.pool.get('email.template')
-            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project')], context=context)
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project'),('model_object_field.name', '=','pc_id')], context=context)
             try:
                 template_id = ir_model_data.get_object_reference(cr, uid, 'project_gantt', 'email_template_edi_purchase')[1]
             except ValueError:
@@ -578,7 +579,7 @@ class project_project(osv.osv):
                 
             create_att_id = self.pool.get('ir.attachment').create(cr, uid, {'name':'Attachment', 'type':'binary', 'datas':upload_attachment})
             email_template_obj = self.pool.get('email.template')
-            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project')], context=context)
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project'),('model_object_field.name', '=','pc_id')], context=context)
             email_att_id = self.pool.get('email.template').write(cr, uid, template_ids,{'attachment_ids':[[6,0,[create_att_id]]]})
              
             ctx = dict(context)
@@ -618,7 +619,7 @@ class project_project(osv.osv):
         if upload_attachment and approver_name:
             ir_model_data = self.pool.get('ir.model.data')
             email_template_obj = self.pool.get('email.template')
-            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project')], context=context)
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project'),('model_object_field.name', '=','fd_id')], context=context)
             try:
                 template_id = ir_model_data.get_object_reference(cr, uid, 'project_gantt', 'email_template_edi_purchase')[1]
             except ValueError:
@@ -630,7 +631,7 @@ class project_project(osv.osv):
                 
             create_att_id = self.pool.get('ir.attachment').create(cr, uid, {'name':'Attachment', 'type':'binary', 'datas':upload_attachment})
             email_template_obj = self.pool.get('email.template')
-            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project')], context=context)
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project'),('model_object_field.name', '=','fd_id')], context=context)
             email_att_id = self.pool.get('email.template').write(cr, uid, template_ids,{'attachment_ids':[[6,0,[create_att_id]]]})
              
             ctx = dict(context)
@@ -663,28 +664,190 @@ class project_project(osv.osv):
     
     
     def approve_by_admin_sr(self,cr,uid,ids,context=None):
-        self.write(cr, uid, ids, {'state_for_sr': 'approved'})
-        return True
+            self.write(cr, uid, ids, {'state_for_sr': 'approved'})
+            ir_model_data = self.pool.get('ir.model.data')
+            email_template_obj = self.pool.get('email.template')
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project'),('model_object_field.name', '=','sr_approve_id')], context=context)
+            
+            try:
+                template_id = ir_model_data.get_object_reference(cr, uid, 'project_gantt', 'email_template_edi_purchase')[1]
+            except ValueError:
+                template_id = False
+            try:
+                compose_form_id = ir_model_data.get_object_reference(cr, uid, 'mail', 'email_compose_message_wizard_form')[1]
+            except ValueError:
+                compose_form_id = False
+                
+            
+            email_template_obj = self.pool.get('email.template')
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project'),('model_object_field.name', '=','sr_approve_id')], context=context)
+            
+             
+            ctx = dict(context)
+            ctx['default_template_id'] = template_ids[0]
+            ctx.update({
+                'default_model': 'project.project',
+                'default_res_id': ids[0],
+                'default_use_template': bool(template_ids),
+                'default_template_id': template_ids[0],
+                'default_composition_mode': 'comment',
+            })
+            return {
+                'type': 'ir.actions.act_window',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_model': 'mail.compose.message',
+                'views': [(compose_form_id, 'form')],
+                'view_id': compose_form_id,
+                'target': 'new',
+                'context': ctx,
+            }
+            
+            
+            return True
     
     def approve_by_admin_ko(self,cr,uid,ids,context=None):
-        self.write(cr, uid, ids, {'state_for_ko': 'approved'})
-        return True
+            self.write(cr, uid, ids, {'state_for_ko': 'approved'})
+            ir_model_data = self.pool.get('ir.model.data')
+            email_template_obj = self.pool.get('email.template')
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project'),('model_object_field.name', '=','ko_approve_id')], context=context)
+            
+            try:
+                template_id = ir_model_data.get_object_reference(cr, uid, 'project_gantt', 'email_template_edi_purchase')[1]
+            except ValueError:
+                template_id = False
+            try:
+                compose_form_id = ir_model_data.get_object_reference(cr, uid, 'mail', 'email_compose_message_wizard_form')[1]
+            except ValueError:
+                compose_form_id = False
+                
+            
+            email_template_obj = self.pool.get('email.template')
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project'),('model_object_field.name', '=','ko_approve_id')], context=context)
+            
+             
+            ctx = dict(context)
+            ctx['default_template_id'] = template_ids[0]
+            ctx.update({
+                'default_model': 'project.project',
+                'default_res_id': ids[0],
+                'default_use_template': bool(template_ids),
+                'default_template_id': template_ids[0],
+                'default_composition_mode': 'comment',
+            })
+            return {
+                'type': 'ir.actions.act_window',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_model': 'mail.compose.message',
+                'views': [(compose_form_id, 'form')],
+                'view_id': compose_form_id,
+                'target': 'new',
+                'context': ctx,
+            }
+            
+            
+            return True
     
     def approve_by_admin_pc(self,cr,uid,ids,context=None):
-        self.write(cr, uid, ids, {'state_for_pc': 'approved'})
-        return True
+            self.write(cr, uid, ids, {'state_for_pc': 'approved'})
+            ir_model_data = self.pool.get('ir.model.data')
+            email_template_obj = self.pool.get('email.template')
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project'),('model_object_field.name', '=','pc_approve_id')], context=context)
+            
+            try:
+                template_id = ir_model_data.get_object_reference(cr, uid, 'project_gantt', 'email_template_edi_purchase')[1]
+            except ValueError:
+                template_id = False
+            try:
+                compose_form_id = ir_model_data.get_object_reference(cr, uid, 'mail', 'email_compose_message_wizard_form')[1]
+            except ValueError:
+                compose_form_id = False
+                
+            
+            email_template_obj = self.pool.get('email.template')
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project'),('model_object_field.name', '=','pc_approve_id')], context=context)
+            
+             
+            ctx = dict(context)
+            ctx['default_template_id'] = template_ids[0]
+            ctx.update({
+                'default_model': 'project.project',
+                'default_res_id': ids[0],
+                'default_use_template': bool(template_ids),
+                'default_template_id': template_ids[0],
+                'default_composition_mode': 'comment',
+            })
+            return {
+                'type': 'ir.actions.act_window',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_model': 'mail.compose.message',
+                'views': [(compose_form_id, 'form')],
+                'view_id': compose_form_id,
+                'target': 'new',
+                'context': ctx,
+            }
+            
+            
+            return True
     
     def approve_by_admin_fd(self,cr,uid,ids,context=None):
-        self.write(cr, uid, ids, {'state_for_fd': 'approved'})
-        return True
+            self.write(cr, uid, ids, {'state_for_fd': 'approved'})
+            ir_model_data = self.pool.get('ir.model.data')
+            email_template_obj = self.pool.get('email.template')
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project'),('model_object_field.name', '=','fd_approve_id')], context=context)
+            
+            try:
+                template_id = ir_model_data.get_object_reference(cr, uid, 'project_gantt', 'email_template_edi_purchase')[1]
+            except ValueError:
+                template_id = False
+            try:
+                compose_form_id = ir_model_data.get_object_reference(cr, uid, 'mail', 'email_compose_message_wizard_form')[1]
+            except ValueError:
+                compose_form_id = False
+                
+            
+            email_template_obj = self.pool.get('email.template')
+            template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','project.project'),('model_object_field.name', '=','fd_approve_id')], context=context)
+            
+             
+            ctx = dict(context)
+            ctx['default_template_id'] = template_ids[0]
+            ctx.update({
+                'default_model': 'project.project',
+                'default_res_id': ids[0],
+                'default_use_template': bool(template_ids),
+                'default_template_id': template_ids[0],
+                'default_composition_mode': 'comment',
+            })
+            return {
+                'type': 'ir.actions.act_window',
+                'view_type': 'form',
+                'view_mode': 'form',
+                'res_model': 'mail.compose.message',
+                'views': [(compose_form_id, 'form')],
+                'view_id': compose_form_id,
+                'target': 'new',
+                'context': ctx,
+            }
+            
+            
+            return True
     
 
     def set_done(self,cr,uid,ids,context=None):
-        for x in self.browse(cr,uid,ids,context=context):
-            if not (x.weekly_report):
-                raise osv.except_osv(_("Warning!"), _("Upload All the required documents First"))
-            else:
-                self.write(cr,uid,x.id,{'state':'close'})
+        self.write(cr,uid,ids,{'state':'close'})
+        
+    def sign_off(self,cr,uid,ids,context=None):
+        obj=self.browse(cr,uid,ids[0])
+        if not (obj.certificate and obj.final_presentation and obj.administrative_closure and obj.technical_closure):
+            raise osv.except_osv(_("Warning!"), _("Upload All the required documents First"))
+        else:
+            
+            self.write(cr,uid,ids,{'state':'sign_off'})
+        
+    
         
     
 class weekly_details(osv.osv):
@@ -718,7 +881,7 @@ class project_task(osv.osv):
         res={}
         end_date=datetime.date.today()
         if end:
-            print end, "--------------------END DATE---------------------"
+            
             end_date==datetime.datetime.strptime(end,'%Y-%m-%d %H:%M:%S').date()
             if end_date:
                 date_open_next=end_date + relativedelta(days = +delay)
@@ -827,68 +990,6 @@ class change_request(osv.osv):
             res.update({'project_id' : obj.id,'date_start':obj.date_start,'date_end':obj.date,'new_date_start':obj.date_start,'new_date_end':obj.date
                         })
         return res
-#     def pnl(self,cr,uid,ids,context):
-# #         domain = [
-# #               
-# #              ('res_model', '=', 'change.request'), ('res_id', 'in', ids),
-# #              
-# #         ]
-# #         res_id = ids and ids[0] or False
-#         res={}
-#         list=[]
-#         obj=self.browse(cr,uid,ids[0])
-#         if obj.pnl:
-#             list.append(obj.request_id.id)
-#             res = {
-#                     'domain': ([('id', 'in', list)]),
-#                     'view_type': 'form',
-#                     'view_mode': 'form',
-#                     'res_model': 'pnl.order',
-#                     'target':'current',
-# #                    'view_id': list[0],
-#                     'nodestroy': True,
-#                     'type': 'ir.actions.act_window',
-#                     'name' : 'Pnl Order',
-#                     'res_id': list[0]
-#                     }
-#         else:
-#             res = {
-#                     'domain': ([('id', 'in', list)]),
-#                     'view_type': 'form',
-#                     'view_mode': 'tree,form',
-#                     'res_model': 'pnl.order',
-#                     'target':'current',
-#                     'view_id': list,
-#                     'nodestroy': True,
-#                     'type': 'ir.actions.act_window',
-#                     'name' : 'Pnl Order',
-#                     #'res_id': list
-#                     }
-#         return res
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-#         return {
-#             'name': _('PnL'),
-#             'domain': domain,
-#             'res_model': 'pnl.order',
-#             'type': 'ir.actions.act_window',
-#             'view_id': False,
-#             'view_mode': 'tree,form',
-#             'view_type': 'form',
-#             'limit': 80,
-#             'context': "{'default_res_model': '%s','default_res_id': %d}" % (self._name, res_id)
-#         }
         
         
        

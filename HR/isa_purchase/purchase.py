@@ -1,28 +1,52 @@
-from osv import osv
-from osv import fields
+import time
+import re
+from openerp.osv import fields, osv
+import datetime
+from openerp import tools
+from openerp.tools.translate import _
+import email
+import logging
+import pytz
+import re
+import xmlrpclib
+from email.message import Message
+from openerp.addons.mail.mail_message import decode
+
+from datetime import timedelta
+from dateutil import relativedelta
+import calendar
+import openerp.addons.decimal_precision as dp
+from dateutil.relativedelta import relativedelta
+from datetime import date, timedelta as td
+
+from datetime import date
+
+from openerp import SUPERUSER_ID
+from openerp.addons.mail.mail_message import decode
+from openerp.osv import fields, osv, orm
+from openerp.tools.safe_eval import safe_eval as eval
 import openerp.addons.decimal_precision as dp
 import time
 import datetime
 from dateutil.relativedelta import relativedelta
 from openerp.tools.translate import _
-import purchase
 from openerp import netsvc
 
-
-class mail_compose_message(osv.Model):
+class mail_compose_message(osv.TransientModel):
     _inherit = 'mail.compose.message'
 
     def send_mail(self, cr, uid, ids, context=None):
-        super(mail_compose_message, self).send_mail(cr, uid, ids, context=context)
+        
         context = context or {}
         if context.get('default_model') == 'stock.picking.in' and context.get('default_res_id'):
             context = dict(context, mail_post_autofollow=True)
             wf_service = netsvc.LocalService("workflow")
             wf_service.trg_validate(uid, 'purchase.order', context['default_res_id'], 'send_rfq', cr)
-        return 
+	    
+        return True
         
                 
-                #self.write(cr, uid, ids, {'state_for_sr': 'sent_for_approval'})
+                
        
 
 class purchase_order(osv.osv):
@@ -45,11 +69,19 @@ class purchase_order(osv.osv):
               'du_attachment':fields.binary('DU Receipt'),
               'approve':fields.boolean('Approved',),
               'user_id':fields.many2one('res.users','Approver'),
+              'clearing_agent_id':fields.many2one('res.partner','Clearing Agent'),
               }
     _defaults={
                'approve':False
-               
-               }
+                }
+    def write(self,cr,uid,ids,vals,context=None):
+        
+        if vals.get('awb_no'):
+            template_obj = self.pool.get('email.template')
+            salesorder_tpl = template_obj.search(cr,uid,[('model_id.model', '=','purchase.order'),('model_object_field.name', '=','awb_no')])
+            if salesorder_tpl:                                  
+                    mail_id = template_obj.send_mail(cr, uid, salesorder_tpl[0], ids[0], force_send=True, context=context)
+        return True
 
     
     def view_invoice(self, cr, uid, ids, context=None):
@@ -58,7 +90,7 @@ class purchase_order(osv.osv):
         '''
         mod_obj = self.pool.get('ir.model.data')
         wizard_obj = self.pool.get('purchase.order.line_invoice')
-        #compute the number of invoices to display
+        
         obj=self.browse(cr,uid,ids[0])
         if obj.approve == False:
             raise osv.except_osv(_('Warning!'),_('Can not Create invoice until the document get approved'))
@@ -98,7 +130,7 @@ class account_invoice(osv.osv):
             ('proforma','Pro-forma'),
             ('proforma2','Pro-forma'),
             ('open','Open'),
-            #('payment','Payment Request'),
+            
             ('paid','Paid'),
             ('cancel','Cancelled'),
             ],'Status', select=True, readonly=True, track_visibility='onchange',),
@@ -120,7 +152,8 @@ class stock_picking(osv.osv):
               'approve':fields.boolean('Approved',readonly=True),
               'user_id':fields.many2one('res.users','Approver'),
               'comments':fields.text('Comments and Review'),
-              'state1':fields.selection([('draft','New'),('pending','Pending'),('approve','Approved')],'Status')
+              'state1':fields.selection([('draft','New'),('pending','Pending'),('approve','Approved')],'Status'),
+              'stores_user_id': fields.many2one('res.users', 'Stores User',size=64),
               }   
 class account_voucher(osv.osv):
     _inherit='account.voucher'
@@ -140,13 +173,14 @@ class account_voucher(osv.osv):
     def button_proforma_voucher(self, cr, uid, ids, context=None):
         context = context or {}
         print context
-        #self.pool.get('account.invoice').write(cr,uid,context['invoice_id'],{'state':'payment'})
+        
         wf_service = netsvc.LocalService("workflow")
         for vid in ids:
             wf_service.trg_validate(uid, 'account.voucher', vid, 'proforma_voucher', cr)
         return {'type': 'ir.actions.act_window_close'}
     def make_request(self,cr,uid,ids,context=None):
-        print "context=========================================",context
+         
+        
         self.write(cr,uid,ids,{'state':'payment','invoice_id':context['invoice_id']})
         return True
     def action_move_line_create(self, cr, uid, ids, context=None):
@@ -170,6 +204,7 @@ class account_voucher(osv.osv):
             # Create the account move record.
             move_id = move_pool.create(cr, uid, self.account_move_get(cr, uid, voucher.id, context=context), context=context)
             # Get the name of the account_move just created
+            
             name = move_pool.browse(cr, uid, move_id, context=context).name
             # Create the first line of the voucher
             move_line_id = move_line_pool.create(cr, uid, self.first_move_line_get(cr,uid,voucher.id, move_id, company_currency, current_currency, context), context)
@@ -185,6 +220,7 @@ class account_voucher(osv.osv):
 
             # Create the writeoff line if needed
             ml_writeoff = self.writeoff_move_line_get(cr, uid, voucher.id, line_total, move_id, name, company_currency, current_currency, context)
+            
             if ml_writeoff:
                 move_line_pool.create(cr, uid, ml_writeoff, context)
             # We post the voucher.
@@ -212,27 +248,80 @@ class stock_picking_in(osv.osv):
               'approve':fields.boolean('Approved',readonly=True),
               'user_id':fields.many2one('res.users','Approver'),
               'comments':fields.text('Comments and Review'),
-              'state1':fields.selection([('draft','New'),('pending','Pending'),('approve','Approved')],'Status')
+              'state1':fields.selection([('draft','New'),('pending','Pending'),('approve','Approved')],'Status'),
+              'stores_user_id': fields.many2one('res.users', 'Stores User',size=64),
               }      
     _defaults={
-               'state1':'draft'
+               'state1':'draft',
+               'stores_user_id': lambda obj, cr, uid, ctx=None: uid, 
                }
     def approve_request(self,cr,uid,ids,context):
         obj=self.browse(cr,uid,ids[0])
         self.write(cr,uid,ids,{'state1':'approve','approve':True})
         self.pool.get('purchase.order').write(cr,uid,obj.purchase_id.id,{'approve':True,'awb_attachment':obj.awb_attachment1,'du_attachment':obj.du_attachment1})
+        ir_model_data = self.pool.get('ir.model.data')
+        email_template_obj = self.pool.get('email.template')
+        template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','stock.picking.in'),('model_object_field.name', '=','user_id')], context=context)
+        
+        try:
+            template_id = ir_model_data.get_object_reference(cr, uid, 'isa_purchase', 'email_template_edi_purchase')[1]
+        except ValueError:
+            template_id = False
+        try:
+            compose_form_id = ir_model_data.get_object_reference(cr, uid, 'mail', 'email_compose_message_wizard_form')[1]
+        except ValueError:
+            compose_form_id = False
+            
+        
+        email_template_obj = self.pool.get('email.template')
+        template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','stock.picking.in'),('model_object_field.name', '=','user_id')], context=context)
+        
+         
+        ctx = dict(context)
+        ctx['default_template_id'] = template_ids[0]
+        ctx.update({
+            'default_model': 'stock.picking.in',
+            'default_res_id': ids[0],
+            'default_use_template': bool(template_ids),
+            'default_template_id': template_ids[0],
+            'default_composition_mode': 'comment',
+        })
+        return {
+            'type': 'ir.actions.act_window',
+            'view_type': 'form',
+            'view_mode': 'form',
+            'res_model': 'mail.compose.message',
+            'views': [(compose_form_id, 'form')],
+            'view_id': compose_form_id,
+            'target': 'new',
+            'context': ctx,
+        }
+        
+        
         return True
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    
     def send_mail(self, cr, uid, ids, context=None):
         
             lst=[]
+	    self.write(cr, uid, ids, {'state1': 'pending'})
             x = self.browse(cr, uid, ids[0], context=None)
             upload_attachment = x.awb_attachment1
             du_attachment = x.du_attachment1
             approver_name = x.user_id.id
+            
             if upload_attachment and approver_name:
                 ir_model_data = self.pool.get('ir.model.data')
                 email_template_obj = self.pool.get('email.template')
-                template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','stock.picking.in')], context=context)
+                template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','stock.picking.in'),('model_object_field.name', '=','stores_user_id')], context=context)
                 try:
                     template_id = ir_model_data.get_object_reference(cr, uid, 'isa_purchase', 'email_template_edi_purchase')[1]
                 except ValueError:
@@ -248,7 +337,7 @@ class stock_picking_in(osv.osv):
                 lst.append(create_att_id1)
                 email_template_obj = self.pool.get('email.template')
                                                          
-                template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','stock.picking.in')], context=context)
+                template_ids = email_template_obj.search(cr, uid, [('model_id.model', '=','stock.picking.in'),('model_object_field.name', '=','stores_user_id')], context=context)
                 
                 email_att_id = self.pool.get('email.template').write(cr, uid, template_ids,{'attachment_ids':[[6,0,lst]]})
                 ctx = dict(context)
@@ -290,6 +379,9 @@ class mail_compose_message(osv.TransientModel):
         if context.get('default_model') == 'stock.picking.in' and context.get('default_res_id'):
             context = dict(context, mail_post_autofollow=True)
             self.pool.get('stock.picking.in').write(cr,uid,[context['default_res_id']],{'state1':'pending'})
+        if context.get('default_model') == 'purchase.order' and context.get('default_res_id') and context.get('mark_so_as_sent'):
+            
+            context = dict(context, mail_post_autofollow=True)
         return super(mail_compose_message, self).send_mail(cr, uid, ids, context=context) 
     
 class stock_partial_picking(osv.osv_memory):
@@ -305,4 +397,160 @@ class stock_partial_picking(osv.osv_memory):
         super(stock_partial_picking, self).do_partial(cr, uid, ids, context=context)
         return True
         
+class mail_thread(osv.osv):
+    _name = "mail.thread"
+    _description = "Mails"
+    _inherit = "mail.thread"
+        
+    _columns={
+                
+            }
+    
+    def message_parse(self, cr, uid, message, save_original=False, context=None):
+        msg_dict = {
+                    'type': 'email',
+                    'author_id': False,
+                }
+        if not isinstance(message, Message):
+           if isinstance(message, unicode):
+                             
+              message = message.encode('utf-8')
+           message = email.message_from_string(message)
+             
+        message_id = message['message-id']
+        if not message_id:
+                         
+           message_id = "<%s@localhost>" % time.time()
+           import logging
+           # _logger.debug('Parsing Message without message-id, generating a random one: %s', message_id)
+        msg_dict['message_id'] = message_id
+             
+        if message.get('Subject'):
+           msg_dict['subject'] = decode(message.get('Subject'))
+             
+                     
+        msg_dict['from'] = decode(message.get('from'))
+        msg_dict['to'] = decode(message.get('to'))
+        msg_dict['cc'] = decode(message.get('cc'))
+             
+        if message.get('From'):
+           author_ids = self._message_find_partners(cr, uid, message, ['From'], context=context)
+           if author_ids:
+              msg_dict['author_id'] = author_ids[0]
+           msg_dict['email_from'] = decode(message.get('from'))
+        partner_ids = self._message_find_partners(cr, uid, message, ['To', 'Cc'], context=context)
+        msg_dict['partner_ids'] = [(4, partner_id) for partner_id in partner_ids]
+             
+        if message.get('Date'):
+           try:
+              date_hdr = decode(message.get('Date'))
+              parsed_date = dateutil.parser.parse(date_hdr, fuzzy=True)
+              if parsed_date.utcoffset() is None:
+                                 
+                 stored_date = parsed_date.replace(tzinfo=pytz.utc)
+              else:
+                 stored_date = parsed_date.astimezone(tz=pytz.utc)
+           except Exception:
+                 import logging
+                 #_logger.warning('Failed to parse Date header %r in incoming mail '
+                 #                       'with message-id %r, assuming current date/time.',
+                 #                       message.get('Date'), message_id)
+                 stored_date = datetime.datetime.now()
+           msg_dict['date'] = stored_date.strftime(tools.DEFAULT_SERVER_DATETIME_FORMAT)
+             
+        if message.get('In-Reply-To'):
+           parent_ids = self.pool.get('mail.message').search(cr, uid, [('message_id', '=', decode(message['In-Reply-To']))])
+           if parent_ids:
+              msg_dict['parent_id'] = parent_ids[0]
+             
+        if message.get('References') and 'parent_id' not in msg_dict:
+           parent_ids = self.pool.get('mail.message').search(cr, uid, [('message_id', 'in',
+                                                                                 [x.strip() for x in decode(message['References']).split()])])
+           if parent_ids:
+              msg_dict['parent_id'] = parent_ids[0]
+        a=[]
+        
+        string=msg_dict['subject']
+        a=string.split(' ')
+        res={}
+        i=0
+        awp=''
+        po=''
+        po_id=''
+        for i in range(len(a)):
+            if "AWB" in a[i] :
+                awp=a[i]
+            if "PO" in a[i]:
+                po=a[i]
+            po_id=self.pool.get('purchase.order').search(cr,uid,[('name','=',po)])
+            
+            pur_id=self.pool.get('purchase.order').browse(cr,uid,po_id)
+            vals=self.pool.get('purchase.order').write(cr, uid,po_id,{'awb_no':awp})  
+        
+             
+        msg_dict['body'], msg_dict['attachments'] = self._message_extract_payload(cr, uid, message, save_original=save_original)
+        return msg_dict
+       
+    def _message_extract_payload(self, cr, uid, message, save_original=False):
+        """Extract body as HTML and attachments from the mail message"""
+             
+        
+             
+        attachments = []
+        body = u''
+             
+        if save_original:
+                 
+            attachments.append(('original_email.eml', message.as_string()))
+        if not message.is_multipart() or 'text/' in message.get('content-type', ''):
+            encoding = message.get_content_charset()
+            body = message.get_payload(decode=True)
+            body = tools.ustr(body, encoding, errors='replace')
+            if message.get_content_type() == 'text/plain':
+                     
+                body = tools.append_content_to_html(u'', body, preserve=True)
+        else:
+                 
+                 
+            alternative = (message.get_content_type() == 'multipart/alternative')
+            for part in message.walk():
+                     
+                if part.get_content_maintype() == 'multipart':
+                    continue  
+                filename = part.get_filename()  
+                     
+                encoding = part.get_content_charset()  
+                     
+                if filename or part.get('content-disposition', '').strip().startswith('attachment'):
+                         
+                    attachments.append((filename or 'attachment', part.get_payload(decode=True)))
+                         
+                    
+                         
+                    continue
+                     
+                if part.get_content_type() == 'text/plain' and (not alternative or not body):
+                    body = tools.append_content_to_html(body, tools.ustr(part.get_payload(decode=True),
+                                                                         encoding, errors='replace'), preserve=True)
+                     
+                elif part.get_content_type() == 'text/html':
+                    html = tools.ustr(part.get_payload(decode=True), encoding, errors='replace')
+                    if alternative:
+                        body = html
+                    else:
+                        body = tools.append_content_to_html(body, html, plaintext=False)
+                     
+                else:
+                         
+                         
+                    attachments.append((filename or 'attachment', part.get_payload(decode=True)))
+             
+        
+        return body, attachments
+   
+   
+   
+   
+mail_thread()
+
         

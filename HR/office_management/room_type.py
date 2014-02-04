@@ -17,21 +17,6 @@ class vehicle_choice(osv.osv):
                 'designation':hr_obj.job_id.id
                 }
             return {'value':res}
-#    def onchange_travel_type_drop(self,cr,uid,ids,drop,return1,context=None):
-#        if not drop:
-#            return {}
-#        return {'value': {'return': False}}
-#    
-#    def onchange_travel_type_return(self,cr,uid,ids,drop,return1,context=None):
-#        if not return1:
-#            return {}
-#        return {'value': {'drop': False,}}
-#    
-#    def _vehicle_name_get_manufacture(self, cr, uid, ids, prop, unknow_none, context=None):
-#        res = {}
-#        for record in self.pool.get('fleet.vehicle').browse(cr, uid, ids, context=context):
-#            res[record.id] = record.model_id.brand_id.name
-#        return res
     
     _columns ={
                'request_id':fields.char('Booking ID',size=64,readonly=True),

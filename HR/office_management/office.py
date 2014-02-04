@@ -117,7 +117,7 @@ class shedule_meeting(osv.osv):
                         raise osv.except_osv(_('Can not Schedule appointment'),
                                                  _('Date Can Not Be More than one Day'))
                 
-                #res[val.id] = result.days
+                
             return res
 
     

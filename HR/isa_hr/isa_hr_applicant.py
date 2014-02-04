@@ -89,7 +89,7 @@ class hr_applicant(osv.osv):
             'candidate_id':fields.char('Applicant Id',size=64,help='First generate the unique id the process further',readonly=True),
             'requestion_id':fields.many2one('drishti.hr','Requisition Id',domain=[('state', '=', 'confirmed')],help='Enter the Unique Id which is approved.',ondelete="cascade"),
             'inter_line':fields.one2many('interview.sta','dumy_id1','Interview Form'),
-#       Test State form design field required       
+       
               'test_line':fields.one2many('test.stage.form','recruitment_id','Test Stage Form'),
               'applicant_name':fields.char('Applicant Name',size=64),
               'description':fields.text('Description'),
@@ -110,7 +110,7 @@ class hr_applicant(osv.osv):
               }
                
     
-#function for mail configuration in the state of director approved 
+ 
     
     def action_offer_acceptance_mail(self, cr, uid, ids, context=None):
             dic=[]
@@ -717,7 +717,7 @@ class hr_applicant(osv.osv):
                       'email_from':line.work_email,
                         } 
              return {'value': res}
-# genrate the random password for the applicant
+
     def genpasswd(self):
         chars = string.letters + string.digits
         return ''.join([choice(chars) for i in range(6)])
@@ -1013,7 +1013,7 @@ class survey_test_line(osv.osv):
               'aplicant_id':fields.many2one('hr.applicant'),
               'date_deadline':fields.date('Date'),
               'marks':fields.char('Scored',size=32),
-############# it is used for the test configuration 
+ 
                 'exam_name1':fields.char('Exam Name',size=64,readonly=True),
               'total_marks1':fields.integer('Total Marks',readonly=True),
               'min_score1':fields.integer('Minimum Marks',readonly=True),

@@ -114,17 +114,6 @@
 				</form>
 			</field>
 		</record>
-<!--	    -->
-<!--	    <record id="action_pnl_equipment_view" model="ir.actions.act_window">-->
-<!--			<field name="name">pnl.cogs.line</field>-->
-<!--			<field name="type">ir.actions.act_window</field>-->
-<!--			<field name="res_model">pnl.cogs.line</field>-->
-<!--			<field name="view_type">form</field>-->
-<!--			<field name="domain">[('id','in',['pnl.line_ids.quotation_id.id'])]</field>-->
-<!--			<field name="view_mode">tree,form</field>-->
-<!--			<field name="view_id" ref="view_pnl_equipments"/>-->
-<!--			<field name="help"></field>-->
-<!--		</record>-->
 	    
 	    
 	    <record id="project_view_inherit" model="ir.ui.view">
@@ -138,11 +127,16 @@
 	            </xpath>
             	
 	            <xpath expr="//button[@name='set_done']" position="after">
+	            	<button name="set_open" string="Re-open project" type="object" states="close,sign_off" class="oe_highlight" groups="base.group_user"/>
 		            <button name="set_cancel" string="Cancel Project" type="object" states="initiate,plan,open,pending" groups="base.group_user"/>
-		            <button name="set_done" string="Close Project" type="object" states="plan,open,execute,pending" groups="base.group_user"/>
+		            <button name="set_done" string="Close Project" type="object" color="red" states="open,execute,pending" groups="base.group_user"/>
+		            <button name="sign_off" string="Sign-off" type="object" states="close" groups="base.group_user" color="red"/>
 		            <button name="start_project" string="Initiate Project" states="draft" type="object" class="oe_highlight" groups="base.group_user"/>
 		            <button name="planning" string="Plan" type="object" states="initiate" class="oe_highlight" groups="base.group_user"/>
 		            <button name="execute" string="Execute" type="object" states="plan" class="oe_highlight" groups="base.group_user"/>
+	            </xpath>
+	            <xpath expr="//button[@name='set_open']" position="replace">
+	            <button name="set_open" string="Re-open project" type="object" states="cancelled,close" class="oe_highlight" groups="base.group_user" invisible="1"/>
 	            </xpath>
 	            <xpath expr="/form/sheet/div[@name='buttons']/button[@string='Tasks']" position='after'>
 	           	 	<button name="view_po" string="Purchase Order"
@@ -170,7 +164,8 @@
 			                   	<group colspan="4" col="4">
 			                   	  <group>
 				                    <field name="sr_id"/>
-				                    <field name="sr_approve_id" on_change="onchange_sr_approve_id(sr_approve_id)"/>
+				                    
+				                    <field name="sr_approve_id" on_change="onchange_sr_approve_id(sr_approve_id)" invisible="1"/>
 									<field name="state_for_sr"/>
 									<field name="comments_sr" class="oe_inline" placeholder="Place your comment..."/>
 								  </group>
@@ -552,11 +547,6 @@
 		</record>
 	    
 	    
-<!--	   <record model="ir.actions.act_window" id="pnl_update_request">-->
-<!--            <field name="context">{'default_request_id': active_id, 'search_default_request_id': active_id}</field>-->
-<!--            <field name="name">PNL</field>-->
-<!--            <field name="res_model">pnl.order</field>-->
-<!--        </record>-->
 	    
 	    <menuitem name="PMO"
             id="menu_base_project"/>

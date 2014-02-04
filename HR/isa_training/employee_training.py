@@ -38,7 +38,7 @@ class employee_training1(osv.osv):
               'date_to':fields.date('Date To'),
               'location':fields.char('Training Location'),
               'cost_of_certificate':fields.float('Cost of Certificate'),
-#               'certificate_name':fields.char('Certificate Name'),
+
               'description':fields.text('Certificate Description'),
               'training_state': fields.selection(AVAILABLE_STATES, 'States',help="The related status for the stage. The status of your document will automatically change according to the selected stage. Example, a stage is related to the status 'Close', when your document reach this stage, it will be automatically closed."),
               'manager_comment':fields.text("Manager's Comments"),
@@ -611,9 +611,9 @@ class certificate_information(osv.osv):
             certificate_obj=self.pool.get('certificate.information')
             invoice_obj=self.pool.get('account.invoice')
             obj=self.browse(cr,uid,ids[0])
-            print'==========invoice_id=====',obj.invoice_id.number
+            
             certificate_id=invoice_obj.search(cr, uid, [('id','=',obj.invoice_id.id),('state','=','open')])
-            print'========certificate_id=========',certificate_id
+            
             if not certificate_id:
                 raise osv.except_osv(('Warning!'),('This Invoice is already paid'))
             if not certificate_id: return []

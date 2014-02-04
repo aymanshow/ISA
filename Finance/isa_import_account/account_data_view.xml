@@ -1,7 +1,7 @@
 <?xml version ='1.0'?>
 <openerp>
     <data>
-        <!-- Form and Tree view for account module add two field portuguese_name and binary field name is file for importing purpose-->
+       
         
         
          <record id="isa_account_tree1" model="ir.ui.view">

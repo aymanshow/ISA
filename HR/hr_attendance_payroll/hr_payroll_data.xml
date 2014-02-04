@@ -42,16 +42,7 @@
             <field name="amount_python_compute">result = categories.BASIC + categories.ALW</field>
         </record>
 
-	<!--record id="hr_rule_taxable" model="hr.salary.rule">
-            <field name="name">Gross</field>
-            <field name="sequence" eval="100"/>
-            <field name="code">GROSS</field>
-            <field name="category_id" ref="hr_payroll.GROSS"/>
-	    <field name="active">False</field>
-            <field name="condition_select">none</field>
-            <field name="amount_select">code</field>
-            <field name="amount_python_compute">result = categories.BASIC + categories.ALW</field>
-        </record-->
+	
         
 	<record id="hr_rule_net_angola" model="hr.salary.rule">
             <field name="name">Net (AKZ)</field>
@@ -217,7 +208,7 @@
 		# 8 = number of hours in day
 		# Therefore, hourly rate = ((contract.wage/worked_days.MONTHDAYS.number_of_days)/8)
 	    </field>
-	    <!--field name="input_ids" ref="input_rules_ott"/-->
+	    
         </record>
 
 	<record id="input_rules_ott" model="hr.rule.input">  <!-- To fill values in a one2many of a main form using data.xml file -->
@@ -237,7 +228,7 @@
             <field name="amount_select">code</field>
             <field name="amount_python_compute">result = inputs.IA.amount</field>
 	    
-	    <!--field name="input_ids" ref="input_rules_ia"/-->
+	    
 		
         </record>
 

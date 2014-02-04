@@ -1,12 +1,15 @@
 <openerp>
     <data>
     
+
+    <menuitem id="account.menu_finance" name="Accounting &amp; Finances"/>
+    
   	  <record id="account_invoice_inherit11" model="ir.ui.view">
             <field name="name">account.invoice.supplier</field>
             <field name="model">account.invoice</field>
             <field name="inherit_id" ref="account.invoice_supplier_form"/>
             <field name="arch" type="xml">
-            <xpath expr="//field[@name='account_id']" position="after">
+            <xpath expr="//field[@name='account_id']" position='after'>
             	<field name="rate_usd"/>
             </xpath>
             </field>
@@ -26,6 +29,9 @@
             </xpath>
             <xpath expr="//field[@name='balance']" position='after'>
             	<field name="balance_usd"/>
+            </xpath>
+            <xpath expr="//field[@name='active']" position='after'>
+            	<field name="budget" attrs="{'invisible':[('type','=','view')]}"/>
             </xpath>
             </field>
         </record> 
@@ -215,12 +221,138 @@
             <field name="view_type">form</field>
             <field name="view_mode">tree,form</field>
             <field name="view_id" ref="view_currency_tree"/>
+            <field name="help"></field>
+        </record>
+        
+        
+        <record id="account_bank_statement_inherit_isa" model="ir.ui.view">
+            <field name="name">account.bank.statement.form</field>
+            <field name="model">account.bank.statement</field>
+            <field name="inherit_id" ref="account.view_bank_statement_form2"/>
+            <field name="arch" type="xml">
             
+            <xpath expr="//button[@name='button_open']" position='after'>
+            	<button name="get_approve" states="open" string="Close CashBox" type="object" class="oe_highlight"/>
+            </xpath>
+            <xpath expr="//button[@name='button_confirm_cash']" position='replace'>
+            	<button name="button_confirm_cash" states="approve" string="Approve" type="object" class="oe_highlight"/>
+            </xpath>
+            
+            <xpath expr="//field[@name='user_id']" position='after'>
+            	<field name="department_id" required='1'/>
+            </xpath>
+            
+            <xpath expr="//field[@name='line_ids']" position='replace'>
+            
+            <field name="line_ids" context="{'date':date}">
+                                <tree editable="bottom" string="Statement lines">
+                                    <field name="sequence" invisible="1"/>
+                                    <field name="date"/>
+                                    <field name="state" invisible='1'/>
+                                    <field name="name"/>
+                                    <field name="ref"/>
+                                    <field name="partner_id" on_change="onchange_partner_id(partner_id)"/>
+                                    <field name="type" on_change="onchange_type(partner_id, type)"/>
+                                    <field domain="[('journal_id','=',parent.journal_id), ('company_id', '=', parent.company_id)]" name="account_id" attrs="{'required':[('state','in',['approve','confirm'])]}"/>
+                                    <field name="analytic_account_id" domain="[('company_id', '=', parent.company_id), ('type', '&lt;&gt;', 'view')]" groups="analytic.group_analytic_accounting" />
+                                    <field name="amount"/>
+                                </tree>
+                                <form string="Statement lines" version="7.0">
+                                    <group col="4">
+                                    	<field name="state" invisible='1'/>
+                                        <field name="date"/>
+                                        <field name="name"/>
+                                        <field name="ref"/>
+                                        <field name="partner_id" on_change="onchange_partner_id(partner_id)"/>
+                                        <field name="type" on_change="onchange_type(partner_id, type)"/>
+                                        <field domain="[('journal_id', '=', parent.journal_id), ('type', '&lt;&gt;', 'view'), ('company_id', '=', parent.company_id)]" name="account_id" attrs="{'required':[('state','in',['approve','confirm'])]}"/>
+                                        <field name="analytic_account_id" domain="[('company_id', '=', parent.company_id), ('type', '&lt;&gt;', 'view')]" groups="analytic.group_analytic_accounting" />
+                                        <field name="amount"/>
+                                        <field name="sequence"/>
+                                    </group>
+                                    <separator string="Notes"/>
+                                    <field name="note"/>
+                                </form>
+                            </field>
+                          <field name='balance_end' position='after'>
+                          <group>
+                          	<field name='balance_end_real'/>
+                          	</group>
+                          </field>
+                          
+            
+            </xpath>
+            </field>
+        </record> 
+		
+		<record model="ir.ui.view" id="view_payment_request_form">
+            <field name="name">payment.request.form</field>
+            <field name="model">payment.request</field>
+            <field name="arch" type="xml">
+                <form string="Payment Request" version="7.0">
+                  <header>
+                    	
+                      <button name="send_request" string="Send Request" states="draft" type='object' class="oe_highlight" default_focus='1'/>
+                      <button name="%(action_recieve_amount)d" string="Recieve" states="approve" type='action' class="oe_highlight" default_focus='1'/>
+                      <button name="approve" string="Approve" type="object" states="waiting" confirm="Are you sure you want to Confirm" default_focus='1'/>
+                  	<field name='state' widget='statusbar'/>
+                  	</header>
+                  	<sheet>
+	                  	<group>
+	                  		<group>
+	                  			<field name='department_id' required='1' attrs="{'readonly':[('state','!=','draft')]}"/>
+	                  			<field name='amount' required='1' attrs="{'readonly':[('state','!=','draft')]}" on_change='onchange_amount(amount)'/>
+	                  			<field name='account_from_id' required='1' attrs="{'readonly':[('state','=','approve')]}"/>
+	                  			<field name='description' required='1' attrs="{'readonly':[('state','!=','draft')]}"/>
+	                  		
+	                  		</group>
+	                  		<group>
+		                  		<field name='journal_id' required='1' on_change="onchange_journal(journal_id)" domain="[('type','=','cash')]" attrs="{'readonly':[('state','=','approve')]}"/>
+		                  		<field name='amount_approve' required='1' attrs="{'readonly':[('state','=','approve')]}"/>
+		                  		<field name='account_to_id' required='1' attrs="{'readonly':[('state','=','approve')]}"/>
+		                  		<field name='date' required='1' attrs="{'readonly':[('state','=','approve')]}"/>
+	                  		</group>
+	                  	</group>
+                  	</sheet>
+                </form>
+           	</field>
+        </record>
+		<record model="ir.ui.view" id="view_payment_request_tree">
+            <field name="name">payment.request.form</field>
+            <field name="model">payment.request</field>
+            <field name="arch" type="xml">
+                <tree string="Payment Request" version="7.0">
+                	<field name='department_id'/>
+           			<field name='amount'/>
+           			<field name='account_from_id'/>
+           			<field name='description'/>
+                	<field name='journal_id'/>
+               		<field name='amount_approve'/>
+               		<field name='account_to_id'/>
+               		<field name='date'/>
+                
+                
+                </tree>
+                </field>
+                </record>
+                
+		
+		<record id="action_payment_request_account" model="ir.actions.act_window">
+            <field name="name">Payment Request</field>
+            <field name="res_model">payment.request</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="view_payment_request_tree"/>
         </record>
 		
-		<menuitem name="Accounting &amp; Finances" id="account.menu_finance"/>
 		
-<!--		<menuitem id="menu_finance_configuration" name="Configuration" parent="menu_finance" sequence="15" groups="account.group_account_manager"/>-->
+		<menuitem id="menu_finance_payment_request_cash" name="Payment Request" parent="account.menu_finance" sequence="3"
+            groups="account.group_account_user,account.group_account_manager"/>
+		<menuitem id="menu_finance_payment_request_cash_sub" name="Request" parent="menu_finance_payment_request_cash" sequence="0"
+            groups="account.group_account_user,account.group_account_manager" action='action_payment_request_account'/>
+		
+
 		<menuitem id="menu_base_usd" name="Base USD" parent="account.menu_finance_configuration" sequence="1" action='action_config_base_rate'/>
        		   
 

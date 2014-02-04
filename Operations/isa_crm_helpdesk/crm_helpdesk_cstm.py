@@ -11,7 +11,7 @@ import openerp.addons.decimal_precision as dp
 AVAILABLE_STATES = [ 
     ('draft', 'New'),
     ('open', 'In Progress'),
-    ('awaiting', 'Awaiting Approval'),# add extra stage
+    ('awaiting', 'Awaiting Approval'),
     ('pending', 'On Duty'),
     ('cancel', 'Cancelled'),
     ('done', 'Closed'),
@@ -31,7 +31,6 @@ class crm_helpdesk(osv.osv):
     _rec_name = "ticket_no"
     _columns = {
         'ticket_no':fields.char('Ticket No.',size=64),
-        #'form_ticket_no':fields.many2one('job.order1','Job Order Id'),
         'job_order_line':fields.one2many('job.order.numbers','job_number','Job Order Line'),
         'contracts_partner':fields.many2one('res.partner','Customer Name',required=True),
         'contracts':fields.many2one('account.analytic.account','Contracts',required=True),
@@ -239,7 +238,6 @@ class job_order1(osv.osv):
         
     _columns={
                'name':fields.char('Job Order Id'),
-               #'ticket_form_id':fields.char('Ticket Form Id'),
                'ticket_form_id':fields.many2one('crm.helpdesk','Ticket Form Id'),
                'customer_name':fields.many2one('res.partner','Customer Name'),
                'address': fields.char('Address'),
@@ -267,7 +265,6 @@ class job_order1(osv.osv):
                                               ('new','New'),
                                               ('completed', 'Completed')],'Status',readonly=True,),
                'remark':fields.text('Visit Remarks'),
-#               Take field for binary attach file
                
                'datas': fields.function(_data_get, fnct_inv=_data_set, string='Attachment', type="binary", nodrop=True),
                'store_fname': fields.char('Stored Filename', size=256),
@@ -321,7 +318,7 @@ class job_order1(osv.osv):
                  'form': self.read(cr, uid, ids[0], context=context),
         }
         return {'type': 'ir.actions.report.xml', 'report_name': 'engineer_job_order', 'datas': datas, 'nodestroy': True}
-       # return True
+       
 
 
 

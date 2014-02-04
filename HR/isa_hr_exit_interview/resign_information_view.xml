@@ -27,7 +27,7 @@
                      <button name="emp_exit_interview" string="Submit for exit" type="object" attrs="{'invisible':[('state','not in',['approve'])]}" class="oe_highlight"/>
                      <button name="emp_releived" string="Relieved" type="object" attrs="{'invisible':[('state','in',['approve','initiate','draft','close','relieved'])]}" class="oe_highlight"/>                       
                       
-<!--                    <button name="emp_close" string="Close" type="object" attrs="{'invisible':[('state','not in',['approve'])]}" class="oe_highlight"/>-->
+
                       
                         <button string="Discard" special="cancel"/>
                        <field name="state" widget="statusbar" statusbar_visible="draft,initiate,approve,exit_int,relieved,close" readonly="1"/>
