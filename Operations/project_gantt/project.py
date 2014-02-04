@@ -355,6 +355,41 @@ class project_project(osv.osv):
                    
                     }
         return res
+    def view_budget(self,cr,uid,ids,context):
+        res={}
+        list=[]
+        obj=self.browse(cr,uid,ids[0])
+        print "budgets====================",obj.budget_id
+        if obj.budget_id:
+            list.append(obj.budget_id.id)
+            print " if============="
+            res = {
+                    'domain': ([('id', 'in', list)]),
+                    'view_type': 'form',
+                    'view_mode': 'form',
+                    'res_model': 'crossovered.budget',
+                    'target':'current',
+                    #'view_id': list[0],
+                    'nodestroy': True,
+                    'type': 'ir.actions.act_window',
+                    'name' : 'Budgets',
+                    'res_id': list[0]
+                    }
+        else:
+            print "else=================="
+            res = {
+                    'domain': ([('id', 'in', list)]),
+                    'view_type': 'form',
+                    'view_mode': 'tree,form',
+                    'res_model': 'crossovered.budget',
+                    'target':'current',
+                    'nodestroy': True,
+                    'type': 'ir.actions.act_window',
+                    'name' : 'Budgets',
+                    'res_id': list
+                    }
+        print "res===============",res
+        return res
     def change_request(self,cr,uid,ids,context):
         res={}
         list=[]
@@ -439,7 +474,10 @@ class project_project(osv.osv):
         if not (obj.training_plan and obj.technical_plan and obj.implementation_plan):
             raise osv.except_osv(_("Warning!"), _("Upload All the required documents First"))
         else:
+<<<<<<< HEAD
             
+=======
+>>>>>>> 90b72dcad5328fb9f9c7ea4bdeef94c467e9dff2
             self.write(cr,uid,ids[0],{'state':'execute'})
             for val in obj.tasks:
                 self.pool.get('project.task').write(cr,uid,val.id,{'state1':'execute'})
@@ -870,7 +908,7 @@ class project_task(osv.osv):
               'date_close_actual':fields.date('Estimated End Date'),
               'date_open_actual':fields.date('Estimated Start Date'),
               'days_delay':fields.integer('Delay'),
-              'days_needed':fields.integer('Days Needed To Finish the task'),
+              'days_needed':fields.integer('Days Needed To '),
               'state1':fields.selection([('draft','Draft'),('execute','Execute')]),
               }
     _defaults={
@@ -881,12 +919,13 @@ class project_task(osv.osv):
         res={}
         end_date=datetime.date.today()
         if end:
+<<<<<<< HEAD
             
+=======
+>>>>>>> 90b72dcad5328fb9f9c7ea4bdeef94c467e9dff2
             end_date==datetime.datetime.strptime(end,'%Y-%m-%d %H:%M:%S').date()
             if end_date:
                 date_open_next=end_date + relativedelta(days = +delay)
-            else:
-                date_open_next=''
         date_close_next=date_open_next+relativedelta(days = +days_needed)
         if date_open_next:
             res={

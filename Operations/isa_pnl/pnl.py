@@ -44,9 +44,12 @@ class sale_order(osv.osv):
              raise osv.except_osv(_('Can not Confirm Order!'),
                                          _('Please Define Estimated Closing Date First.')) 
              return False
+<<<<<<< HEAD
         if obj.pnl:
             if obj.pnl.lead_id:
                 self.pool.get('crm.lead').case_close(cr,uid,[obj.pnl.lead_id.id])
+=======
+>>>>>>> 90b72dcad5328fb9f9c7ea4bdeef94c467e9dff2
         dict={
               'name':obj.pnl.name,
               'order_id':obj.id,
@@ -55,7 +58,11 @@ class sale_order(osv.osv):
               'team_id':obj.section_id.id,
               }
         handover_id=self.pool.get('project.handover').create(cr,uid,dict)
+<<<<<<< HEAD
        
+=======
+        #self.pool.get('sale.order').write(cr,uid,obj.id,{'state':'progress'})
+>>>>>>> 90b72dcad5328fb9f9c7ea4bdeef94c467e9dff2
         if obj.pnl:
             self.pool.get('pnl.order').write(cr,uid,obj.pnl.id,{'state':'done'})
         return True       
@@ -64,6 +71,214 @@ class sale_order(osv.osv):
         vals={}
         if isinstance(ids, (list, tuple)):
             ids=ids[0]
+<<<<<<< HEAD
+=======
+#         obj=self.browse(cr,uid,ids)
+#         if not (obj.pnl and obj.partner_id):
+#              raise osv.except_osv(_('Can not Complete Handover!'),
+#                                          _('The sale order does not belong to any PNL'))
+#         else: 
+#             name=obj.pnl.name
+#             
+#             vals={
+#                   'name':obj.pnl.name,
+#                   'active': True,
+#                   'type': 'contract',
+#                   'use_tasks':True,
+#                   'state': 'draft',
+#                   'priority': 1,
+#                   'pnl':obj.pnl.id,
+#                   'sequence': 10,
+#                   'alias_model': 'project.task',
+#                   'privacy_visibility': 'employees',
+#                   'alias_domain': False,
+#                   'user_id':uid,
+#                   'partner_id':obj.partner_id.id,
+#                   }
+#             project_id=self.pool.get('project.project').create(cr,uid,vals)
+#             project_analytic_id=self.pool.get('project.project').browse(cr,uid,project_id).analytic_account_id.id
+#             #self.generate_project(cr,uid,ids,context=None)
+#             self.write(cr,uid,ids,{'state':'meeting'})
+#             equip_dict = {'name': 'Products', 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':project_analytic_id,}
+#             products_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#             equip_dict = {'name': 'Cost of Goods Sold', 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':products_analytic_id,}
+#             cogs_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#             equip_dict = {'name': 'CIF', 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':products_analytic_id,}
+#             cif_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#             equip_dict = {'name': 'Consulting', 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':products_analytic_id,}
+#             consult_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)    
+#             equip_dict = {'name': 'Overheads', 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':products_analytic_id,}
+#             overheads_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#     
+#             equip_dict = {'name': 'Service', 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':project_analytic_id,}
+#             services_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#             equip_dict = {'name': 'Cost of Services', 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':services_analytic_id,}
+#             cost_service_analytic_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#             
+#             """Creation of Budget"""
+#             budget_dict = {'name':"Budget for: " + name ,
+#                            'code':obj.name,
+#                            'date_from':obj.date_order,
+#                            'date_to':obj.close_date,
+#                            }
+#             budget_id = self.pool.get('crossovered.budget').create(cr, uid, budget_dict, context=context)
+#             
+#             """"Creation of analytic accounts and budget lines for Product section of the P&L.""" 
+#             equip_dict = {
+#                           'name': 'Revenue', 
+#                           'active': True, 
+#                           'type': 'normal', 
+#                           'parent_id':products_analytic_id,
+#                           }
+#             analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#             budget_line_dict ={
+#                            'crossovered_budget_id': budget_id,
+#                            'analytic_account_id': analy_id,
+#                            'general_budget_id': 1,
+#                            'date_from': obj.date_order, 
+#                            'date_to':obj.close_date,
+#                            'planned_amount': obj.pnl.cogs_rev,
+#                            }
+#             self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
+#             
+#             """P&L COGS, CIF and Consulting"""
+#             for vals in obj.pnl.line_ids:
+#                 
+#                 equip_dict = {'name': vals.name, 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':cogs_analytic_id,}
+#                 analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#                 budget_line_dict ={
+#                                        'crossovered_budget_id': budget_id,
+#                                        'analytic_account_id': analy_id,
+#                                        'general_budget_id': 2,
+#                                        'date_from': obj.date_order, 
+#                                        'date_to':obj.close_date,
+#                                        'planned_amount': -  vals.quote_amt,
+#                                        }
+#                 self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
+#                 
+#                 if vals.cif_amt:
+#                     equip_dict = {'name': vals.name + " CIF", 
+#                                   'active': True, 
+#                                   'type': 'normal', 
+#                                   'parent_id':cif_analytic_id,}
+#                     analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#                     budget_line_dict ={
+#                                            'crossovered_budget_id': budget_id,
+#                                            'analytic_account_id': analy_id,
+#                                            'general_budget_id': 2,
+#                                            'date_from': obj.date_order, 
+#                                            'date_to':obj.close_date,
+#                                            'planned_amount': -vals.cif_amt,
+#                                            }
+#                     self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
+#                 if vals.consultancy_amt:
+#                     equip_dict = {'name': vals.name + " Consulting", 
+#                                   'active': True, 
+#                                   'type': 'normal', 
+#                                   'parent_id':consult_analytic_id,}
+#                     analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#                     budget_line_dict ={
+#                                            'crossovered_budget_id': budget_id,
+#                                            'analytic_account_id': analy_id,
+#                                            'general_budget_id': 2,
+#                                            'date_from': obj.date_order, 
+#                                            'date_to':obj.close_date,
+#                                            'planned_amount': -vals.consultancy_amt,
+#                                            }
+#                     self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
+#              
+#             for vals in obj.pnl.cogs_addl_costs:
+#                 budget_line_ids = {}
+#                 equip_dict = {'name': vals.name, 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':overheads_analytic_id,}
+#                 analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#                 budget_line_dict ={
+#                                        'crossovered_budget_id': budget_id,
+#                                        'analytic_account_id': analy_id,
+#                                        'general_budget_id': 2,
+#                                        'date_from': obj.date_order, 
+#                                        'date_to':obj.close_date,
+#                                        'planned_amount': -vals.amount,
+#                                        }
+#                 self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
+#             
+#             """"Creation of analytic accounts and budget lines for Services section of the P&L.""" 
+#             equip_dict = {
+#                           'name': 'Revenue', 
+#                           'active': True, 
+#                           'type': 'normal', 
+#                           'parent_id':services_analytic_id,
+#                           }
+#             analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#             budget_line_dict ={
+#                            'crossovered_budget_id': budget_id,
+#                            'analytic_account_id': analy_id,
+#                            'general_budget_id': 1,
+#                            'date_from': obj.date_order, 
+#                            'date_to':obj.close_date,
+#                            'planned_amount': obj.pnl.serv_rev,
+#                            }
+#             self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
+#             
+#             for vals in obj.pnl.serv_line:
+#                 budget_line_ids = {}
+#                 equip_dict = {'name': vals.product_id.name, 
+#                               'active': True, 
+#                               'type': 'normal', 
+#                               'parent_id':cost_service_analytic_id,}
+#                 analy_id = self.pool.get('account.analytic.account').create(cr,uid,equip_dict,context=context)
+#                 budget_line_dict ={
+#                                        'crossovered_budget_id': budget_id,
+#                                        'analytic_account_id': analy_id,
+#                                        'general_budget_id': 2,
+#                                        'date_from': obj.date_order, 
+#                                        'date_to':obj.close_date,
+#                                        'planned_amount': -vals.subtotal,
+#                                        }
+#                 self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
+#             self.pool.get('pnl.order').write(cr,uid,obj.pnl.id,{'budget_id':budget_id})
+#             self.pool.get('project.project').write(cr,uid,project_id,{'budget_id':budget_id})
+#         
+#         
+#         
+#         return True
+#HAVING ISSUES CREATING A PROJECT
+#         project_dict = {'name': obj.name, 
+#                         'state': 'open',
+#                         'priority': 1,
+#                         'sequence': 10,
+#                         'alias_model': 'project.task',
+#                         'privacy_visibility': 'employees',
+#                         'alias_domain': False,  # always hide alias during creation
+#             }
+#         project_id = self.pool.get('account.analytic.account').project_create(cr,uid,project_analytic_id,project_dict)
+>>>>>>> 90b72dcad5328fb9f9c7ea4bdeef94c467e9dff2
 
         
         
@@ -758,7 +973,14 @@ class pnl_cogs_line(osv.osv):
         for val in self.browse(cr,uid,ids):
             if val.quotation_id or val.requisition_id:
                amt=val.quote_amt*val.perc_cif/100
+<<<<<<< HEAD
             res[val.id]=amt
+=======
+            
+            
+        
+        res[val.id]=amt
+>>>>>>> 90b72dcad5328fb9f9c7ea4bdeef94c467e9dff2
         
         return res    
     
@@ -776,9 +998,13 @@ class pnl_cogs_line(osv.osv):
                 }
     _defaults={
                'quote_amt':0.0,
+<<<<<<< HEAD
                'cif_amt':0.0
                }
     
+=======
+               }
+>>>>>>> 90b72dcad5328fb9f9c7ea4bdeef94c467e9dff2
     def onchange_quotation(self, cr, uid, ids, quotation_id):
         
         if not quotation_id:

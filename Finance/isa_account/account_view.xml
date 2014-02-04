@@ -1,7 +1,11 @@
 <openerp>
     <data>
     
+<<<<<<< HEAD
 
+=======
+<!--    <menuitem name="Accounting & Finance" id="menu_finance"/>-->
+>>>>>>> 90b72dcad5328fb9f9c7ea4bdeef94c467e9dff2
     <menuitem id="account.menu_finance" name="Accounting &amp; Finances"/>
     
   	  <record id="account_invoice_inherit11" model="ir.ui.view">

@@ -12,7 +12,11 @@ class project_handover(osv.osv):
               'partner_id':fields.many2one('res.partner','Customer'),
               'order_id':fields.many2one('sale.order','Sale Order'),
               'pnl':fields.many2one('pnl.order','PNL'),
+<<<<<<< HEAD
               'responsible':fields.many2one('res.users','Project Manager',required=True),
+=======
+              'responsible':fields.many2one('res.users','Responsible'),
+>>>>>>> 90b72dcad5328fb9f9c7ea4bdeef94c467e9dff2
               'manger_id':fields.many2one('res.users','Business Development Team Manager'),
               'team_id':fields.many2one('crm.case.section','Sales Team'),
               'date':fields.date('Handover Date'),
@@ -53,12 +57,21 @@ class project_handover(osv.osv):
                   'alias_model': 'project.task',
                   'privacy_visibility': 'employees',
                   'alias_domain': False,
+<<<<<<< HEAD
                   'user_id':handover_obj.responsible.id if handover_obj.responsible else uid,
+=======
+                  'user_id':uid,
+>>>>>>> 90b72dcad5328fb9f9c7ea4bdeef94c467e9dff2
                   'partner_id':obj.partner_id.id,
                   }
             project_id=self.pool.get('project.project').create(cr,uid,vals)
             project_analytic_id=self.pool.get('project.project').browse(cr,uid,project_id).analytic_account_id.id
+<<<<<<< HEAD
             
+=======
+            #self.generate_project(cr,uid,ids,context=None)
+            #self.write(cr,uid,ids,{'state':'meeting'})
+>>>>>>> 90b72dcad5328fb9f9c7ea4bdeef94c467e9dff2
             equip_dict = {'name': 'Products', 
                               'active': True, 
                               'type': 'normal', 
@@ -224,7 +237,15 @@ class project_handover(osv.osv):
                 self.pool.get('crossovered.budget.lines').create(cr, uid, budget_line_dict, context=context)
             self.pool.get('pnl.order').write(cr,uid,obj.pnl.id,{'budget_id':budget_id})
             self.pool.get('project.project').write(cr,uid,project_id,{'budget_id':budget_id})
+<<<<<<< HEAD
             self.write(cr,uid,ids,{'project_id':project_id,'state':'accept'})
+=======
+            self.write(cr,uid,ids,{'project_id':project_id})
+        
+        
+        
+        
+>>>>>>> 90b72dcad5328fb9f9c7ea4bdeef94c467e9dff2
         return True
     
 class ir_attachment(osv.osv):
